@@ -1,0 +1,21 @@
+# Artefatos de build — backend
+**/bin/
+**/obj/
+
+# Artefatos de build — frontend
+**/node_modules/
+**/dist/
+**/.angular/
+
+# Credenciais — proteção extra, nunca entram na imagem
+**/appsettings.Development.json
+**/appsettings.*.local.json
+**/.env
+
+# Diversos
+.git/
+.gitignore
+.vscode/
+.idea/
+**/*.user
+README.md

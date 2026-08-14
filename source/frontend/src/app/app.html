@@ -1,0 +1,24 @@
+<main>
+  <h1>Estoque Igreja — Validação de Infraestrutura</h1>
+
+  <section>
+    <h2>GET /health</h2>
+
+    @if (carregando()) {
+      <p>Carregando…</p>
+    } @else if (erro()) {
+      <p class="erro">Erro: {{ erro() }}</p>
+    } @else if (health(); as h) {
+      <p class="ok">status: <strong>{{ h.status }}</strong></p>
+      <p class="ok">timestamp: <strong>{{ h.timestamp }}</strong></p>
+    }
+  </section>
+
+  <section>
+    <h2>Testes manuais</h2>
+    <ul>
+      <li><a href="/health/db">/health/db</a> — conexão com o Postgres</li>
+      <li><a href="/teste">/teste</a> — recarregar nessa rota não pode dar 404</li>
+    </ul>
+  </section>
+</main>
