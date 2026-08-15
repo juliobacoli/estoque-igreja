@@ -1,0 +1,36 @@
+<header class="cabecalho">
+  <button
+    class="hamburguer"
+    type="button"
+    [attr.aria-expanded]="menuAberto()"
+    aria-label="Abrir menu"
+    (click)="alternarMenu()">
+    <span></span><span></span><span></span>
+  </button>
+
+  <span class="marca">Estoque <strong class="dourado">ICPA</strong></span>
+</header>
+
+@if (menuAberto()) {
+  <div class="overlay" (click)="fecharMenu()"></div>
+}
+
+<nav class="menu glass" [class.menu--aberto]="menuAberto()">
+  <p class="menu__perfil muted">Conectado como {{ perfil() }}</p>
+
+  <a routerLink="/dashboard" routerLinkActive="ativo" (click)="fecharMenu()">Dashboard</a>
+  <a routerLink="/atualizar" routerLinkActive="ativo" (click)="fecharMenu()">Atualizar Estoque</a>
+
+  <!-- Só o Admin enxerga o cadastro. A barreira real é o 403 do servidor. -->
+  @if (ehAdmin()) {
+    <a routerLink="/cadastro" routerLinkActive="ativo" (click)="fecharMenu()">Cadastro de Itens</a>
+  }
+
+  <a routerLink="/historico" routerLinkActive="ativo" (click)="fecharMenu()">Histórico</a>
+
+  <button class="menu__sair" type="button" (click)="sair()">Sair</button>
+</nav>
+
+<main class="container">
+  <router-outlet />
+</main>

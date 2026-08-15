@@ -1,6 +1,37 @@
 import { Routes } from '@angular/router';
+import { adminGuard, authGuard } from './core/auth.guard';
 
-// Sem rotas no MVP de infraestrutura. O teste de deep-link (`/teste`) é do lado do
-// servidor: recarregar nessa URL tem que devolver o index.html (MapFallbackToFile),
-// e não 404. O AppComponent renderiza em qualquer URL.
-export const routes: Routes = [];
+export const routes: Routes = [
+  {
+    path: 'login',
+    loadComponent: () => import('./paginas/login/login').then((m) => m.Login)
+  },
+  {
+    path: '',
+    loadComponent: () => import('./layout/shell').then((m) => m.Shell),
+    canActivate: [authGuard],
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./paginas/dashboard/dashboard').then((m) => m.Dashboard)
+      },
+      {
+        path: 'atualizar',
+        loadComponent: () =>
+          import('./paginas/atualizar-estoque/atualizar-estoque').then((m) => m.AtualizarEstoque)
+      },
+      {
+        path: 'cadastro',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+          import('./paginas/cadastro-item/cadastro-item').then((m) => m.CadastroItem)
+      },
+      {
+        path: 'historico',
+        loadComponent: () => import('./paginas/historico/historico').then((m) => m.Historico)
+      }
+    ]
+  },
+  { path: '**', redirectTo: '' }
+];

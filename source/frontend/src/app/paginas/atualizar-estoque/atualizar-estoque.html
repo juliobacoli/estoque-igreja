@@ -1,0 +1,39 @@
+<h1>Atualizar estoque</h1>
+<p class="muted">Ajuste o número para a quantidade contada na prateleira.</p>
+
+@if (carregando()) {
+  <p class="muted">Carregando…</p>
+} @else if (linhas().length === 0) {
+  <p class="muted">Nenhum item cadastrado ainda.</p>
+} @else {
+  <ul class="lista">
+    @for (linha of linhas(); track linha.item.id) {
+      <li class="linha glass">
+        <label class="linha__nome" [attr.for]="'qtd-' + linha.item.id">
+          {{ linha.item.nome }}
+          <small class="muted">{{ linha.item.unidade }}</small>
+        </label>
+
+        <input
+          class="linha__input"
+          [id]="'qtd-' + linha.item.id"
+          type="number"
+          min="0"
+          inputmode="numeric"
+          [value]="linha.quantidade"
+          [disabled]="salvando()"
+          (input)="alterar(linha.item.id, $any($event.target).value)">
+      </li>
+    }
+  </ul>
+}
+
+@if (erro(); as mensagem) {
+  <p class="erro" role="alert">{{ mensagem }}</p>
+}
+
+<div class="acoes">
+  <button class="botao" type="button" [disabled]="salvando() || !temAlteracao()" (click)="salvar()">
+    {{ salvando() ? 'Salvando…' : 'Salvar contagem' }}
+  </button>
+</div>

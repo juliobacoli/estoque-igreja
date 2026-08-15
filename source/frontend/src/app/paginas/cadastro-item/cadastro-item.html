@@ -1,0 +1,31 @@
+<h1>Cadastro de itens</h1>
+
+<form class="cartao glass" (ngSubmit)="cadastrar()">
+  <label class="campo">
+    <span>Nome</span>
+    <input name="nome" type="text" [(ngModel)]="nome" [disabled]="salvando()" required>
+  </label>
+
+  <label class="campo">
+    <span>Unidade</span>
+    <input
+      name="unidade"
+      type="text"
+      placeholder="rolo, pacote, unidade…"
+      [(ngModel)]="unidade"
+      [disabled]="salvando()"
+      required>
+  </label>
+
+  @if (erro(); as mensagem) {
+    <p class="erro" role="alert">{{ mensagem }}</p>
+  }
+
+  @if (sucesso(); as mensagem) {
+    <p class="dourado" role="status">{{ mensagem }}</p>
+  }
+
+  <button class="botao" type="submit" [disabled]="salvando()">
+    {{ salvando() ? 'Salvando…' : 'Cadastrar item' }}
+  </button>
+</form>

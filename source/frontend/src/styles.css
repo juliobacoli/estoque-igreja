@@ -1,1 +1,155 @@
-/* You can add global styles to this file, and also import other style files */
+/* Identidade visual ICPA — Capítulo 2, item 2.9.
+   Base escura: o glassmorphism (branco a 3%) só tem contraste sobre fundo escuro. */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700&display=swap');
+
+:root {
+  --roxo-escuro: #2d1b3d;
+  --roxo-primario: #6b2d8e;
+  --roxo-secundario: #8b4db8;
+  --dourado: #d4a574;
+  --overlay: #0a0a0b;
+
+  --texto: #ffffff;
+  --texto-muted: #d4d1c9;
+  --claro: #f5f5f7;
+  --texto-escuro: #4a4a4a;
+
+  --erro: #ff8a80;
+
+  --raio: 12px;
+  --blur: 15px;
+  --glass-fundo: rgba(255, 255, 255, 0.03);
+  --glass-borda: 1px solid rgba(255, 255, 255, 0.1);
+  --container: 1200px;
+
+  --fonte-titulo: 'Montserrat', sans-serif;
+  --fonte-corpo: 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--roxo-escuro);
+  color: var(--texto);
+  font-family: var(--fonte-corpo);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+}
+
+/* ---------- Blocos reutilizados pelas telas ---------- */
+
+.glass {
+  background: var(--glass-fundo);
+  border: var(--glass-borda);
+  border-radius: var(--raio);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.botao {
+  font-family: var(--fonte-corpo);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--texto);
+  background: var(--roxo-primario);
+  border: none;
+  border-radius: var(--raio);
+  padding: 0.85rem 1.25rem;
+  width: 100%;
+  cursor: pointer;
+  /* Alvo de toque confortável no celular. */
+  min-height: 48px;
+}
+
+.botao:hover:not(:disabled),
+.botao:active:not(:disabled) {
+  background: var(--roxo-secundario);
+}
+
+.botao:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.botao--secundario {
+  background: transparent;
+  border: var(--glass-borda);
+}
+
+.campo {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.campo label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--texto-muted);
+  margin-bottom: 0.35rem;
+}
+
+.campo input,
+.campo select {
+  width: 100%;
+  font-family: var(--fonte-corpo);
+  font-size: 1rem;
+  /* Fundo claro sobre o glass, conforme o papel do #F5F5F7 no item 2.9. */
+  background: var(--claro);
+  color: var(--texto-escuro);
+  border: 1px solid transparent;
+  border-radius: var(--raio);
+  padding: 0.75rem;
+  min-height: 48px;
+}
+
+.campo input:focus,
+.campo select:focus {
+  outline: 2px solid var(--dourado);
+  outline-offset: 1px;
+}
+
+.erro {
+  color: var(--erro);
+  font-size: 0.9rem;
+}
+
+.muted {
+  color: var(--texto-muted);
+  font-size: 0.9rem;
+}
+
+.dourado {
+  color: var(--dourado);
+}
