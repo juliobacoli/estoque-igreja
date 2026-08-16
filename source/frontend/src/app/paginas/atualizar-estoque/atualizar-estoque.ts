@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { forkJoin } from 'rxjs';
 import { ItensService } from '../../core/itens.service';
 import { Item } from '../../core/models';
@@ -20,7 +20,10 @@ interface LinhaContagem {
     FormsModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    // MatSnackBarModule é obrigatório: o MatSnackBar não é providedIn root,
+    // quem o registra é o módulo.
+    MatSnackBarModule
   ],
   templateUrl: './atualizar-estoque.html',
   styleUrl: './atualizar-estoque.css'

@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ItensService } from '../../core/itens.service';
 import { shakeAnimation } from '../../shared/animations';
 
@@ -17,7 +17,10 @@ import { shakeAnimation } from '../../shared/animations';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    // MatSnackBarModule é obrigatório: o MatSnackBar não é providedIn root,
+    // quem o registra é o módulo.
+    MatSnackBarModule
   ],
   templateUrl: './cadastro-item.html',
   styleUrl: './cadastro-item.css',

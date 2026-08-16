@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HistoricoService } from '../../core/historico.service';
 import { ItensService } from '../../core/itens.service';
 import { Item, RegistroHistorico } from '../../core/models';
@@ -20,7 +20,10 @@ const TAMANHO_PAGINA = 20;
     MatFormFieldModule,
     MatSelectModule,
     MatButtonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    // MatSnackBarModule é obrigatório: o MatSnackBar não é providedIn root,
+    // quem o registra é o módulo.
+    MatSnackBarModule
   ],
   templateUrl: './historico.html',
   styleUrl: './historico.css'

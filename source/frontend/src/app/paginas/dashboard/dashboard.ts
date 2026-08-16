@@ -3,14 +3,16 @@ import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ExportService } from '../../core/export.service';
 import { ItensService } from '../../core/itens.service';
 import { Item } from '../../core/models';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [MatButtonModule, MatIconModule, MatProgressSpinnerModule],
+  // MatSnackBarModule é obrigatório: o MatSnackBar não é providedIn root,
+  // quem o registra é o módulo.
+  imports: [MatButtonModule, MatIconModule, MatProgressSpinnerModule, MatSnackBarModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
