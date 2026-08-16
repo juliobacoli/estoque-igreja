@@ -34,8 +34,6 @@
   width: 78%;
   max-width: 300px;
   padding: 1.5rem 0.75rem;
-  display: flex;
-  flex-direction: column;
 
   background: var(--roxo-escuro);
   border-right: var(--glass-borda);
@@ -64,8 +62,40 @@
   color: var(--texto);
 }
 
-.menu__sair {
+/* O Material insere um wrapper próprio dentro da gaveta. Sem tornar ele flex,
+   o margin-top:auto do botão Sair não tem em que se apoiar e ele acaba colado
+   no último item do menu. */
+.menu ::ng-deep .mat-drawer-inner-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Separa visualmente a navegação da ação de sair. */
+.menu__rodape {
   margin-top: auto;
+  padding-top: 1rem;
+  border-top: var(--glass-borda);
+}
+
+.menu__sair {
+  width: 100%;
   min-height: 48px;
-  color: var(--texto-muted);
+
+  /* O contorno padrão do Material some sobre o fundo escuro. Aqui o botão
+     precisa ser reconhecível: texto branco, borda visível e leve preenchimento. */
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.06);
+
+  --mdc-outlined-button-outline-color: rgba(255, 255, 255, 0.35);
+  --mdc-outlined-button-label-text-color: var(--texto);
+}
+
+.menu__sair:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.menu__sair mat-icon {
+  margin-right: 0.35rem;
+  color: var(--dourado);
 }
