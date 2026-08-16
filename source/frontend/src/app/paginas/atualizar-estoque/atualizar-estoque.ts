@@ -39,9 +39,16 @@ export class AtualizarEstoque implements OnInit {
   protected readonly falhaAoCarregar = signal(false);
 
   ngOnInit(): void {
+    this.carregar();
+  }
+
+  private carregar() {
+    this.carregando.set(true);
+
     this.itensService.listar().subscribe({
       next: (itens) => {
         this.linhas.set(itens.map((item) => ({ item, quantidade: item.estoqueAtual })));
+        this.falhaAoCarregar.set(false);
         this.carregando.set(false);
       },
       error: () => {
@@ -104,8 +111,18 @@ export class AtualizarEstoque implements OnInit {
         this.router.navigate(['/dashboard']);
       },
       error: (resposta) => {
-        this.avisar(resposta.error?.error ?? 'Não foi possível salvar a contagem.');
         this.salvando.set(false);
+
+        // 404 aqui significa que um item foi removido por um administrador depois
+        // que esta tela carregou. A lista em mãos está velha, então recarrega —
+        // insistir no mesmo save falharia de novo.
+        if (resposta.status === 404) {
+          this.avisar('Um item foi removido por um administrador. A lista foi atualizada.');
+          this.carregar();
+          return;
+        }
+
+        this.avisar(resposta.error?.error ?? 'Não foi possível salvar a contagem.');
       }
     });
   }

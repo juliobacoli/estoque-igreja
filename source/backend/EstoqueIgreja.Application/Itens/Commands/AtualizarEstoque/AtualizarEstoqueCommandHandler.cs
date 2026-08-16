@@ -23,9 +23,12 @@ public class AtualizarEstoqueCommandHandler
         // Inicia a transação. O banco gerenciará a fila (lock) sem disparar exceptions de concorrência.
         using var transaction = await _db.BeginTransactionAsync(ct);
 
-        // FOR UPDATE trava exclusivamente esta linha para a transação atual no PostgreSQL
+        // FOR UPDATE trava exclusivamente esta linha para a transação atual no PostgreSQL.
+        // O filtro por Ativo fica dentro da query travada de propósito: se o admin
+        // remover o item enquanto alguém está com a tela de contagem aberta, o save
+        // atrasado não pode gravar movimentação para um item que saiu do catálogo.
         var item = await _db.Itens
-            .FromSqlInterpolated($"SELECT * FROM \"Itens\" WHERE \"Id\" = {request.ItemId} FOR UPDATE")
+            .FromSqlInterpolated($"SELECT * FROM \"Itens\" WHERE \"Id\" = {request.ItemId} AND \"Ativo\" FOR UPDATE")
             .FirstOrDefaultAsync(ct);
 
         if (item is null)
