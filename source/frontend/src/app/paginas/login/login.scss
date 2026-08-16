@@ -1,0 +1,129 @@
+.tela {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+
+  // Clareia levemente o fundo atrás do card, dando profundidade ao vidro.
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(139, 77, 184, 0.18) 0%, transparent 60%),
+    radial-gradient(90% 60% at 50% 100%, rgba(212, 165, 116, 0.08) 0%, transparent 55%);
+}
+
+.cartao {
+  width: 100%;
+  max-width: 380px;
+  padding: 1.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+
+  animation: entrada-cartao 480ms cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+
+// Cada elemento entra logo depois do card, em cascata curta.
+.cartao > * {
+  animation: entrada-item 420ms cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+
+.cartao > *:nth-child(1) { animation-delay: 120ms; }
+.cartao > *:nth-child(2) { animation-delay: 175ms; }
+.cartao > *:nth-child(3) { animation-delay: 230ms; }
+.cartao > *:nth-child(4) { animation-delay: 285ms; }
+.cartao > *:nth-child(5) { animation-delay: 340ms; }
+.cartao > *:nth-child(6) { animation-delay: 340ms; }
+
+.cartao h1 {
+  margin-bottom: 0.15rem;
+}
+
+.cartao > .muted {
+  margin: 0 0 1.5rem;
+}
+
+.campo-mat {
+  width: 100%;
+}
+
+.erro {
+  margin: 0 0 0.75rem;
+  // A mensagem de erro aparece depois da montagem, então tem entrada própria.
+  animation: entrada-erro 260ms ease-out both;
+}
+
+.entrar {
+  width: 100%;
+  min-height: 48px;
+  transition: transform 140ms ease-out, filter 140ms ease-out;
+
+  // O Material 3 em tema escuro usa o tom claro da paleta como fundo do botão,
+  // com texto escuro. A identidade da ICPA pede o inverso: roxo cheio e texto
+  // branco (item 2.9).
+  --mdc-filled-button-container-color: var(--roxo-primario);
+  --mdc-filled-button-label-text-color: #{'#fff'};
+}
+
+.entrar:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.entrar:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+// O spinner do estado de carregando herda branco para não sumir sobre o botão cheio.
+.entrar mat-progress-spinner {
+  --mat-progress-spinner-active-indicator-color: #{'#fff'};
+  margin: 0 auto;
+}
+
+@keyframes entrada-cartao {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes entrada-item {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes entrada-erro {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// Quem pediu menos movimento no sistema recebe só o fade.
+@media (prefers-reduced-motion: reduce) {
+  .cartao,
+  .cartao > *,
+  .erro {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+
+  .entrar {
+    transition: none;
+  }
+
+  .entrar:active:not(:disabled) {
+    transform: none;
+  }
+}

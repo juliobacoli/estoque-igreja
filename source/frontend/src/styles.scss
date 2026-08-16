@@ -1,7 +1,24 @@
-/* Identidade visual ICPA — Capítulo 2, item 2.9.
-   Base escura: o glassmorphism (branco a 3%) só tem contraste sobre fundo escuro. */
+// Identidade visual ICPA — Capítulo 2, item 2.9.
+// Base escura: o glassmorphism (branco a 3%) só tem contraste sobre fundo escuro.
+
+@use '@angular/material' as mat;
+@use './theme-colors' as theme;
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700&display=swap');
+
+// Tematiza os componentes do Material (botão, campo, spinner) com a paleta da igreja.
+// O fundo geral das telas NÃO vem daqui — é definido no body, logo abaixo.
+html {
+  @include mat.theme((
+    color: (
+      theme-type: dark,
+      primary: theme.$primary-palette,
+      tertiary: theme.$tertiary-palette,
+    ),
+    typography: Montserrat,
+    density: 0,
+  ));
+}
 
 :root {
   --roxo-escuro: #2d1b3d;
@@ -38,6 +55,7 @@ body {
 }
 
 body {
+  // Fundo da ICPA, independente da paleta do Material.
   background: var(--roxo-escuro);
   color: var(--texto);
   font-family: var(--fonte-corpo);
@@ -62,7 +80,7 @@ h2 {
   font-size: 1.15rem;
 }
 
-/* ---------- Blocos reutilizados pelas telas ---------- */
+// ---------- Blocos reutilizados pelas telas ----------
 
 .glass {
   background: var(--glass-fundo);
@@ -78,6 +96,7 @@ h2 {
   padding: 1rem;
 }
 
+// Telas ainda não migradas para Material continuam usando estas classes.
 .botao {
   font-family: var(--fonte-corpo);
   font-size: 1rem;
@@ -89,7 +108,6 @@ h2 {
   padding: 0.85rem 1.25rem;
   width: 100%;
   cursor: pointer;
-  /* Alvo de toque confortável no celular. */
   min-height: 48px;
 }
 
@@ -125,7 +143,6 @@ h2 {
   width: 100%;
   font-family: var(--fonte-corpo);
   font-size: 1rem;
-  /* Fundo claro sobre o glass, conforme o papel do #F5F5F7 no item 2.9. */
   background: var(--claro);
   color: var(--texto-escuro);
   border: 1px solid transparent;

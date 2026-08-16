@@ -1,15 +1,27 @@
+.shell {
+  height: 100dvh;
+
+  /* O Material pinta container, conteúdo e gaveta com a superfície do tema.
+     Aqui quem manda é o fundo da ICPA (item 2.9). */
+  --mat-sidenav-container-background-color: var(--roxo-escuro);
+  --mat-sidenav-content-background-color: var(--roxo-escuro);
+  --mat-sidenav-container-text-color: var(--texto);
+  --mat-sidenav-content-text-color: var(--texto);
+  --mat-sidenav-scrim-color: rgba(10, 10, 11, 0.6);
+}
+
 .cabecalho {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: var(--glass-fundo);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  gap: 0.5rem;
+
+  --mat-toolbar-container-background-color: var(--glass-fundo);
+  --mat-toolbar-container-text-color: var(--texto);
+
   border-bottom: var(--glass-borda);
   backdrop-filter: blur(var(--blur));
   -webkit-backdrop-filter: blur(var(--blur));
-  position: sticky;
-  top: 0;
-  z-index: 30;
 }
 
 .marca {
@@ -18,91 +30,72 @@
   font-size: 1.1rem;
 }
 
-.hamburguer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  width: 44px;
-  height: 44px;
-  padding: 10px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.hamburguer span {
-  display: block;
-  height: 2px;
-  background: var(--texto);
-  border-radius: 2px;
-}
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: var(--overlay);
-  opacity: 0.6;
-  z-index: 40;
-}
-
 .menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
   width: 78%;
   max-width: 300px;
-  padding: 1.5rem 1rem;
-  background: var(--roxo-escuro);
-  border-radius: 0;
-  border-right: var(--glass-borda);
-  z-index: 50;
-  transform: translateX(-100%);
-  transition: transform 0.2s ease-out;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
+  padding: 1.5rem 0.75rem;
 
-.menu--aberto {
-  transform: translateX(0);
+  background: var(--roxo-escuro);
+  border-right: var(--glass-borda);
+
+  --mat-list-list-item-label-text-color: var(--texto);
+  --mat-list-list-item-leading-icon-color: var(--texto-muted);
+  --mat-list-active-indicator-shape: var(--raio);
 }
 
 .menu__perfil {
   margin: 0 0 1rem;
+  padding: 0 0.5rem;
 }
 
-.menu a {
-  color: var(--texto);
-  text-decoration: none;
-  padding: 0.85rem 0.5rem;
-  border-radius: var(--raio);
-  min-height: 48px;
-  display: flex;
-  align-items: center;
+.menu mat-nav-list {
+  padding: 0;
 }
 
-.menu a:hover,
+/* Rota atual destacada com o roxo da igreja. */
 .menu a.ativo {
   background: var(--roxo-primario);
+  border-radius: var(--raio);
+}
+
+.menu a.ativo mat-icon {
+  color: var(--texto);
+}
+
+/* O Material insere um wrapper próprio dentro da gaveta. Sem tornar ele flex,
+   o margin-top:auto do botão Sair não tem em que se apoiar e ele acaba colado
+   no último item do menu. */
+.menu ::ng-deep .mat-drawer-inner-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Separa visualmente a navegação da ação de sair. */
+.menu__rodape {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: var(--glass-borda);
 }
 
 .menu__sair {
-  margin-top: auto;
-  font-family: var(--fonte-corpo);
-  font-size: 1rem;
-  color: var(--texto-muted);
-  background: transparent;
-  border: var(--glass-borda);
-  border-radius: var(--raio);
-  padding: 0.85rem;
+  width: 100%;
   min-height: 48px;
-  cursor: pointer;
+
+  /* O contorno padrão do Material some sobre o fundo escuro. Aqui o botão
+     precisa ser reconhecível: texto branco, borda visível e leve preenchimento. */
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.06);
+
+  --mdc-outlined-button-outline-color: rgba(255, 255, 255, 0.35);
+  --mdc-outlined-button-label-text-color: var(--texto);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .menu {
-    transition: none;
-  }
+.menu__sair:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.menu__sair mat-icon {
+  margin-right: 0.35rem;
+  color: var(--dourado);
 }

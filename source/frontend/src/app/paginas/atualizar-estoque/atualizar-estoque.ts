@@ -1,6 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { forkJoin } from 'rxjs';
 import { ItensService } from '../../core/itens.service';
 import { Item } from '../../core/models';
@@ -12,18 +16,27 @@ interface LinhaContagem {
 
 @Component({
   selector: 'app-atualizar-estoque',
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    // MatSnackBarModule é obrigatório: o MatSnackBar não é providedIn root,
+    // quem o registra é o módulo.
+    MatSnackBarModule
+  ],
   templateUrl: './atualizar-estoque.html',
   styleUrl: './atualizar-estoque.css'
 })
 export class AtualizarEstoque implements OnInit {
   private readonly itensService = inject(ItensService);
   private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
 
   protected readonly linhas = signal<LinhaContagem[]>([]);
   protected readonly carregando = signal(true);
   protected readonly salvando = signal(false);
-  protected readonly erro = signal<string | null>(null);
+  protected readonly falhaAoCarregar = signal(false);
 
   ngOnInit(): void {
     this.itensService.listar().subscribe({
@@ -32,8 +45,9 @@ export class AtualizarEstoque implements OnInit {
         this.carregando.set(false);
       },
       error: () => {
-        this.erro.set('Não foi possível carregar os itens.');
+        this.falhaAoCarregar.set(true);
         this.carregando.set(false);
+        this.avisar('Não foi possível carregar os itens.');
       }
     });
   }
@@ -41,10 +55,23 @@ export class AtualizarEstoque implements OnInit {
   protected alterar(id: string, valor: string) {
     const numero = Number(valor);
 
+    this.definir(id, Number.isFinite(numero) ? numero : null);
+  }
+
+  protected somar(id: string, passo: number) {
+    const linha = this.linhas().find((l) => l.item.id === id);
+
+    if (linha) {
+      this.definir(id, linha.quantidade + passo);
+    }
+  }
+
+  /** Nunca abaixo de zero — a mesma regra que o servidor aplica. */
+  private definir(id: string, valor: number | null) {
     this.linhas.update((linhas) =>
       linhas.map((linha) =>
         linha.item.id === id
-          ? { ...linha, quantidade: Number.isFinite(numero) ? numero : linha.quantidade }
+          ? { ...linha, quantidade: valor === null ? linha.quantidade : Math.max(0, valor) }
           : linha
       )
     );
@@ -65,22 +92,25 @@ export class AtualizarEstoque implements OnInit {
       return;
     }
 
-    if (alterados.some((linha) => linha.quantidade < 0)) {
-      this.erro.set('A quantidade não pode ser negativa.');
-      return;
-    }
-
-    this.erro.set(null);
     this.salvando.set(true);
 
     forkJoin(
       alterados.map((linha) => this.itensService.atualizarEstoque(linha.item.id, linha.quantidade))
     ).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => {
+        this.avisar(
+          alterados.length === 1 ? 'Contagem salva.' : `${alterados.length} itens atualizados.`
+        );
+        this.router.navigate(['/dashboard']);
+      },
       error: (resposta) => {
-        this.erro.set(resposta.error?.error ?? 'Não foi possível salvar a contagem.');
+        this.avisar(resposta.error?.error ?? 'Não foi possível salvar a contagem.');
         this.salvando.set(false);
       }
     });
+  }
+
+  private avisar(mensagem: string) {
+    this.snackBar.open(mensagem, 'Fechar', { duration: 4000 });
   }
 }

@@ -1,12 +1,12 @@
 <main class="tela">
-  <form class="cartao glass" (ngSubmit)="entrar()">
+  <form class="cartao glass" [@shake]="shakeState()" (ngSubmit)="entrar()">
     <h1>Estoque <span class="dourado">ICPA</span></h1>
     <p class="muted">Controle de itens de limpeza</p>
 
-    <div class="campo">
-      <label for="login">Login</label>
+    <mat-form-field appearance="outline" class="campo-mat">
+      <mat-label>Login</mat-label>
       <input
-        id="login"
+        matInput
         name="login"
         type="text"
         autocomplete="username"
@@ -14,51 +14,41 @@
         [(ngModel)]="login"
         [disabled]="enviando()"
         required>
-    </div>
+    </mat-form-field>
 
-    <div class="campo">
-      <label for="senha">Senha</label>
+    <mat-form-field appearance="outline" class="campo-mat">
+      <mat-label>Senha</mat-label>
+      <input
+        matInput
+        name="senha"
+        [type]="mostrarSenha() ? 'text' : 'password'"
+        autocomplete="current-password"
+        [(ngModel)]="senha"
+        [disabled]="enviando()"
+        required>
 
-      <div class="senha">
-        <input
-          id="senha"
-          name="senha"
-          [type]="mostrarSenha() ? 'text' : 'password'"
-          autocomplete="current-password"
-          [(ngModel)]="senha"
-          [disabled]="enviando()"
-          required>
-
-        <button
-          class="senha__olho"
-          type="button"
-          [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'"
-          [attr.aria-pressed]="mostrarSenha()"
-          (click)="alternarSenha()">
-          @if (mostrarSenha()) {
-            <!-- olho cortado: senha visível, tocar esconde -->
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M2 2l20 20" />
-              <path d="M6.7 6.7C4.6 8.1 3 10 2 12c2 3.9 5.6 6.5 10 6.5 1.9 0 3.6-.5 5.1-1.3" />
-              <path d="M9.9 5.7A9.9 9.9 0 0 1 12 5.5c4.4 0 8 2.6 10 6.5-.8 1.6-2 3-3.4 4.1" />
-              <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
-            </svg>
-          } @else {
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M2 12c2-3.9 5.6-6.5 10-6.5S20 8.1 22 12c-2 3.9-5.6 6.5-10 6.5S4 15.9 2 12z" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-          }
-        </button>
-      </div>
-    </div>
+      <button
+        matSuffix
+        mat-icon-button
+        type="button"
+        [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'"
+        [attr.aria-pressed]="mostrarSenha()"
+        (click)="alternarSenha()">
+        <mat-icon>{{ mostrarSenha() ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
 
     @if (erro(); as mensagem) {
       <p class="erro" role="alert">{{ mensagem }}</p>
     }
 
-    <button class="botao" type="submit" [disabled]="enviando()">
-      {{ enviando() ? 'Entrando…' : 'Entrar' }}
+    <!-- Sem color="primary": obsoleto no M3, o botão já usa a primária do tema. -->
+    <button mat-flat-button class="entrar" type="submit" [disabled]="enviando()">
+      @if (enviando()) {
+        <mat-progress-spinner diameter="20" mode="indeterminate" />
+      } @else {
+        Entrar
+      }
     </button>
   </form>
 </main>

@@ -1,30 +1,29 @@
 <h1>Cadastro de itens</h1>
 
-<form class="cartao glass" (ngSubmit)="cadastrar()">
-  <div class="campo">
-    <label for="nome">Nome</label>
-    <input id="nome" name="nome" type="text" [(ngModel)]="nome" [disabled]="salvando()" required>
-  </div>
+<form class="cartao glass" [@shake]="shakeState()" (ngSubmit)="cadastrar()">
+  <mat-form-field appearance="outline" class="campo-mat">
+    <mat-label>Nome</mat-label>
+    <input matInput name="nome" type="text" [(ngModel)]="nome" [disabled]="salvando()" required>
+  </mat-form-field>
 
-  <div class="campo">
-    <label for="unidade">Unidade</label>
-    <select id="unidade" name="unidade" [(ngModel)]="unidade" [disabled]="salvando()" required>
-      <option value="" disabled>Selecione…</option>
+  <mat-form-field appearance="outline" class="campo-mat">
+    <mat-label>Unidade</mat-label>
+    <mat-select name="unidade" [(ngModel)]="unidade" [disabled]="salvando()" required>
       @for (opcao of unidades; track opcao) {
-        <option [value]="opcao">{{ opcao }}</option>
+        <mat-option [value]="opcao">{{ opcao }}</mat-option>
       }
-    </select>
-  </div>
+    </mat-select>
+  </mat-form-field>
 
   @if (erro(); as mensagem) {
     <p class="erro" role="alert">{{ mensagem }}</p>
   }
 
-  @if (sucesso(); as mensagem) {
-    <p class="dourado" role="status">{{ mensagem }}</p>
-  }
-
-  <button class="botao" type="submit" [disabled]="salvando()">
-    {{ salvando() ? 'Salvando…' : 'Cadastrar item' }}
+  <button mat-flat-button class="cadastrar" type="submit" [disabled]="salvando()">
+    @if (salvando()) {
+      <mat-progress-spinner diameter="20" mode="indeterminate" />
+    } @else {
+      Cadastrar item
+    }
   </button>
 </form>

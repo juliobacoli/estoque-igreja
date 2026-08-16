@@ -1,3 +1,13 @@
+.filtro {
+  width: 100%;
+}
+
+.centro {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0;
+}
+
 .lista {
   list-style: none;
   margin: 0 0 1rem;
@@ -20,14 +30,24 @@
 
 .registro__item {
   font-weight: 500;
+  /* Nome longo quebra em vez de empurrar a quantidade para fora. */
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .registro__qtd {
   font-family: var(--fonte-titulo);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .registro__meta {
   margin: 0.25rem 0 0;
   font-size: 0.8rem;
+}
+
+.carregar-mais {
+  width: 100%;
+  min-height: 48px;
+  margin-bottom: 1rem;
 }
