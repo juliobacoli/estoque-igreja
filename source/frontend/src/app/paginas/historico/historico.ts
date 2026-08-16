@@ -43,7 +43,9 @@ export class Historico implements OnInit {
   private pagina = 1;
 
   ngOnInit(): void {
-    this.itensService.listar().subscribe({
+    // Inclui itens removidos: sem eles, o histórico de um item inativado ficaria
+    // sem como ser filtrado (Capítulo 4, item 4.3).
+    this.itensService.listar(true).subscribe({
       next: (itens) => this.itens.set(itens),
       error: () => undefined
     });

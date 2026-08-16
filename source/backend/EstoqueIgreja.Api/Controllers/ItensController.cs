@@ -1,6 +1,7 @@
 using EstoqueIgreja.Api.Contracts.Requests;
 using EstoqueIgreja.Application.Itens.Commands.AtualizarEstoque;
 using EstoqueIgreja.Application.Itens.Commands.CriarItem;
+using EstoqueIgreja.Application.Itens.Commands.RemoverItem;
 using EstoqueIgreja.Application.Itens.Queries.ListarItens;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,10 +20,16 @@ public class ItensController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Só itens ativos por padrão. O filtro do Histórico usa
+    /// <c>incluirInativos=true</c> para alcançar o histórico de itens removidos.
+    /// </summary>
     [HttpGet]
-    public async Task<IActionResult> Listar(CancellationToken ct)
+    public async Task<IActionResult> Listar(
+        [FromQuery] bool incluirInativos = false,
+        CancellationToken ct = default)
     {
-        return Ok(await _mediator.Send(new ListarItensQuery(), ct));
+        return Ok(await _mediator.Send(new ListarItensQuery(incluirInativos), ct));
     }
 
     /// <summary>
@@ -48,5 +55,15 @@ public class ItensController : ControllerBase
             new AtualizarEstoqueCommand(id, request.NovaQuantidade), ct);
 
         return Ok(resultado);
+    }
+
+    /// <summary>
+    /// Restrito a Admin no servidor, igual ao cadastro (Capítulo 4, item 4.3).
+    /// </summary>
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Remover(Guid id, CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(new RemoverItemCommand(id), ct));
     }
 }

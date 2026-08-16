@@ -15,8 +15,14 @@ public class ListarItensQueryHandler : IRequestHandler<ListarItensQuery, IReadOn
 
     public async Task<IReadOnlyList<ItemListado>> Handle(ListarItensQuery request, CancellationToken ct)
     {
-        return await _db.Itens
-            .AsNoTracking()
+        var consulta = _db.Itens.AsNoTracking();
+
+        if (!request.IncluirInativos)
+        {
+            consulta = consulta.Where(i => i.Ativo);
+        }
+
+        return await consulta
             // Mesma ordenação do relatório: pelo nome sem acento, senão itens
             // como "Álcool em gel" caem no fim da lista.
             .OrderBy(i => i.NomeNormalizado)

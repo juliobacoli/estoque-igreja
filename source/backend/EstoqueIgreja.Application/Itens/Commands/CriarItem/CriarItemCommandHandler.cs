@@ -19,11 +19,26 @@ public class CriarItemCommandHandler : IRequestHandler<CriarItemCommand, ItemCri
     {
         var normalizado = Item.Normalizar(request.Nome);
 
-        var jaExiste = await _db.Itens.AnyAsync(i => i.NomeNormalizado == normalizado, ct);
+        var existente = await _db.Itens
+            .FirstOrDefaultAsync(i => i.NomeNormalizado == normalizado, ct);
 
-        if (jaExiste)
+        if (existente is not null)
         {
-            throw new ConflitoException("Já existe um item com esse nome");
+            // Nome de item ativo é duplicata de verdade.
+            if (existente.Ativo)
+            {
+                throw new ConflitoException("Já existe um item com esse nome");
+            }
+
+            // Nome de item inativo reativa o registro em vez de criar outro: o
+            // índice único continua valendo e o histórico antigo segue ligado a
+            // este mesmo item.
+            existente.Reativar(request.Nome, request.Unidade);
+
+            await _db.SaveChangesAsync(ct);
+
+            return new ItemCriadoResult(
+                existente.Id, existente.Nome, existente.Unidade, existente.EstoqueAtual);
         }
 
         var item = Item.Criar(request.Nome, request.Unidade);

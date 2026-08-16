@@ -13,6 +13,11 @@ export interface EstoqueAtualizado {
   quantidadeNova: number;
 }
 
+/** `removido` diz se o item saiu do banco ou apenas ficou inativo. */
+export interface ItemRemovido {
+  removido: boolean;
+}
+
 export interface RegistroHistorico {
   itemNome: string;
   quantidadeAnterior: number;
