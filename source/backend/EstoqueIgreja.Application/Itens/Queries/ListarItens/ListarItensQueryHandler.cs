@@ -17,7 +17,9 @@ public class ListarItensQueryHandler : IRequestHandler<ListarItensQuery, IReadOn
     {
         return await _db.Itens
             .AsNoTracking()
-            .OrderBy(i => i.Nome)
+            // Mesma ordenação do relatório: pelo nome sem acento, senão itens
+            // como "Álcool em gel" caem no fim da lista.
+            .OrderBy(i => i.NomeNormalizado)
             .Select(i => new ItemListado(i.Id, i.Nome, i.Unidade, i.EstoqueAtual))
             .ToListAsync(ct);
     }
