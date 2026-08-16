@@ -26,3 +26,56 @@
   --mat-progress-spinner-active-indicator-color: #fff;
   margin: 0 auto;
 }
+
+.titulo-lista {
+  margin: 2rem 0 0.75rem;
+}
+
+.centro {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0;
+}
+
+.lista {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.5rem 0.75rem 1rem;
+}
+
+.linha__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.linha__nome {
+  font-weight: 500;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.linha__unidade {
+  font-size: 0.8rem;
+}
+
+.remover {
+  flex-shrink: 0;
+  color: var(--erro);
+}
+
+.remover mat-progress-spinner {
+  --mat-progress-spinner-active-indicator-color: var(--erro);
+}

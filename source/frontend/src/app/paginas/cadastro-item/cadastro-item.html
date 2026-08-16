@@ -27,3 +27,38 @@
     }
   </button>
 </form>
+
+<h2 class="titulo-lista">Itens cadastrados</h2>
+
+@if (carregando()) {
+  <div class="centro">
+    <mat-progress-spinner diameter="36" mode="indeterminate" />
+  </div>
+} @else if (itens().length === 0) {
+  <p class="muted">Nenhum item cadastrado ainda.</p>
+} @else {
+  <ul class="lista">
+    @for (item of itens(); track item.id) {
+      <li class="linha glass">
+        <div class="linha__info">
+          <span class="linha__nome">{{ item.nome }}</span>
+          <span class="muted linha__unidade">{{ item.unidade }} · {{ item.estoqueAtual }} em estoque</span>
+        </div>
+
+        <button
+          mat-icon-button
+          type="button"
+          class="remover"
+          [attr.aria-label]="'Remover ' + item.nome"
+          [disabled]="removendo() !== null"
+          (click)="remover(item)">
+          @if (removendo() === item.id) {
+            <mat-progress-spinner diameter="20" mode="indeterminate" />
+          } @else {
+            <mat-icon>delete_outline</mat-icon>
+          }
+        </button>
+      </li>
+    }
+  </ul>
+}
