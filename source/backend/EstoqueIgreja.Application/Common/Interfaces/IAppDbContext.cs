@@ -1,3 +1,4 @@
+using EstoqueIgreja.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 

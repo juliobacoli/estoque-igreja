@@ -1,3 +1,5 @@
+using EstoqueIgreja.Application.Common.Interfaces;
+using EstoqueIgreja.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -52,7 +54,6 @@ public class AppDbContext : DbContext, IAppDbContext
                 .HasForeignKey(a => a.UsuarioId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Índice na ordenação usada pelo Histórico (mais recente primeiro).
             entidade.HasIndex(a => new { a.ItemId, a.Data });
             entidade.HasIndex(a => a.Data);
         });
