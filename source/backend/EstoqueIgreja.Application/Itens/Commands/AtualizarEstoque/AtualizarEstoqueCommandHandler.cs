@@ -20,7 +20,13 @@ public class AtualizarEstoqueCommandHandler
 
     public async Task<EstoqueAtualizadoResult> Handle(AtualizarEstoqueCommand request, CancellationToken ct)
     {
-        var item = await _db.Itens.FirstOrDefaultAsync(i => i.Id == request.ItemId, ct);
+        // Inicia a transação. O banco gerenciará a fila (lock) sem disparar exceptions de concorrência.
+        using var transaction = await _db.BeginTransactionAsync(ct);
+
+        // FOR UPDATE trava exclusivamente esta linha para a transação atual no PostgreSQL
+        var item = await _db.Itens
+            .FromSqlInterpolated($"SELECT * FROM \"Itens\" WHERE \"Id\" = {request.ItemId} FOR UPDATE")
+            .FirstOrDefaultAsync(ct);
 
         if (item is null)
         {
@@ -37,6 +43,7 @@ public class AtualizarEstoqueCommandHandler
             AtualizacaoEstoque.Criar(item.Id, quantidadeAnterior, request.NovaQuantidade, _usuarioAtual.Id));
 
         await _db.SaveChangesAsync(ct);
+        await transaction.CommitAsync(ct);
 
         return new EstoqueAtualizadoResult(item.Id, quantidadeAnterior, item.EstoqueAtual);
     }

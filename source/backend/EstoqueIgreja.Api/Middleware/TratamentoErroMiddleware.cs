@@ -3,10 +3,6 @@ using FluentValidation;
 
 namespace EstoqueIgreja.Api.Middleware;
 
-/// <summary>
-/// Traduz exceções em respostas no formato { "error": "..." }, que é o contrato
-/// usado por toda a API (Capítulo 3, item 3.5).
-/// </summary>
 public class TratamentoErroMiddleware
 {
     private readonly RequestDelegate _proximo;
@@ -48,7 +44,6 @@ public class TratamentoErroMiddleware
         {
             _logger.LogError(ex, "Erro não tratado em {Caminho}", contexto.Request.Path);
 
-            // Mensagem genérica: detalhe do erro fica só no log do servidor.
             await Responder(contexto, 500, new { error = "Erro interno" });
         }
     }

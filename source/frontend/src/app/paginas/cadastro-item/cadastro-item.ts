@@ -11,6 +11,8 @@ import { ItensService } from '../../core/itens.service';
 export class CadastroItem {
   private readonly itensService = inject(ItensService);
 
+  protected readonly unidades = ['rolo', 'pacote', 'unidade'];
+
   protected nome = '';
   protected unidade = '';
 

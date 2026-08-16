@@ -1,14 +1,14 @@
 <h1>Histórico</h1>
 
-<label class="campo">
-  <span>Filtrar por item</span>
-  <select name="item" [(ngModel)]="itemSelecionado" (ngModelChange)="filtrar()">
+<div class="campo">
+  <label for="filtro-item">Filtrar por item</label>
+  <select id="filtro-item" name="item" [(ngModel)]="itemSelecionado" (ngModelChange)="filtrar()">
     <option value="">Todos os itens</option>
     @for (item of itens(); track item.id) {
       <option [value]="item.id">{{ item.nome }}</option>
     }
   </select>
-</label>
+</div>
 
 @if (erro(); as mensagem) {
   <p class="erro" role="alert">{{ mensagem }}</p>

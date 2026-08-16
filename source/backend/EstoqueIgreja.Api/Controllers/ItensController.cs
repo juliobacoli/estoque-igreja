@@ -1,3 +1,4 @@
+using EstoqueIgreja.Api.Contracts.Requests;
 using EstoqueIgreja.Application.Itens.Commands.AtualizarEstoque;
 using EstoqueIgreja.Application.Itens.Commands.CriarItem;
 using EstoqueIgreja.Application.Itens.Queries.ListarItens;
@@ -49,5 +50,3 @@ public class ItensController : ControllerBase
         return Ok(resultado);
     }
 }
-
-public record AtualizarEstoqueRequest(int NovaQuantidade);

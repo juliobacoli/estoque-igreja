@@ -1,21 +1,20 @@
 <h1>Cadastro de itens</h1>
 
 <form class="cartao glass" (ngSubmit)="cadastrar()">
-  <label class="campo">
-    <span>Nome</span>
-    <input name="nome" type="text" [(ngModel)]="nome" [disabled]="salvando()" required>
-  </label>
+  <div class="campo">
+    <label for="nome">Nome</label>
+    <input id="nome" name="nome" type="text" [(ngModel)]="nome" [disabled]="salvando()" required>
+  </div>
 
-  <label class="campo">
-    <span>Unidade</span>
-    <input
-      name="unidade"
-      type="text"
-      placeholder="rolo, pacote, unidade…"
-      [(ngModel)]="unidade"
-      [disabled]="salvando()"
-      required>
-  </label>
+  <div class="campo">
+    <label for="unidade">Unidade</label>
+    <select id="unidade" name="unidade" [(ngModel)]="unidade" [disabled]="salvando()" required>
+      <option value="" disabled>Selecione…</option>
+      @for (opcao of unidades; track opcao) {
+        <option [value]="opcao">{{ opcao }}</option>
+      }
+    </select>
+  </div>
 
   @if (erro(); as mensagem) {
     <p class="erro" role="alert">{{ mensagem }}</p>

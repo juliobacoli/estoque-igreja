@@ -1,6 +1,5 @@
-using EstoqueIgreja.Application.Common.Interfaces;
-using EstoqueIgreja.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EstoqueIgreja.Infrastructure.Data;
 
@@ -13,6 +12,11 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<Usuario> Usuarios => Set<Usuario>();
     public DbSet<Item> Itens => Set<Item>();
     public DbSet<AtualizacaoEstoque> AtualizacoesEstoque => Set<AtualizacaoEstoque>();
+
+    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    {
+        return Database.BeginTransactionAsync(cancellationToken);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -18,6 +18,11 @@ export class Login {
 
   protected readonly enviando = signal(false);
   protected readonly erro = signal<string | null>(null);
+  protected readonly mostrarSenha = signal(false);
+
+  protected alternarSenha() {
+    this.mostrarSenha.update((mostrando) => !mostrando);
+  }
 
   protected entrar() {
     this.erro.set(null);
