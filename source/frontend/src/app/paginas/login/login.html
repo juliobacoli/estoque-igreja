@@ -31,6 +31,7 @@
         matSuffix
         mat-icon-button
         type="button"
+        [class.destacado]="destacarOlho()"
         [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'"
         [attr.aria-pressed]="mostrarSenha()"
         (click)="alternarSenha()">
