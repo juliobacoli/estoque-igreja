@@ -17,9 +17,11 @@ public class ExportarEstoquePdfQueryHandler : IRequestHandler<ExportarEstoquePdf
 
     public async Task<byte[]> Handle(ExportarEstoquePdfQuery request, CancellationToken ct)
     {
+        // Ordena pelo nome sem acento: por code point, "Álcool" viria depois de
+        // "Sabão", porque as letras acentuadas ficam acima do ASCII.
         var itens = await _db.Itens
             .AsNoTracking()
-            .OrderBy(i => i.Nome)
+            .OrderBy(i => i.NomeNormalizado)
             .Select(i => new ItemDoRelatorio(i.Nome, i.Unidade, i.EstoqueAtual))
             .ToListAsync(ct);
 
