@@ -1,0 +1,45 @@
+.lista {
+  list-style: none;
+  margin: 1rem 0 1.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+}
+
+.linha__nome {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+}
+
+.linha__input {
+  width: 90px;
+  flex-shrink: 0;
+  font-family: var(--fonte-corpo);
+  font-size: 1.1rem;
+  text-align: center;
+  background: var(--claro);
+  color: var(--texto-escuro);
+  border: 1px solid transparent;
+  border-radius: var(--raio);
+  padding: 0.6rem;
+  min-height: 48px;
+}
+
+.linha__input:focus {
+  outline: 2px solid var(--dourado);
+  outline-offset: 1px;
+}
+
+.acoes {
+  padding-bottom: 1rem;
+}

@@ -1,0 +1,43 @@
+<h1>Histórico</h1>
+
+<div class="campo">
+  <label for="filtro-item">Filtrar por item</label>
+  <select id="filtro-item" name="item" [(ngModel)]="itemSelecionado" (ngModelChange)="filtrar()">
+    <option value="">Todos os itens</option>
+    @for (item of itens(); track item.id) {
+      <option [value]="item.id">{{ item.nome }}</option>
+    }
+  </select>
+</div>
+
+@if (erro(); as mensagem) {
+  <p class="erro" role="alert">{{ mensagem }}</p>
+}
+
+@if (registros().length === 0 && !carregando()) {
+  <p class="muted">Nenhuma atualização registrada.</p>
+} @else {
+  <ul class="lista">
+    @for (registro of registros(); track $index) {
+      <li class="registro glass">
+        <div class="registro__topo">
+          <span class="registro__item">{{ registro.itemNome }}</span>
+          <span class="registro__qtd">
+            {{ registro.quantidadeAnterior }} <span class="dourado">→</span> {{ registro.quantidadeNova }}
+          </span>
+        </div>
+        <p class="muted registro__meta">
+          {{ registro.perfil }} · {{ registro.data | date: 'dd/MM/yyyy HH:mm' }}
+        </p>
+      </li>
+    }
+  </ul>
+}
+
+@if (carregando()) {
+  <p class="muted">Carregando…</p>
+}
+
+@if (temMais() && !carregando()) {
+  <button class="botao botao--secundario" type="button" (click)="carregarMais()">Carregar mais</button>
+}

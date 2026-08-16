@@ -1,9 +1,11 @@
-using EstoqueIgreja.Api.Data;
+using EstoqueIgreja.Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Api.Controllers;
 
+[AllowAnonymous]
 [ApiController]
 [Route("health")]
 public class HealthController : ControllerBase

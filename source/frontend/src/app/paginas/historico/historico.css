@@ -1,0 +1,33 @@
+.lista {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.registro {
+  padding: 0.85rem 1rem;
+}
+
+.registro__topo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.registro__item {
+  font-weight: 500;
+}
+
+.registro__qtd {
+  font-family: var(--fonte-titulo);
+  white-space: nowrap;
+}
+
+.registro__meta {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+}
