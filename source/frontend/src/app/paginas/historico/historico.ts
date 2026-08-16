@@ -1,6 +1,11 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { HistoricoService } from '../../core/historico.service';
 import { ItensService } from '../../core/itens.service';
 import { Item, RegistroHistorico } from '../../core/models';
@@ -9,19 +14,26 @@ const TAMANHO_PAGINA = 20;
 
 @Component({
   selector: 'app-historico',
-  imports: [FormsModule, DatePipe],
+  imports: [
+    FormsModule,
+    DatePipe,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './historico.html',
   styleUrl: './historico.css'
 })
 export class Historico implements OnInit {
   private readonly historicoService = inject(HistoricoService);
   private readonly itensService = inject(ItensService);
+  private readonly snackBar = inject(MatSnackBar);
 
   protected readonly registros = signal<RegistroHistorico[]>([]);
   protected readonly itens = signal<Item[]>([]);
   protected readonly temMais = signal(false);
   protected readonly carregando = signal(true);
-  protected readonly erro = signal<string | null>(null);
 
   protected itemSelecionado = '';
 
@@ -48,7 +60,6 @@ export class Historico implements OnInit {
 
   private buscar(reiniciar: boolean) {
     this.carregando.set(true);
-    this.erro.set(null);
 
     this.historicoService
       .listar(this.pagina, TAMANHO_PAGINA, this.itemSelecionado || undefined)
@@ -61,8 +72,10 @@ export class Historico implements OnInit {
           this.carregando.set(false);
         },
         error: () => {
-          this.erro.set('Não foi possível carregar o histórico.');
           this.carregando.set(false);
+          this.snackBar.open('Não foi possível carregar o histórico.', 'Fechar', {
+            duration: 4000
+          });
         }
       });
   }

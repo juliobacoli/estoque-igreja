@@ -2,31 +2,70 @@
 <p class="muted">Ajuste o número para a quantidade contada na prateleira.</p>
 
 @if (carregando()) {
-<p class="muted">Carregando…</p>
+  <div class="centro">
+    <mat-progress-spinner diameter="36" mode="indeterminate" />
+  </div>
+} @else if (falhaAoCarregar()) {
+  <p class="erro" role="alert">Não foi possível carregar os itens.</p>
 } @else if (linhas().length === 0) {
-<p class="muted">Nenhum item cadastrado ainda.</p>
+  <p class="muted">Nenhum item cadastrado ainda.</p>
 } @else {
-<ul class="lista">
-  @for (linha of linhas(); track linha.item.id) {
-  <li class="linha glass">
-    <label class="linha__nome" [attr.for]="'qtd-' + linha.item.id">
-      {{ linha.item.nome }}
-      <small class="muted">{{ linha.item.unidade }}</small>
-    </label>
+  <ul class="lista">
+    @for (linha of linhas(); track linha.item.id) {
+      <li class="linha glass">
+        <div class="linha__info">
+          <span class="linha__nome">{{ linha.item.nome }}</span>
+          <span class="muted linha__unidade">{{ linha.item.unidade }}</span>
+        </div>
 
-    <input class="linha__input" [id]="'qtd-' + linha.item.id" type="number" min="0" inputmode="numeric"
-      [value]="linha.quantidade" [disabled]="salvando()" (input)="alterar(linha.item.id, $any($event.target).value)">
-  </li>
-  }
-</ul>
-}
+        <div class="contador">
+          <button
+            mat-icon-button
+            type="button"
+            class="contador__botao"
+            [attr.aria-label]="'Diminuir ' + linha.item.nome"
+            [disabled]="salvando() || linha.quantidade === 0"
+            (click)="somar(linha.item.id, -1)">
+            <mat-icon>remove</mat-icon>
+          </button>
 
-@if (erro(); as mensagem) {
-<p class="erro" role="alert">{{ mensagem }}</p>
+          <input
+            class="contador__valor"
+            [id]="'qtd-' + linha.item.id"
+            type="number"
+            min="0"
+            inputmode="numeric"
+            [attr.aria-label]="'Quantidade de ' + linha.item.nome"
+            [value]="linha.quantidade"
+            [disabled]="salvando()"
+            (input)="alterar(linha.item.id, $any($event.target).value)">
+
+          <button
+            mat-icon-button
+            type="button"
+            class="contador__botao"
+            [attr.aria-label]="'Aumentar ' + linha.item.nome"
+            [disabled]="salvando()"
+            (click)="somar(linha.item.id, 1)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </li>
+    }
+  </ul>
 }
 
 <div class="acoes">
-  <button class="botao" type="button" [disabled]="salvando() || !temAlteracao()" (click)="salvar()">
-    {{ salvando() ? 'Salvando…' : 'Salvar' }}
+  <button
+    mat-flat-button
+    class="salvar"
+    type="button"
+    [disabled]="salvando() || !temAlteracao()"
+    (click)="salvar()">
+    @if (salvando()) {
+      <mat-progress-spinner diameter="20" mode="indeterminate" />
+    } @else {
+      Salvar contagem
+    }
   </button>
 </div>

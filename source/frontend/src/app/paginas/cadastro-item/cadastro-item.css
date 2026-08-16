@@ -1,9 +1,28 @@
 .cartao {
   padding: 1.25rem;
   margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
-.erro,
-.dourado {
+.campo-mat {
+  width: 100%;
+}
+
+.erro {
   margin: 0 0 0.75rem;
+}
+
+.cadastrar {
+  width: 100%;
+  min-height: 48px;
+
+  /* O M3 em tema escuro usaria o tom claro da paleta como fundo do botão cheio. */
+  --mdc-filled-button-container-color: var(--roxo-primario);
+  --mdc-filled-button-label-text-color: #fff;
+}
+
+.cadastrar mat-progress-spinner {
+  --mat-progress-spinner-active-indicator-color: #fff;
+  margin: 0 auto;
 }

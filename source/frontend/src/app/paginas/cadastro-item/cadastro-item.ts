@@ -1,15 +1,31 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItensService } from '../../core/itens.service';
+import { shakeAnimation } from '../../shared/animations';
 
 @Component({
   selector: 'app-cadastro-item',
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './cadastro-item.html',
-  styleUrl: './cadastro-item.css'
+  styleUrl: './cadastro-item.css',
+  animations: [shakeAnimation]
 })
 export class CadastroItem {
   private readonly itensService = inject(ItensService);
+  private readonly snackBar = inject(MatSnackBar);
 
   protected readonly unidades = ['rolo', 'pacote', 'unidade'];
 
@@ -18,16 +34,15 @@ export class CadastroItem {
 
   protected readonly salvando = signal(false);
   protected readonly erro = signal<string | null>(null);
-  protected readonly sucesso = signal<string | null>(null);
+  protected readonly shakeState = signal<'idle' | 'shake'>('idle');
 
   protected cadastrar() {
     this.erro.set(null);
-    this.sucesso.set(null);
     this.salvando.set(true);
 
     this.itensService.criar(this.nome, this.unidade).subscribe({
       next: (item) => {
-        this.sucesso.set(`"${item.nome}" cadastrado.`);
+        this.snackBar.open(`"${item.nome}" cadastrado.`, 'Fechar', { duration: 4000 });
         this.nome = '';
         this.unidade = '';
         this.salvando.set(false);
@@ -37,7 +52,13 @@ export class CadastroItem {
         // normalizado — pega duplicata com acento ou caixa diferente.
         this.erro.set(resposta.error?.error ?? 'Não foi possível cadastrar o item.');
         this.salvando.set(false);
+        this.sacudir();
       }
     });
+  }
+
+  private sacudir() {
+    this.shakeState.set('shake');
+    setTimeout(() => this.shakeState.set('idle'), 450);
   }
 }

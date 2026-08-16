@@ -1,9 +1,11 @@
 <h1>Estoque atual</h1>
 
 @if (carregando()) {
-  <p class="muted">Carregando…</p>
-} @else if (erro(); as mensagem) {
-  <p class="erro" role="alert">{{ mensagem }}</p>
+  <div class="centro">
+    <mat-progress-spinner diameter="36" mode="indeterminate" />
+  </div>
+} @else if (falhaAoCarregar()) {
+  <p class="erro" role="alert">Não foi possível carregar os itens.</p>
 } @else if (itens().length === 0) {
   <p class="muted">Nenhum item cadastrado ainda.</p>
 } @else {
@@ -11,20 +13,32 @@
     @for (item of itens(); track item.id) {
       <li class="linha glass">
         <span class="linha__nome">{{ item.nome }}</span>
-        <span class="linha__qtd">{{ item.estoqueAtual }} <small class="muted">{{ item.unidade }}</small></span>
+        <span class="linha__qtd">
+          {{ item.estoqueAtual }}
+          <small class="muted">{{ item.unidade }}</small>
+        </span>
       </li>
     }
   </ul>
 }
 
 <div class="acoes">
-  <button class="botao" type="button" (click)="irParaAtualizar()">Atualizar estoque</button>
-
-  <button class="botao botao--secundario" type="button" [disabled]="exportando()" (click)="exportarPdf()">
-    {{ exportando() ? 'Gerando PDF…' : 'Exportar PDF' }}
+  <button mat-flat-button class="acao acao--principal" type="button" (click)="irParaAtualizar()">
+    <mat-icon>edit</mat-icon>
+    Atualizar estoque
   </button>
 
-  @if (avisoExport(); as aviso) {
-    <p class="muted" role="status">{{ aviso }}</p>
-  }
+  <button
+    mat-stroked-button
+    class="acao"
+    type="button"
+    [disabled]="exportando()"
+    (click)="exportarPdf()">
+    @if (exportando()) {
+      <mat-progress-spinner diameter="20" mode="indeterminate" />
+    } @else {
+      <mat-icon>picture_as_pdf</mat-icon>
+      Exportar PDF
+    }
+  </button>
 </div>

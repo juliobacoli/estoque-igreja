@@ -1,3 +1,9 @@
+.centro {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
 .lista {
   list-style: none;
   margin: 1rem 0 1.5rem;
@@ -11,35 +17,94 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.85rem 1rem;
+  gap: 0.75rem;
+  padding: 0.75rem 0.85rem;
+}
+
+.linha__info {
+  display: flex;
+  flex-direction: column;
+  /* Deixa o nome ocupar o espaço restante e quebrar em duas linhas em vez de
+     ser cortado com reticências. */
+  min-width: 0;
+  flex: 1;
 }
 
 .linha__nome {
-  display: flex;
-  flex-direction: column;
   font-weight: 500;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
-.linha__input {
-  width: 90px;
+.linha__unidade {
+  font-size: 0.8rem;
+}
+
+.contador {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
   flex-shrink: 0;
+  border-radius: var(--raio);
+  padding: 2px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.contador__botao {
+  color: var(--texto);
+  flex-shrink: 0;
+}
+
+.contador__botao:disabled {
+  opacity: 0.35;
+}
+
+.contador__valor {
+  width: 52px;
   font-family: var(--fonte-corpo);
   font-size: 1.1rem;
+  font-weight: 600;
   text-align: center;
   background: var(--claro);
   color: var(--texto-escuro);
   border: 1px solid transparent;
-  border-radius: var(--raio);
-  padding: 0.6rem;
-  min-height: 48px;
+  border-radius: 8px;
+  padding: 0.45rem 0.2rem;
+  min-height: 44px;
 }
 
-.linha__input:focus {
+.contador__valor:focus {
   outline: 2px solid var(--dourado);
   outline-offset: 1px;
 }
 
+/* Esconde as setinhas nativas: quem incrementa agora são os botões, que têm
+   alvo de toque adequado para celular. */
+.contador__valor::-webkit-outer-spin-button,
+.contador__valor::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.contador__valor {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 .acoes {
   padding-bottom: 1rem;
+}
+
+.salvar {
+  width: 100%;
+  min-height: 48px;
+
+  /* Mesma correção do Login: o M3 escuro usaria o tom claro da paleta como fundo. */
+  --mdc-filled-button-container-color: var(--roxo-primario);
+  --mdc-filled-button-label-text-color: #fff;
+}
+
+.salvar mat-progress-spinner {
+  --mat-progress-spinner-active-indicator-color: #fff;
+  margin: 0 auto;
 }

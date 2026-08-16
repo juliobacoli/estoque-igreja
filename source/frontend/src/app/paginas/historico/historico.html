@@ -1,18 +1,14 @@
 <h1>Histórico</h1>
 
-<div class="campo">
-  <label for="filtro-item">Filtrar por item</label>
-  <select id="filtro-item" name="item" [(ngModel)]="itemSelecionado" (ngModelChange)="filtrar()">
-    <option value="">Todos os itens</option>
+<mat-form-field appearance="outline" class="filtro">
+  <mat-label>Filtrar por item</mat-label>
+  <mat-select name="item" [(ngModel)]="itemSelecionado" (ngModelChange)="filtrar()">
+    <mat-option value="">Todos os itens</mat-option>
     @for (item of itens(); track item.id) {
-      <option [value]="item.id">{{ item.nome }}</option>
+      <mat-option [value]="item.id">{{ item.nome }}</mat-option>
     }
-  </select>
-</div>
-
-@if (erro(); as mensagem) {
-  <p class="erro" role="alert">{{ mensagem }}</p>
-}
+  </mat-select>
+</mat-form-field>
 
 @if (registros().length === 0 && !carregando()) {
   <p class="muted">Nenhuma atualização registrada.</p>
@@ -23,7 +19,9 @@
         <div class="registro__topo">
           <span class="registro__item">{{ registro.itemNome }}</span>
           <span class="registro__qtd">
-            {{ registro.quantidadeAnterior }} <span class="dourado">→</span> {{ registro.quantidadeNova }}
+            {{ registro.quantidadeAnterior }}
+            <span class="dourado">→</span>
+            {{ registro.quantidadeNova }}
           </span>
         </div>
         <p class="muted registro__meta">
@@ -35,9 +33,13 @@
 }
 
 @if (carregando()) {
-  <p class="muted">Carregando…</p>
+  <div class="centro">
+    <mat-progress-spinner diameter="36" mode="indeterminate" />
+  </div>
 }
 
 @if (temMais() && !carregando()) {
-  <button class="botao botao--secundario" type="button" (click)="carregarMais()">Carregar mais</button>
+  <button mat-stroked-button class="carregar-mais" type="button" (click)="carregarMais()">
+    Carregar mais
+  </button>
 }
