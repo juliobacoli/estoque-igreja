@@ -2,11 +2,6 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
-/**
- * Aparece depois de algumas tentativas erradas. A graça é o cadeado sacudindo,
- * mas a mensagem resolve a causa real no celular: senha digitada errada sem que
- * a pessoa consiga ver o que escreveu.
- */
 @Component({
   selector: 'app-dica-senha-dialog',
   imports: [MatDialogModule, MatButtonModule],

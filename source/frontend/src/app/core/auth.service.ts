@@ -25,10 +25,6 @@ export class AuthService {
       .pipe(tap(() => this._perfil.set(null)));
   }
 
-  /**
-   * Recupera o perfil a partir do cookie. Necessário porque o estado em memória
-   * some ao recarregar a página, mas o cookie continua válido.
-   */
   carregarSessao() {
     if (this._perfil() !== null) {
       return of(true);

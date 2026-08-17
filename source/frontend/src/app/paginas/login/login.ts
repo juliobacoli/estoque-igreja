@@ -11,7 +11,6 @@ import { AuthService } from '../../core/auth.service';
 import { shakeAnimation } from '../../shared/animations';
 import { DicaSenhaDialog } from './dica-senha-dialog';
 
-/** Tentativas erradas seguidas antes de oferecer a dica. */
 const TENTATIVAS_ATE_A_DICA = 3;
 
 @Component({
@@ -57,7 +56,6 @@ export class Login {
     this.auth.login(this.login, this.senha).subscribe({
       next: () => this.router.navigate(['/dashboard']),
       error: (resposta) => {
-        // Mensagem única, sem revelar se o errado foi o login ou a senha.
         this.erro.set(resposta.error?.error ?? 'Login ou senha inválidos');
         this.enviando.set(false);
         this.sacudir();
@@ -66,10 +64,6 @@ export class Login {
     });
   }
 
-  /**
-   * A contagem vive só nesta tela e some ao recarregar. É ajuda ao usuário, não
-   * proteção contra força bruta — isso teria que ser feito no servidor.
-   */
   private contarErro() {
     this.tentativasErradas += 1;
 

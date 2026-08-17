@@ -21,8 +21,6 @@ const TAMANHO_PAGINA = 20;
     MatSelectModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    // MatSnackBarModule é obrigatório: o MatSnackBar não é providedIn root,
-    // quem o registra é o módulo.
     MatSnackBarModule
   ],
   templateUrl: './historico.html',
@@ -43,8 +41,6 @@ export class Historico implements OnInit {
   private pagina = 1;
 
   ngOnInit(): void {
-    // Inclui itens removidos: sem eles, o histórico de um item inativado ficaria
-    // sem como ser filtrado (Capítulo 4, item 4.3).
     this.itensService.listar(true).subscribe({
       next: (itens) => this.itens.set(itens),
       error: () => undefined

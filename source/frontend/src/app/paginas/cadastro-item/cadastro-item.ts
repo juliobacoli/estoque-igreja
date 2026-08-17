@@ -80,8 +80,6 @@ export class CadastroItem implements OnInit {
         this.carregarItens();
       },
       error: (resposta) => {
-        // 400 com "Já existe um item com esse nome" vem do índice único
-        // normalizado — pega duplicata com acento ou caixa diferente.
         this.erro.set(resposta.error?.error ?? 'Não foi possível cadastrar o item.');
         this.salvando.set(false);
         this.sacudir();
@@ -108,8 +106,6 @@ export class CadastroItem implements OnInit {
 
     this.itensService.remover(item.id).subscribe({
       next: (resultado) => {
-        // O servidor apaga de vez o item que nunca foi contado e apenas inativa
-        // o que já tem histórico. A mensagem conta qual dos dois aconteceu.
         this.avisar(
           resultado.removido
             ? 'Item excluído.'

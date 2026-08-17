@@ -13,7 +13,6 @@ export interface EstoqueAtualizado {
   quantidadeNova: number;
 }
 
-/** `removido` diz se o item saiu do banco ou apenas ficou inativo. */
 export interface ItemRemovido {
   removido: boolean;
 }
@@ -31,7 +30,6 @@ export interface HistoricoPaginado {
   temMaisPaginas: boolean;
 }
 
-/** Formato de erro usado por toda a API (Capítulo 3, item 3.5). */
 export interface ErroApi {
   error: string;
 }

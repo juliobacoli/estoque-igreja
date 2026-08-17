@@ -22,8 +22,6 @@ interface LinhaContagem {
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    // MatSnackBarModule é obrigatório: o MatSnackBar não é providedIn root,
-    // quem o registra é o módulo.
     MatSnackBarModule
   ],
   templateUrl: './atualizar-estoque.html',
@@ -75,7 +73,6 @@ export class AtualizarEstoque implements OnInit, PodeTerAlteracoes {
     }
   }
 
-  /** Nunca abaixo de zero — a mesma regra que o servidor aplica. */
   private definir(id: string, valor: number | null) {
     this.linhas.update((linhas) =>
       linhas.map((linha) =>
@@ -90,21 +87,10 @@ export class AtualizarEstoque implements OnInit, PodeTerAlteracoes {
     return this.linhas().some((linha) => linha.quantidade !== linha.item.estoqueAtual);
   }
 
-  /**
-   * O guard de saída pergunta por aqui.
-   *
-   * O `salvoComSucesso` é indispensável: depois de salvar, as linhas ainda
-   * carregam o `estoqueAtual` antigo, então `temAlteracao()` continua true e o
-   * guard barraria o próprio redirect para o dashboard.
-   */
   temAlteracaoPendente() {
     return !this.salvoComSucesso() && this.temAlteracao();
   }
 
-  /**
-   * Envia só os itens cuja contagem mudou. Cada um vira um PUT próprio, que é o
-   * contrato do Capítulo 3 — e um registro de histórico no servidor.
-   */
   protected salvar() {
     const alterados = this.linhas().filter((linha) => linha.quantidade !== linha.item.estoqueAtual);
 
@@ -127,9 +113,6 @@ export class AtualizarEstoque implements OnInit, PodeTerAlteracoes {
       error: (resposta) => {
         this.salvando.set(false);
 
-        // 404 aqui significa que um item foi removido por um administrador depois
-        // que esta tela carregou. A lista em mãos está velha, então recarrega —
-        // insistir no mesmo save falharia de novo.
         if (resposta.status === 404) {
           this.avisar('Um item foi removido por um administrador. A lista foi atualizada.');
           this.carregar();
