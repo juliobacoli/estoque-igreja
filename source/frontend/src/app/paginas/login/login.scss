@@ -51,6 +51,25 @@
   animation: entrada-erro 260ms ease-out both;
 }
 
+// Depois de fechar a dica, o botão do olho pulsa até a pessoa tocar nele —
+// senão a instrução do diálogo aponta para algo que ela nunca reparou.
+.destacado {
+  color: var(--dourado);
+  animation: pulsa-olho 1.4s ease-in-out 3;
+}
+
+@keyframes pulsa-olho {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: none;
+  }
+  50% {
+    transform: scale(1.18);
+    filter: drop-shadow(0 0 6px rgba(212, 165, 116, 0.9));
+  }
+}
+
 .entrar {
   width: 100%;
   min-height: 48px;
@@ -117,6 +136,10 @@
   .erro {
     animation-duration: 1ms;
     animation-delay: 0ms;
+  }
+
+  .destacado {
+    animation: none;
   }
 
   .entrar {

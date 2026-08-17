@@ -2,12 +2,17 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../core/auth.service';
 import { shakeAnimation } from '../../shared/animations';
+import { DicaSenhaDialog } from './dica-senha-dialog';
+
+/** Tentativas erradas seguidas antes de oferecer a dica. */
+const TENTATIVAS_ATE_A_DICA = 3;
 
 @Component({
   selector: 'app-login',
@@ -17,6 +22,7 @@ import { shakeAnimation } from '../../shared/animations';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    MatDialogModule,
     MatProgressSpinnerModule
   ],
   templateUrl: './login.html',
@@ -26,6 +32,7 @@ import { shakeAnimation } from '../../shared/animations';
 export class Login {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   protected login = '';
   protected senha = '';
@@ -34,9 +41,13 @@ export class Login {
   protected readonly erro = signal<string | null>(null);
   protected readonly mostrarSenha = signal(false);
   protected readonly shakeState = signal<'idle' | 'shake'>('idle');
+  protected readonly destacarOlho = signal(false);
+
+  private tentativasErradas = 0;
 
   protected alternarSenha() {
     this.mostrarSenha.update((mostrando) => !mostrando);
+    this.destacarOlho.set(false);
   }
 
   protected entrar() {
@@ -50,14 +61,26 @@ export class Login {
         this.erro.set(resposta.error?.error ?? 'Login ou senha inválidos');
         this.enviando.set(false);
         this.sacudir();
+        this.contarErro();
       }
     });
   }
 
   /**
-   * Volta o estado para 'idle' ao fim da animação, senão uma segunda falha
-   * seguida não dispararia a transição de novo.
+   * A contagem vive só nesta tela e some ao recarregar. É ajuda ao usuário, não
+   * proteção contra força bruta — isso teria que ser feito no servidor.
    */
+  private contarErro() {
+    this.tentativasErradas += 1;
+
+    if (this.tentativasErradas === TENTATIVAS_ATE_A_DICA && !this.mostrarSenha()) {
+      this.dialog
+        .open(DicaSenhaDialog, { width: '320px' })
+        .afterClosed()
+        .subscribe(() => this.destacarOlho.set(true));
+    }
+  }
+
   private sacudir() {
     this.shakeState.set('shake');
     setTimeout(() => this.shakeState.set('idle'), 450);
