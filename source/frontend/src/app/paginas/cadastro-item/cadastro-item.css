@@ -18,8 +18,8 @@
   min-height: 48px;
 
   /* O M3 em tema escuro usaria o tom claro da paleta como fundo do botão cheio. */
-  --mdc-filled-button-container-color: var(--roxo-primario);
-  --mdc-filled-button-label-text-color: #fff;
+  --mat-button-filled-container-color: var(--roxo-primario);
+  --mat-button-filled-label-text-color: #fff;
 }
 
 .cadastrar mat-progress-spinner {

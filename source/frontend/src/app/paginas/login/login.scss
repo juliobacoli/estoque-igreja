@@ -78,8 +78,8 @@
   // O Material 3 em tema escuro usa o tom claro da paleta como fundo do botão,
   // com texto escuro. A identidade da ICPA pede o inverso: roxo cheio e texto
   // branco (item 2.9).
-  --mdc-filled-button-container-color: var(--roxo-primario);
-  --mdc-filled-button-label-text-color: #{'#fff'};
+  --mat-button-filled-container-color: var(--roxo-primario);
+  --mat-button-filled-label-text-color: #{'#fff'};
 }
 
 .entrar:hover:not(:disabled) {

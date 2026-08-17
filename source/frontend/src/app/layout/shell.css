@@ -87,8 +87,8 @@
   color: var(--texto);
   background: rgba(255, 255, 255, 0.06);
 
-  --mdc-outlined-button-outline-color: rgba(255, 255, 255, 0.35);
-  --mdc-outlined-button-label-text-color: var(--texto);
+  --mat-button-outlined-outline-color: rgba(255, 255, 255, 0.35);
+  --mat-button-outlined-label-text-color: var(--texto);
 }
 
 .menu__sair:hover {
