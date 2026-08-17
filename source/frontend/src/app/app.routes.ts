@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { alteracoesNaoSalvasGuard } from './core/alteracoes-nao-salvas.guard';
 import { adminGuard, authGuard } from './core/auth.guard';
 
 export const routes: Routes = [
@@ -18,6 +19,7 @@ export const routes: Routes = [
       },
       {
         path: 'atualizar',
+        canDeactivate: [alteracoesNaoSalvasGuard],
         loadComponent: () =>
           import('./paginas/atualizar-estoque/atualizar-estoque').then((m) => m.AtualizarEstoque)
       },
