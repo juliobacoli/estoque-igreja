@@ -29,8 +29,8 @@ export interface ConfirmacaoDados {
   `,
   styles: `
     .perigo {
-      --mdc-filled-button-container-color: #b3261e;
-      --mdc-filled-button-label-text-color: #fff;
+      --mat-button-filled-container-color: #b3261e;
+      --mat-button-filled-label-text-color: #fff;
     }
   `
 })

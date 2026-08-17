@@ -78,8 +78,8 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
     .tentar {
       min-height: 48px;
-      --mdc-filled-button-container-color: var(--roxo-primario);
-      --mdc-filled-button-label-text-color: #fff;
+      --mat-button-filled-container-color: var(--roxo-primario);
+      --mat-button-filled-label-text-color: #fff;
     }
 
     /* Balança e gira um pouco: o cadeado "não abre" de jeito nenhum. */

@@ -24,8 +24,6 @@
 .linha__info {
   display: flex;
   flex-direction: column;
-  /* Deixa o nome ocupar o espaço restante e quebrar em duas linhas em vez de
-     ser cortado com reticências. */
   min-width: 0;
   flex: 1;
 }
@@ -78,8 +76,6 @@
   outline-offset: 1px;
 }
 
-/* Esconde as setinhas nativas: quem incrementa agora são os botões, que têm
-   alvo de toque adequado para celular. */
 .contador__valor::-webkit-outer-spin-button,
 .contador__valor::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -98,10 +94,8 @@
 .salvar {
   width: 100%;
   min-height: 48px;
-
-  /* Mesma correção do Login: o M3 escuro usaria o tom claro da paleta como fundo. */
-  --mdc-filled-button-container-color: var(--roxo-primario);
-  --mdc-filled-button-label-text-color: #fff;
+  --mat-button-filled-container-color: var(--roxo-primario);
+  --mat-button-filled-label-text-color: #fff;
 }
 
 .salvar mat-progress-spinner {
