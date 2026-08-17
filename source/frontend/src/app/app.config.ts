@@ -11,7 +11,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptors([authInterceptor])),
-    // Sem isto os componentes do Material ficam estáticos, sem animação.
     provideAnimationsAsync()
   ]
 };

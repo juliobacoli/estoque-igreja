@@ -6,10 +6,6 @@ import { EstoqueAtualizado, Item, ItemRemovido } from './models';
 export class ItensService {
   private readonly http = inject(HttpClient);
 
-  /**
-   * Por padrão só itens ativos. O filtro do Histórico pede os inativos também,
-   * senão o histórico de um item removido fica inalcançável.
-   */
   listar(incluirInativos = false) {
     const params = incluirInativos ? new HttpParams().set('incluirInativos', true) : undefined;
 

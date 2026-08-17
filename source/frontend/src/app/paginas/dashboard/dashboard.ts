@@ -10,8 +10,6 @@ import { Item } from '../../core/models';
 
 @Component({
   selector: 'app-dashboard',
-  // MatSnackBarModule é obrigatório: o MatSnackBar não é providedIn root,
-  // quem o registra é o módulo.
   imports: [MatButtonModule, MatIconModule, MatProgressSpinnerModule, MatSnackBarModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
@@ -31,10 +29,6 @@ export class Dashboard implements OnInit {
     this.carregar();
   }
 
-  /**
-   * Busca sempre do servidor ao entrar na tela — o critério de aceite 2.4 exige
-   * que a quantidade reflita o banco logo após uma atualização.
-   */
   private carregar() {
     this.carregando.set(true);
 

@@ -12,7 +12,6 @@ export const authGuard: CanActivateFn = () => {
   );
 };
 
-/** Cadastro de Itens é só do Admin (Capítulo 2, item 2.6). */
 export const adminGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
