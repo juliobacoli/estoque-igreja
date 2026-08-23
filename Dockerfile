@@ -25,7 +25,7 @@ RUN dotnet publish EstoqueIgreja.Api/EstoqueIgreja.Api.csproj -c Release -o /app
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS final
 WORKDIR /app
 
-RUN apk add --no-cache icu-libs
+RUN apk add --no-cache icu-libs tzdata fontconfig ttf-dejavu
 
 COPY --from=backend-build /app/publish .
 
