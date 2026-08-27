@@ -31,5 +31,13 @@ COPY --from=backend-build /app/publish .
 
 EXPOSE 8080
 
-ENV PORT=8080
+# O GC deriva seu heap hard limit do limite do container (1 GB), e um teto de
+# 750 MB o deixa sem incentivo para compactar. O teto explícito de 100 MB, com
+# ConserveMemory devolvendo segmentos ao SO, mede ~8% de RSS a menos sob carga.
+# gcConcurrent=0 foi testado e descartado: sem background GC as coleções gen2
+# viram bloqueantes e mais raras, e o RSS subiu 37%.
+ENV PORT=8080 \
+    DOTNET_GCHeapHardLimit=0x6400000 \
+    DOTNET_GCConserveMemory=9
+
 ENTRYPOINT ["sh", "-c", "ASPNETCORE_URLS=http://+:${PORT} dotnet EstoqueIgreja.Api.dll"]
