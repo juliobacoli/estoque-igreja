@@ -18,12 +18,8 @@ public class ListarHistoricoQueryHandler : IRequestHandler<ListarHistoricoQuery,
         var consulta = _db.AtualizacoesEstoque.AsNoTracking();
 
         if (request.ItemId is not null)
-        {
             consulta = consulta.Where(a => a.ItemId == request.ItemId);
-        }
-
-        // Busca um registro além do tamanho da página: se ele vier, é porque ainda
-        // há mais para carregar.
+        
         var registros = await consulta
             .OrderByDescending(a => a.Data)
             .ThenByDescending(a => a.Id)
@@ -40,10 +36,8 @@ public class ListarHistoricoQueryHandler : IRequestHandler<ListarHistoricoQuery,
         var temMais = registros.Count > request.TamanhoPagina;
 
         if (temMais)
-        {
             registros.RemoveAt(registros.Count - 1);
-        }
-
+        
         return new HistoricoPaginado(registros, temMais);
     }
 }
