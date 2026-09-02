@@ -14,11 +14,9 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-                services.AddDbContextPool<AppDbContext>(options =>                                                                                                                                                        
-    {                                                                                                                                                                                                         
-        options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));                                                                                                                                                                                                                                                                                          
-        options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);                                                                                                                                   
-    });
+        
+        services.AddDbContextPool<AppDbContext>(options =>                                                                                                                                                        
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IAppDbContext>(sp => sp.GetRequiredService<AppDbContext>());
 
