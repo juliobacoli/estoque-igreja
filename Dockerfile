@@ -32,4 +32,5 @@ COPY --from=backend-build /app/publish .
 EXPOSE 8080
 
 ENV PORT=8080
+ENV DOTNET_GCHeapHardLimit=134217728
 ENTRYPOINT ["sh", "-c", "ASPNETCORE_URLS=http://+:${PORT} dotnet EstoqueIgreja.Api.dll"]
