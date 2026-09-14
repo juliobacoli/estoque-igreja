@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstoqueIgreja.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstoqueIgreja.UnitTests", "EstoqueIgreja.UnitTests\EstoqueIgreja.UnitTests.csproj", "{2B6622B4-A17A-44CB-BAFD-A2426F9BA5C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstoqueIgreja.IntegrationTests", "EstoqueIgreja.IntegrationTests\EstoqueIgreja.IntegrationTests.csproj", "{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{2B6622B4-A17A-44CB-BAFD-A2426F9BA5C9}.Release|x64.Build.0 = Release|Any CPU
 		{2B6622B4-A17A-44CB-BAFD-A2426F9BA5C9}.Release|x86.ActiveCfg = Release|Any CPU
 		{2B6622B4-A17A-44CB-BAFD-A2426F9BA5C9}.Release|x86.Build.0 = Release|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Debug|x64.Build.0 = Debug|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Debug|x86.Build.0 = Debug|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Release|x64.ActiveCfg = Release|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Release|x64.Build.0 = Release|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Release|x86.ActiveCfg = Release|Any CPU
+		{019DE371-E749-4D58-9A1B-9C7EC4B2EE11}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
