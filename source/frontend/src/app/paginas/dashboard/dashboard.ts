@@ -21,7 +21,9 @@ interface StatusContagem {
   nivel: NivelContagem;
   icone: string;
   titulo: string;
-  mensagem: string;
+  // Linha da data, com a data em destaque. Ausente quando nunca houve contagem.
+  data: { prefixo: string; destaque: string } | null;
+  aviso: string | null;
 }
 
 function haDias(dias: number) {
@@ -77,7 +79,8 @@ export class Dashboard implements OnInit {
         nivel: 'sem-contagem',
         icone: 'inventory_2',
         titulo: 'Nenhuma contagem registrada',
-        mensagem: 'Faça a primeira contagem para acompanhar o estoque da igreja.'
+        data: null,
+        aviso: 'Faça a primeira contagem para acompanhar o estoque da igreja.'
       };
     }
 
@@ -89,7 +92,11 @@ export class Dashboard implements OnInit {
         nivel: 'em-dia',
         icone: 'check_circle',
         titulo: 'Estoque em dia',
-        mensagem: dias <= 0 ? 'Contado hoje.' : `Última contagem ${haDias(dias)} (${dataCurta}).`
+        data:
+          dias <= 0
+            ? { prefixo: 'Contado', destaque: 'hoje' }
+            : { prefixo: `Última contagem ${haDias(dias)}, em`, destaque: dataCurta },
+        aviso: null
       };
     }
 
@@ -98,7 +105,8 @@ export class Dashboard implements OnInit {
         nivel: 'atencao',
         icone: 'schedule',
         titulo: `Estoque sem contagem ${haDias(dias)}`,
-        mensagem: `Última contagem em ${dataCurta}. Quem estiver na igreja pode dar uma passada no depósito?`
+        data: { prefixo: 'Última contagem em', destaque: dataCurta },
+        aviso: 'Quem estiver na igreja pode dar uma passada no depósito?'
       };
     }
 
@@ -106,7 +114,8 @@ export class Dashboard implements OnInit {
       nivel: 'atrasado',
       icone: 'warning',
       titulo: `Estoque sem contagem ${haDias(dias)}`,
-      mensagem: `Última contagem em ${dataCurta}. As quantidades abaixo podem estar desatualizadas.`
+      data: { prefixo: 'Última contagem em', destaque: dataCurta },
+      aviso: 'As quantidades abaixo podem estar desatualizadas.'
     };
   });
 

@@ -6,7 +6,15 @@
 
     <div class="status__texto">
       <p class="status__titulo">{{ status.titulo }}</p>
-      <p class="status__mensagem">{{ status.mensagem }}</p>
+      @if (status.data; as data) {
+        <p class="status__linha">
+          {{ data.prefixo }} <strong class="status__destaque">{{ data.destaque }}</strong>.
+        </p>
+      }
+
+      @if (status.aviso) {
+        <p class="status__linha">{{ status.aviso }}</p>
+      }
     </div>
 
     @if (status.nivel !== 'em-dia') {

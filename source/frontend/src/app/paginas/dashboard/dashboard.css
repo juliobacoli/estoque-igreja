@@ -38,10 +38,15 @@
   line-height: 1.3;
 }
 
-.status__mensagem {
+.status__linha {
   margin: 0.2rem 0 0;
   color: var(--texto-muted);
   font-size: 0.9rem;
+}
+
+.status__destaque {
+  color: var(--texto);
+  font-weight: 600;
 }
 
 .status__acao {
