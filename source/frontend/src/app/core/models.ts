@@ -30,6 +30,10 @@ export interface HistoricoPaginado {
   temMaisPaginas: boolean;
 }
 
+export interface UltimaAtualizacao {
+  data: string | null;
+}
+
 export interface ErroApi {
   error: string;
 }

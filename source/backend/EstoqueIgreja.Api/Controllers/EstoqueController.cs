@@ -1,4 +1,5 @@
 using EstoqueIgreja.Application.Estoque.Queries.ExportarEstoquePdf;
+using EstoqueIgreja.Application.Estoque.Queries.ObterUltimaAtualizacao;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,5 +22,11 @@ public class EstoqueController : ControllerBase
         var pdf = await _mediator.Send(new ExportarEstoquePdfQuery(), ct);
 
         return File(pdf, "application/pdf", "estoque.pdf");
+    }
+
+    [HttpGet("ultima-atualizacao")]
+    public async Task<IActionResult> UltimaAtualizacao(CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(new ObterUltimaAtualizacaoQuery(), ct));
     }
 }

@@ -1,5 +1,22 @@
 <h1>Estoque atual</h1>
 
+@if (statusContagem(); as status) {
+  <section class="status glass" [attr.data-nivel]="status.nivel" role="status">
+    <mat-icon class="status__icone" aria-hidden="true">{{ status.icone }}</mat-icon>
+
+    <div class="status__texto">
+      <p class="status__titulo">{{ status.titulo }}</p>
+      <p class="status__mensagem">{{ status.mensagem }}</p>
+    </div>
+
+    @if (status.nivel !== 'em-dia') {
+      <button mat-flat-button class="status__acao" type="button" (click)="irParaAtualizar()">
+        Contar agora
+      </button>
+    }
+  </section>
+}
+
 @if (carregando()) {
   <div class="centro">
     <mat-progress-spinner diameter="36" mode="indeterminate" />
