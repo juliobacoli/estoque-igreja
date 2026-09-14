@@ -59,6 +59,9 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
+      - name: Testes unitários
+        run: npm test -- --no-watch --no-progress
+
       - name: Build
         run: npm run build -- --configuration production
 
