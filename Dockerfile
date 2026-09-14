@@ -15,7 +15,7 @@ COPY source/backend/EstoqueIgreja.Domain/*.csproj ./EstoqueIgreja.Domain/
 COPY source/backend/EstoqueIgreja.Application/*.csproj ./EstoqueIgreja.Application/
 COPY source/backend/EstoqueIgreja.Infrastructure/*.csproj ./EstoqueIgreja.Infrastructure/
 COPY source/backend/EstoqueIgreja.Api/*.csproj ./EstoqueIgreja.Api/
-RUN dotnet restore EstoqueIgreja.sln
+RUN dotnet restore EstoqueIgreja.Api/EstoqueIgreja.Api.csproj
 
 COPY source/backend/ ./
 

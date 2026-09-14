@@ -25,10 +25,8 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
         if (!_validators.Any())
             return await next();
 
-        var contexto = new ValidationContext<TRequest>(request);
-
         var falhas = (await Task.WhenAll(
-                _validators.Select(v => v.ValidateAsync(contexto, cancellationToken))))
+                _validators.Select(v => v.ValidateAsync(new ValidationContext<TRequest>(request), cancellationToken))))
             .SelectMany(resultado => resultado.Errors)
             .Where(falha => falha is not null)
             .ToList();
