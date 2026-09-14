@@ -1,3 +1,61 @@
+/* Card de status da contagem. A cor acompanha o nível, mas ícone e texto também
+   mudam: a informação nunca depende só da cor. */
+.status {
+  --status-cor: var(--dourado);
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin: 0.5rem 0 1rem;
+  padding: 0.9rem 1rem;
+  background: color-mix(in srgb, var(--status-cor) 12%, transparent);
+}
+
+.status[data-nivel='em-dia'] {
+  --status-cor: #81c995;
+}
+
+.status[data-nivel='atrasado'] {
+  --status-cor: var(--erro);
+}
+
+.status__icone {
+  color: var(--status-cor);
+  flex-shrink: 0;
+}
+
+.status__texto {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.status__titulo {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.status__linha {
+  margin: 0.2rem 0 0;
+  color: var(--texto-muted);
+  font-size: 0.9rem;
+}
+
+.status__destaque {
+  color: var(--texto);
+  font-weight: 600;
+}
+
+.status__acao {
+  min-height: 44px;
+  margin-left: auto;
+  --mat-button-filled-container-color: var(--status-cor);
+  --mat-button-filled-label-text-color: var(--roxo-escuro);
+}
+
 .centro {
   display: flex;
   justify-content: center;
