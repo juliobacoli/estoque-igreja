@@ -26,9 +26,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult?>
         // controller devolve a mesma mensagem nos dois casos, sem revelar qual
         // dos campos está incorreto.
         if (usuario is null || !_hasher.Verificar(request.Senha, usuario.SenhaHash))
-        {
             return null;
-        }
 
         return new LoginResult(usuario.Id, usuario.Perfil.ToString());
     }

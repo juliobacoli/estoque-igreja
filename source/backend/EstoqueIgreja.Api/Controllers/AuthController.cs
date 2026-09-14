@@ -28,9 +28,7 @@ public class AuthController : ControllerBase
         // Mesma resposta para login inexistente e senha errada — não revela qual
         // dos dois campos está incorreto.
         if (resultado is null)
-        {
             return Unauthorized(new { error = "Login ou senha inválidos" });
-        }
 
         var claims = new List<Claim>
         {

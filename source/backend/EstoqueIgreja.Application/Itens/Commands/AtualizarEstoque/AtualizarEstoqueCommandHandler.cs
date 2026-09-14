@@ -32,9 +32,7 @@ public class AtualizarEstoqueCommandHandler
             .FirstOrDefaultAsync(ct);
 
         if (item is null)
-        {
             throw new NaoEncontradoException("Item não encontrado");
-        }
 
         // A quantidade anterior é lida do banco aqui, e nunca enviada pelo cliente —
         // senão duas contagens simultâneas gravariam histórico com valores errados.

@@ -16,10 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 // variável de ambiente ConnectionStrings__DefaultConnection, e este bloco não roda.
 if (builder.Environment.IsDevelopment() &&
     string.IsNullOrWhiteSpace(builder.Configuration.GetConnectionString("DefaultConnection")))
-{
     builder.Configuration["ConnectionStrings:DefaultConnection"] =
         "Host=localhost;Port=5432;Database=estoque;Username=postgres;Password=postgres";
-}
 
 var assemblyApplication = typeof(ValidationBehavior<,>).Assembly;
 
