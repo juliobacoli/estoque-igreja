@@ -20,24 +20,15 @@ public class RemoverItemCommandHandler : IRequestHandler<RemoverItemCommand, Ite
             .FirstOrDefaultAsync(i => i.Id == request.Id && i.Ativo, ct);
 
         if (item is null)
-        {
             throw new NaoEncontradoException("Item não encontrado");
-        }
 
         var jaFoiContado = await _db.AtualizacoesEstoque
             .AnyAsync(a => a.ItemId == item.Id, ct);
 
-        // Item nunca contado foi engano de cadastro: sai do banco. Item com
-        // histórico só fica inativo, senão os registros antigos perderiam o nome
-        // do produto — e a FK com Restrict recusaria a exclusão de qualquer forma.
         if (jaFoiContado)
-        {
             item.Inativar();
-        }
         else
-        {
             _db.Itens.Remove(item);
-        }
 
         await _db.SaveChangesAsync(ct);
 

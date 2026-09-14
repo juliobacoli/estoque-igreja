@@ -51,9 +51,7 @@ public class TratamentoErroMiddleware
     private static async Task Responder(HttpContext contexto, int status, object corpo)
     {
         if (contexto.Response.HasStarted)
-        {
             return;
-        }
 
         contexto.Response.Clear();
         contexto.Response.StatusCode = status;

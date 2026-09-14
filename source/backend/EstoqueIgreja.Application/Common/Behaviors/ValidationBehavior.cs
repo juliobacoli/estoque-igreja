@@ -23,9 +23,7 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
         CancellationToken cancellationToken)
     {
         if (!_validators.Any())
-        {
             return await next();
-        }
 
         var contexto = new ValidationContext<TRequest>(request);
 
@@ -36,9 +34,7 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
             .ToList();
 
         if (falhas.Count != 0)
-        {
             throw new ValidationException(falhas);
-        }
 
         return await next();
     }

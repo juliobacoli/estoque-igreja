@@ -56,9 +56,7 @@ public class Item
     public void AtualizarQuantidade(int novaQuantidade)
     {
         if (novaQuantidade < 0)
-        {
             throw new ArgumentOutOfRangeException(nameof(novaQuantidade), "A quantidade não pode ser negativa.");
-        }
 
         EstoqueAtual = novaQuantidade;
     }

@@ -33,14 +33,12 @@ public class HealthController : ControllerBase
             bool conectou = await _db.Database.CanConnectAsync();
 
             if (conectou)
-            {
                 return Ok(new
                 {
                     status = "healthy",
                     database = "connected",
                     timestamp = DateTime.UtcNow
                 });
-            }
 
             return StatusCode(503, new
             {
