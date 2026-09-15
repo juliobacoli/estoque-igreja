@@ -1,0 +1,37 @@
+# Ambiente dos testes E2E: a mesma imagem de produção (front + API) contra um PostgreSQL
+# descartável. Os nomes dos containers começam com "estoque-e2e".
+name: estoque-e2e
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: estoque
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      # Exposto só para os testes limparem e prepararem o banco antes de cada cenário.
+      - "15432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d estoque"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  app:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=estoque;Username=postgres;Password=postgres"
+    ports:
+      - "5080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      # As migrations rodam na subida da API; /health/db só responde 200 com o banco pronto.
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health/db || exit 1"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
