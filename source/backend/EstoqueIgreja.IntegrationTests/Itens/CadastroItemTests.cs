@@ -76,11 +76,11 @@ public class CadastroItemTests(ApiFactory factory) : TesteDeIntegracao(factory)
     }
 
     /// <summary>
-    /// Comportamento atual documentado: a verificação de duplicata não trava nada, então
-    /// quem perde a corrida esbarra no índice único e recebe 500 em vez do 400 de conflito.
+    /// A verificação de duplicata não trava nada, então quem perde a corrida esbarra no
+    /// índice único. O handler traduz isso para o mesmo 400 do cadastro duplicado comum.
     /// </summary>
     [Fact]
-    public async Task CadastroSimultaneoComMesmoNome_PerdedorRecebe500()
+    public async Task CadastroSimultaneoComMesmoNome_PerdedorRecebe400()
     {
         var admin = await ClienteAdmin();
 
@@ -98,7 +98,7 @@ public class CadastroItemTests(ApiFactory factory) : TesteDeIntegracao(factory)
 
         var resposta = await cadastro;
 
-        Assert.Equal(HttpStatusCode.InternalServerError, resposta.StatusCode);
-        Assert.Equal("Erro interno", (await LerJson(resposta)).GetProperty("error").GetString());
+        Assert.Equal(HttpStatusCode.BadRequest, resposta.StatusCode);
+        Assert.Equal("Já existe um item com esse nome", (await LerJson(resposta)).GetProperty("error").GetString());
     }
 }

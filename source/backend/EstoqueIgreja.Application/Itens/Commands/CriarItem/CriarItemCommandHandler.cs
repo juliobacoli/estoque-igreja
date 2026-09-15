@@ -42,7 +42,21 @@ public class CriarItemCommandHandler : IRequestHandler<CriarItemCommand, ItemCri
         var item = Item.Criar(request.Nome, request.Unidade);
 
         _db.Itens.Add(item);
-        await _db.SaveChangesAsync(ct);
+
+        try
+        {
+            await _db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException)
+        {
+            // Dois cadastros simultâneos passam juntos pela verificação acima e quem
+            // perde a corrida esbarra no índice único. Sem isso, viraria 500 em vez do
+            // mesmo 400 do cadastro duplicado comum.
+            if (await _db.Itens.AnyAsync(i => i.NomeNormalizado == normalizado && i.Id != item.Id, ct))
+                throw new ConflitoException("Já existe um item com esse nome");
+
+            throw;
+        }
 
         return new ItemCriadoResult(item.Id, item.Nome, item.Unidade, item.EstoqueAtual);
     }
