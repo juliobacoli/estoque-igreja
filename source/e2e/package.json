@@ -1,0 +1,13 @@
+{
+  "name": "estoque-e2e",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "relatorio": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/pg": "8.23.1",
+    "pg": "8.23.0"
+  }
+}
