@@ -75,7 +75,9 @@ jobs:
         if: always()
         run: |
           dotnet tool install --global Sarif.Multitool --version 5.7.0
-          sarif merge "$GITHUB_WORKSPACE"/sarif/*.sarif \
+          # --merge-empty-logs: sem achado nenhum, o arquivo final sairia sem runs
+          # e o upload recusaria.
+          sarif merge "$GITHUB_WORKSPACE"/sarif/*.sarif --merge-empty-logs \
             --output-directory "$GITHUB_WORKSPACE/sarif-final" --output-file dotnet.sarif
 
       - name: Enviar relatório
