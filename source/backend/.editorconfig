@@ -1,4 +1,3 @@
-# Estilo do backend. Serve ao editor e ao `dotnet format --verify-no-changes` do CI.
 root = true
 
 [*]
@@ -13,25 +12,18 @@ indent_size = 2
 [*.cs]
 indent_size = 4
 
-# Organização de usings
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = false
 csharp_using_directive_placement = outside_namespace:suggestion
 
-# Padrões já usados no código
 csharp_style_namespace_declarations = file_scoped:suggestion
 csharp_new_line_before_open_brace = all
 csharp_style_var_when_type_is_apparent = true:suggestion
 csharp_style_expression_bodied_methods = when_on_single_line:suggestion
-
-# `if` de uma instrução fica sem chaves (ver CLAUDE.md, seção 5)
 csharp_prefer_braces = when_multiline:suggestion
 
-# Qualidade
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
 dotnet_diagnostic.IDE0005.severity = warning
 
-# Migrations são geradas pelo EF e ficam como saíram: reformatar arquivo já aplicado
-# em produção não traz ganho e só gera dúvida sobre o histórico do banco.
 [**/Migrations/*.cs]
 generated_code = true
