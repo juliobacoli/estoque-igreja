@@ -221,6 +221,7 @@ docker exec -it estoque-pg psql -U postgres -d estoque -c "INSERT INTO \"Usuario
 ## 10. Convenções de git
 
 - **Commits em inglês**, no padrão `tipo: descrição` (`feat`, `fix`, `test`, `ci`, `perf`, `docs`, `refactor`, `style`).
+- **Descrição do PR em português**, mesmo com os commits em inglês.
 - **Sem co-autor** nos commits e sem "Generated with…" nas descrições de PR.
 - **Uma branch por assunto**, com prefixo igual ao tipo (`feat/...`, `fix/...`, `test/...`), a partir da `main` atualizada.
 - **Commits separados por assunto** dentro do PR (ex.: estrutura, testes, CI).
