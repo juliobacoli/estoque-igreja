@@ -1,0 +1,45 @@
+name: Code Scanning
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  # Necessário para enviar o relatório para o Security do repositório.
+  security-events: write
+
+jobs:
+  eslint:
+    name: eslint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: source/frontend
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: source/frontend/package-lock.json
+
+      - name: Instalar dependências
+        run: npm ci
+
+      # continue-on-error: achado de lint aparece no Security, sem derrubar o pipeline.
+      - name: ESLint
+        continue-on-error: true
+        run: npx eslint "src/**/*.ts" "src/**/*.html" -f @microsoft/eslint-formatter-sarif -o eslint-results.sarif
+
+      # if: always() para o relatório subir mesmo quando o lint encontra problemas.
+      - name: Enviar relatório
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: source/frontend/eslint-results.sarif
+          # Categoria própria: não sobrescreve o relatório de outras ferramentas.
+          category: eslint

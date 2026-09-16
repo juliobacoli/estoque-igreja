@@ -2,3 +2,6 @@ node_modules/
 dist/
 .angular/
 .env
+
+# Relatório do ESLint gerado para o Code Scanning
+eslint-results.sarif
