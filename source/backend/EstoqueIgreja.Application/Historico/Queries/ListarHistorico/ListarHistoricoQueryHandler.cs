@@ -19,7 +19,7 @@ public class ListarHistoricoQueryHandler : IRequestHandler<ListarHistoricoQuery,
 
         if (request.ItemId is not null)
             consulta = consulta.Where(a => a.ItemId == request.ItemId);
-        
+
         var registros = await consulta
             .OrderByDescending(a => a.Data)
             .ThenByDescending(a => a.Id)
@@ -37,7 +37,7 @@ public class ListarHistoricoQueryHandler : IRequestHandler<ListarHistoricoQuery,
 
         if (temMais)
             registros.RemoveAt(registros.Count - 1);
-        
+
         return new HistoricoPaginado(registros, temMais);
     }
 }
