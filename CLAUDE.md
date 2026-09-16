@@ -199,9 +199,7 @@ docker exec -it estoque-pg psql -U postgres -d estoque -c "INSERT INTO \"Usuario
 
 - Um teste descreve o comportamento esperado. **Se ele falha, corrija o código, não o teste**, a menos que a mudança de comportamento tenha sido pedida.
 - Ao criar um teste, prove que ele pega falha: quebre o comportamento de propósito, veja falhar e desfaça.
-- Dois comportamentos atuais estão **documentados por testes, sem correção** (não mudar sem pedido):
-  - cadastro simultâneo de itens com o mesmo nome devolve **500** (índice único) em vez de 400;
-  - quantidade negativa devolve **400 no formato ProblemDetails**, sem a propriedade `error` que o front lê.
+- Um comportamento atual está **documentado por teste, sem correção** (não mudar sem pedido): quantidade negativa devolve **400 no formato ProblemDetails**, sem a propriedade `error` que o front lê.
 
 ---
 
