@@ -44,6 +44,11 @@ updates:
       frontend:
         patterns: ["*"]
         update-types: [minor, patch]
+    ignore:
+      # O Angular fixa a faixa do TypeScript (>=6.0 <6.1 no Angular 22). Major do TS
+      # só entra junto com a versão do Angular que o aceite.
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: npm
     directory: "/source/e2e"
