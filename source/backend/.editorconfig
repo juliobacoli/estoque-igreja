@@ -30,3 +30,8 @@ csharp_prefer_braces = when_multiline:suggestion
 # Qualidade
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
 dotnet_diagnostic.IDE0005.severity = warning
+
+# Migrations são geradas pelo EF e ficam como saíram: reformatar arquivo já aplicado
+# em produção não traz ganho e só gera dúvida sobre o histórico do banco.
+[**/Migrations/*.cs]
+generated_code = true

@@ -58,9 +58,10 @@ jobs:
           dotnet-version: 10.0.x
 
       # Formatação e estilo, conforme o .editorconfig do backend.
+      # As migrations do EF ficam de fora: são geradas e já aplicadas em produção.
       - name: dotnet format
         continue-on-error: true
-        run: dotnet format --verify-no-changes
+        run: dotnet format --verify-no-changes --exclude "**/Migrations/**"
 
       # Os analisadores do Roslyn escrevem um SARIF por projeto (ver Directory.Build.props).
       - name: Analisadores
