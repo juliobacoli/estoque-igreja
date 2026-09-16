@@ -13,16 +13,15 @@ public class GeradorPdfTests
         QuestPDF.Settings.License = LicenseType.Community;
     }
 
-    public static TheoryData<ItemDoRelatorio[]> Listas => new()
-    {
-        Array.Empty<ItemDoRelatorio>(),
-        new[] { new ItemDoRelatorio("Sabão", "unidade", 3), new ItemDoRelatorio("Esponja", "pacote", 0) }
-    };
-
     [Theory]
-    [MemberData(nameof(Listas))]
-    public void GerarRelatorioEstoque_RetornaPdfValido(ItemDoRelatorio[] itens)
+    [InlineData(0)]
+    [InlineData(2)]
+    public void GerarRelatorioEstoque_RetornaPdfValido(int quantidadeDeItens)
     {
+        var itens = Enumerable.Range(1, quantidadeDeItens)
+            .Select(i => new ItemDoRelatorio($"Item {i}", "unidade", i))
+            .ToList();
+
         var bytes = new GeradorPdf().GerarRelatorioEstoque(itens, DateTime.UtcNow);
 
         Assert.NotEmpty(bytes);

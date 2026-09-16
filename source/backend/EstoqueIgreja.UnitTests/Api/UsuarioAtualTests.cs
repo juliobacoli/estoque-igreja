@@ -9,7 +9,7 @@ public class UsuarioAtualTests
     private static UsuarioAtual Criar(HttpContext? contexto) =>
         new(new HttpContextAccessor { HttpContext = contexto });
 
-    private static HttpContext ContextoComClaim(string? valor)
+    private static DefaultHttpContext ContextoComClaim(string? valor)
     {
         var claims = valor is null ? [] : new[] { new Claim(ClaimTypes.NameIdentifier, valor) };
 

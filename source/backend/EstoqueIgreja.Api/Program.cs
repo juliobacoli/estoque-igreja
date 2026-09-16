@@ -64,12 +64,10 @@ builder.Services
     });
 
 // Todo endpoint exige autenticação por padrão; quem for público declara [AllowAnonymous].
-builder.Services.AddAuthorization(options =>
-{
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+builder.Services.AddAuthorizationBuilder()
+    .SetFallbackPolicy(new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
-        .Build();
-});
+        .Build());
 
 var app = builder.Build();
 
