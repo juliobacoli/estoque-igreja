@@ -20,6 +20,23 @@ test.describe('Cadastro de itens', () => {
     await expect(page.getByRole('listitem').filter({ hasText: 'Rodo' })).toBeVisible();
   });
 
+  test('nome repetido mostra a mensagem de erro na tela', async ({ page }) => {
+    await criarItem('Sabão', 'unidade');
+
+    await entrarComo(page, 'admin');
+    await abrirMenu(page);
+    await page.getByRole('link', { name: 'Cadastro de Itens' }).click();
+
+    // Mesmo nome, escrito de outro jeito: o backend compara sem acento e sem maiúsculas.
+    await page.getByLabel('Nome', { exact: true }).fill('SABAO');
+    await page.getByRole('combobox', { name: 'Unidade' }).click();
+    await page.getByRole('option', { name: 'pacote' }).click();
+    await page.getByRole('button', { name: 'Cadastrar item' }).click();
+
+    await expect(page.getByRole('alert')).toHaveText('Já existe um item com esse nome');
+    await expect(page.getByRole('listitem').filter({ hasText: 'Sabão' })).toHaveCount(1);
+  });
+
   test('remover item com histórico tira do dashboard e mantém no histórico', async ({ page }) => {
     const vassoura = await criarItem('Vassoura');
     await registrarContagem(vassoura, 2, 1);
