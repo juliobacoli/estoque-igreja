@@ -42,7 +42,13 @@ public class TratamentoErroMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Erro não tratado em {Caminho}", contexto.Request.Path);
+            // O caminho vem do usuário: sem tirar as quebras de linha, dá para forjar
+            // linhas inteiras no log e atrapalhar a investigação de um incidente.
+            var caminho = contexto.Request.Path.ToString()
+                .Replace("\r", string.Empty)
+                .Replace("\n", string.Empty);
+
+            _logger.LogError(ex, "Erro não tratado em {Caminho}", caminho);
 
             await Responder(contexto, 500, new { error = "Erro interno" });
         }
