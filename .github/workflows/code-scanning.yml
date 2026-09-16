@@ -69,9 +69,17 @@ jobs:
           mkdir -p "$GITHUB_WORKSPACE/sarif"
           dotnet build EstoqueIgreja.sln -c Release -p:ErrorLogDir="$GITHUB_WORKSPACE/sarif"
 
+      # O upload aceita um run por categoria; os relatórios dos projetos viram um só.
+      - name: Juntar relatórios
+        if: always()
+        run: |
+          dotnet tool install --global Sarif.Multitool --version 5.7.0
+          sarif merge "$GITHUB_WORKSPACE"/sarif/*.sarif \
+            --output-directory "$GITHUB_WORKSPACE/sarif-final" --output-file dotnet.sarif
+
       - name: Enviar relatório
         if: always()
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: sarif
+          sarif_file: sarif-final/dotnet.sarif
           category: dotnet
