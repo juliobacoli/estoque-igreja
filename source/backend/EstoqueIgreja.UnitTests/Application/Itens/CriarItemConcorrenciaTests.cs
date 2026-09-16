@@ -35,7 +35,7 @@ public class CriarItemConcorrenciaTests
         }
     }
 
-    private Task<ItemCriadoResult> Cadastrar(AppDbContext db, string nome = "Sabão") =>
+    private static Task<ItemCriadoResult> Cadastrar(AppDbContext db, string nome = "Sabão") =>
         new CriarItemCommandHandler(db).Handle(new CriarItemCommand(nome, "unidade"), CancellationToken.None);
 
     [Fact]
