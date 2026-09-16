@@ -1,0 +1,12 @@
+<Project>
+
+  <!--
+    Relatório dos analisadores do Roslyn em SARIF, um arquivo por projeto.
+    Só liga quando ErrorLogDir é passado no build (usado pelo workflow de code scanning):
+    dotnet build EstoqueIgreja.sln -c Release -p:ErrorLogDir=/caminho/sarif
+  -->
+  <PropertyGroup Condition="'$(ErrorLogDir)' != ''">
+    <ErrorLog>$(ErrorLogDir)/$(MSBuildProjectName).sarif,version=2.1</ErrorLog>
+  </PropertyGroup>
+
+</Project>

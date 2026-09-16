@@ -19,7 +19,7 @@ public class ListarItensQueryHandler : IRequestHandler<ListarItensQuery, IReadOn
 
         if (!request.IncluirInativos)
             consulta = consulta.Where(i => i.Ativo);
-        
+
         return await consulta
             .OrderBy(i => i.NomeNormalizado)
             .Select(i => new ItemListado(i.Id, i.Nome, i.Unidade, i.EstoqueAtual))
