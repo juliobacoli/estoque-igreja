@@ -1,6 +1,7 @@
 using System.Text.Json;
 using EstoqueIgreja.Api.Middleware;
 using EstoqueIgreja.Application.Common.Exceptions;
+using EstoqueIgreja.UnitTests.Helpers;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
@@ -94,6 +95,24 @@ public class TratamentoErroMiddlewareTests
                 It.IsAny<InvalidOperationException>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
+    }
+
+    [Fact]
+    public async Task ExcecaoGenerica_CaminhoNaoQuebraLinhaNoLog()
+    {
+        var logger = new LoggerQueCaptura<TratamentoErroMiddleware>();
+
+        await Executar(
+            _ => throw new InvalidOperationException("falha"),
+            logger,
+            // Pelo feature, o caminho chega bruto, como numa requisição real.
+            contexto => contexto.Features.Get<IHttpRequestFeature>()!.Path = "/api/itens\nFAKE: linha forjada");
+
+        // O log fica numa linha só: a tentativa de forjar outra linha não passa.
+        var mensagem = Assert.Single(logger.Mensagens);
+        Assert.DoesNotContain("\n", mensagem);
+        Assert.DoesNotContain("\r", mensagem);
+        Assert.Contains("/api/itens", mensagem);
     }
 
     [Fact]
