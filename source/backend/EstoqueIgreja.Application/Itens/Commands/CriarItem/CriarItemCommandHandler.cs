@@ -24,13 +24,9 @@ public class CriarItemCommandHandler : IRequestHandler<CriarItemCommand, ItemCri
 
         if (existente is not null)
         {
-            // Nome de item ativo é duplicata de verdade.
             if (existente.Ativo)
                 throw new ConflitoException("Já existe um item com esse nome");
 
-            // Nome de item inativo reativa o registro em vez de criar outro: o
-            // índice único continua valendo e o histórico antigo segue ligado a
-            // este mesmo item.
             existente.Reativar(request.Nome, request.Unidade);
 
             await _db.SaveChangesAsync(ct);
@@ -49,9 +45,6 @@ public class CriarItemCommandHandler : IRequestHandler<CriarItemCommand, ItemCri
         }
         catch (DbUpdateException)
         {
-            // Dois cadastros simultâneos passam juntos pela verificação acima e quem
-            // perde a corrida esbarra no índice único. Sem isso, viraria 500 em vez do
-            // mesmo 400 do cadastro duplicado comum.
             if (await _db.Itens.AnyAsync(i => i.NomeNormalizado == normalizado && i.Id != item.Id, ct))
                 throw new ConflitoException("Já existe um item com esse nome");
 
