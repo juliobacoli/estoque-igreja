@@ -43,3 +43,35 @@ jobs:
           sarif_file: source/frontend/eslint-results.sarif
           # Categoria própria: não sobrescreve o relatório de outras ferramentas.
           category: eslint
+
+  dotnet:
+    name: dotnet
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: source/backend
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      # Formatação e estilo, conforme o .editorconfig do backend.
+      - name: dotnet format
+        continue-on-error: true
+        run: dotnet format --verify-no-changes
+
+      # Os analisadores do Roslyn escrevem um SARIF por projeto (ver Directory.Build.props).
+      - name: Analisadores
+        continue-on-error: true
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/sarif"
+          dotnet build EstoqueIgreja.sln -c Release -p:ErrorLogDir="$GITHUB_WORKSPACE/sarif"
+
+      - name: Enviar relatório
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: sarif
+          category: dotnet
