@@ -1,4 +1,5 @@
 using EstoqueIgreja.Api.Contracts.Requests;
+using EstoqueIgreja.Api.Services;
 using EstoqueIgreja.Application.Itens.Commands.AtualizarEstoque;
 using EstoqueIgreja.Application.Itens.Commands.CriarItem;
 using EstoqueIgreja.Application.Itens.Commands.RemoverItem;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EstoqueIgreja.Api.Controllers;
 
 [ApiController]
+[Authorize(Policy = Politicas.Obreiros)]
 [Route("api/itens")]
 public class ItensController : ControllerBase
 {

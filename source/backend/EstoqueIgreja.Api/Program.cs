@@ -36,7 +36,9 @@ builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.Cookie.Name = "estoque.auth";
+        // O ".v2" invalida os cookies anteriores ao acesso por módulo: eles não têm
+        // o claim "modulo" e dariam 403 em tudo. Quem estava logado entra de novo.
+        options.Cookie.Name = "estoque.auth.v2";
         options.Cookie.HttpOnly = true;
         // Em produção o cookie é sempre Secure. Em Development cai para
         // SameAsRequest, senão o navegador do celular recusa o cookie ao acessar
@@ -67,7 +69,9 @@ builder.Services
 builder.Services.AddAuthorizationBuilder()
     .SetFallbackPolicy(new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
-        .Build());
+        .Build())
+    .AddPolicy(Politicas.Obreiros, politica => politica.RequireClaim(Politicas.ClaimModulo, Politicas.Obreiros))
+    .AddPolicy(Politicas.AcaoSocial, politica => politica.RequireClaim(Politicas.ClaimModulo, Politicas.AcaoSocial));
 
 var app = builder.Build();
 

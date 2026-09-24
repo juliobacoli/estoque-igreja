@@ -34,7 +34,7 @@ public class GeradorPdf : IGeradorPdf
 
                 pagina.Header().Background(RoxoEscuro).Padding(30).Column(coluna =>
                 {
-                    coluna.Item().Text("Estoque — Igreja ICPA")
+                    coluna.Item().Text("Estoque — Igreja ICPA — Obreiros")
                         .FontSize(20).FontColor(Colors.White).Bold();
 
                     coluna.Item().Text("Relatório de itens em estoque")

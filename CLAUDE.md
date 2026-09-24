@@ -10,8 +10,9 @@ App web de controle de estoque dos itens de limpeza da igreja ICPA, feito para u
 
 | Perfil | Pode |
 |---|---|
-| **Admin** | Tudo o que o voluntário faz, e também cadastrar e remover itens |
-| **Voluntário** | Ver o dashboard, contar o estoque, ver o histórico, exportar PDF |
+| **Admin** | Ver o dashboard, contar o estoque, ver o histórico, exportar PDF, cadastrar e remover itens |
+
+**Módulos**: cada usuário acessa um ou mais módulos (`AcessoObreiros`, `AcessoAcaoSocial` em `Usuarios`). O login grava um claim `modulo` por acesso; os controllers de cada módulo exigem a policy de mesmo nome (`[Authorize(Policy = Politicas.Obreiros)]`). Usuário sem módulo não entra.
 
 Deploy: um único container (front + API na mesma origem) publicado no Railway.
 
@@ -172,7 +173,7 @@ npm start
 
 ```powershell
 docker run --rm httpd:alpine htpasswd -nbBC 11 "" SUA_SENHA   # remova o ":" do início da saída
-docker exec -it estoque-pg psql -U postgres -d estoque -c "INSERT INTO \"Usuarios\" (\"Id\",\"Login\",\"SenhaHash\",\"Perfil\",\"CriadoEm\") VALUES (gen_random_uuid(),'admin','HASH_AQUI','Admin',now());"
+docker exec -it estoque-pg psql -U postgres -d estoque -c "INSERT INTO \"Usuarios\" (\"Id\",\"Login\",\"SenhaHash\",\"Perfil\",\"CriadoEm\",\"AcessoObreiros\",\"AcessoAcaoSocial\") VALUES (gen_random_uuid(),'admin','HASH_AQUI','Admin',now(),true,false);"
 ```
 
 ---
@@ -237,3 +238,5 @@ docker exec -it estoque-pg psql -U postgres -d estoque -c "INSERT INTO \"Usuario
 - **Portas reservadas no Windows**: o Hyper-V/WSL reserva faixas de portas (a `55432` já falhou). Veja com `netsh interface ipv4 show excludedportrange protocol=tcp`.
 - **Migrations sem usuários**: um banco novo não tem login; é preciso inserir os usuários (seção 7).
 - **Horário do PDF**: o container roda em UTC e o relatório converte para `America/Sao_Paulo`. Por isso a imagem precisa do pacote `tzdata`.
+- **Versão no menu**: vem do `ARG RAILWAY_GIT_COMMIT_SHA` do `Dockerfile`, passado ao front com `--define VERSAO_APP`. Fora do Railway (CI, E2E, local) aparece `dev`.
+- **Usuário novo precisa de módulo**: o `INSERT` manual (seção 7) tem de marcar `AcessoObreiros` e/ou `AcessoAcaoSocial`, senão o login responde "Usuário sem acesso".

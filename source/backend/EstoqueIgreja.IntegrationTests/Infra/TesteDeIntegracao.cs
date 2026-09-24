@@ -15,19 +15,15 @@ using Npgsql;
 namespace EstoqueIgreja.IntegrationTests.Infra;
 
 /// <summary>
-/// Cada teste começa com o banco limpo e com as duas contas fixas (admin e voluntário).
+/// Cada teste começa com o banco limpo e com as contas fixas: admin (Obreiros), social (Ação Social) e
+/// semacesso (nenhum módulo). As três usam a mesma senha.
 /// </summary>
 public abstract class TesteDeIntegracao : IAsyncLifetime
 {
     protected const string SenhaAdmin = "senha-admin";
-    protected const string SenhaVoluntario = "senha-voluntario";
 
     // BCrypt é lento de propósito; o hash é gerado uma vez só para a execução inteira.
-    private static readonly Lazy<(string Admin, string Voluntario)> Hashes = new(() =>
-    {
-        var hasher = new PasswordHasher();
-        return (hasher.Hash(SenhaAdmin), hasher.Hash(SenhaVoluntario));
-    });
+    private static readonly Lazy<string> HashAdmin = new(() => new PasswordHasher().Hash(SenhaAdmin));
 
     protected TesteDeIntegracao(ApiFactory factory)
     {
@@ -36,19 +32,21 @@ public abstract class TesteDeIntegracao : IAsyncLifetime
 
     protected ApiFactory Factory { get; }
     protected Usuario Admin { get; private set; } = null!;
-    protected Usuario Voluntario { get; private set; } = null!;
+    protected Usuario Social { get; private set; } = null!;
+    protected Usuario SemAcesso { get; private set; } = null!;
 
     public async Task InitializeAsync()
     {
-        Admin = Usuario.Criar("admin", Hashes.Value.Admin, PerfilUsuario.Admin);
-        Voluntario = Usuario.Criar("voluntario", Hashes.Value.Voluntario, PerfilUsuario.Voluntario);
+        Admin = Usuario.Criar("admin", HashAdmin.Value, PerfilUsuario.Admin, Modulo.Obreiros);
+        Social = Usuario.Criar("social", HashAdmin.Value, PerfilUsuario.Admin, Modulo.AcaoSocial);
+        SemAcesso = Usuario.Criar("semacesso", HashAdmin.Value, PerfilUsuario.Admin);
 
         await NoBanco(async db =>
         {
             await db.Database.ExecuteSqlRawAsync(
                 "TRUNCATE TABLE \"AtualizacoesEstoque\", \"Itens\", \"Usuarios\" CASCADE");
 
-            db.Usuarios.AddRange(Admin, Voluntario);
+            db.Usuarios.AddRange(Admin, Social, SemAcesso);
             await db.SaveChangesAsync();
         });
     }
@@ -125,8 +123,8 @@ public abstract class TesteDeIntegracao : IAsyncLifetime
     protected Task<HttpClient> ClienteAdmin(WebApplicationFactory<Program>? factory = null) =>
         Logar(factory, "admin", SenhaAdmin);
 
-    protected Task<HttpClient> ClienteVoluntario(WebApplicationFactory<Program>? factory = null) =>
-        Logar(factory, "voluntario", SenhaVoluntario);
+    protected Task<HttpClient> ClienteSocial(WebApplicationFactory<Program>? factory = null) =>
+        Logar(factory, "social", SenhaAdmin);
 
     private async Task<HttpClient> Logar(WebApplicationFactory<Program>? factory, string login, string senha)
     {

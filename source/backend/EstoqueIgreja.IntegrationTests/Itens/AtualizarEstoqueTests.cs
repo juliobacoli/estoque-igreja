@@ -15,12 +15,12 @@ namespace EstoqueIgreja.IntegrationTests;
 public class AtualizarEstoqueTests(ApiFactory factory) : TesteDeIntegracao(factory)
 {
     [Fact]
-    public async Task Voluntario_AtualizaEstoque_GravaNovaQuantidade()
+    public async Task Admin_AtualizaEstoque_GravaNovaQuantidade()
     {
-        var item = await CriarItem(await ClienteAdmin(), "Sabão");
-        var voluntario = await ClienteVoluntario();
+        var admin = await ClienteAdmin();
+        var item = await CriarItem(admin, "Sabão");
 
-        var resposta = await AtualizarEstoque(voluntario, item.Id, 7);
+        var resposta = await AtualizarEstoque(admin, item.Id, 7);
 
         Assert.Equal(HttpStatusCode.OK, resposta.StatusCode);
         var resultado = (await resposta.Content.ReadFromJsonAsync<EstoqueAtualizadoResult>())!;
@@ -33,15 +33,15 @@ public class AtualizarEstoqueTests(ApiFactory factory) : TesteDeIntegracao(facto
     [Fact]
     public async Task AtualizarEstoque_GravaHistoricoComUsuarioEQuantidadeAnteriorDoBanco()
     {
-        var item = await CriarItem(await ClienteAdmin(), "Sabão");
-        var voluntario = await ClienteVoluntario();
+        var admin = await ClienteAdmin();
+        var item = await CriarItem(admin, "Sabão");
 
-        await AtualizarEstoque(voluntario, item.Id, 7);
-        await AtualizarEstoque(voluntario, item.Id, 3);
+        await AtualizarEstoque(admin, item.Id, 7);
+        await AtualizarEstoque(admin, item.Id, 3);
 
         var registros = await RegistrosDoItem(item.Id);
         Assert.Equal(2, registros.Count);
-        Assert.All(registros, r => Assert.Equal(Voluntario.Id, r.UsuarioId));
+        Assert.All(registros, r => Assert.Equal(Admin.Id, r.UsuarioId));
         Assert.Contains(registros, r => r.QuantidadeAnterior == 0 && r.QuantidadeNova == 7);
         Assert.Contains(registros, r => r.QuantidadeAnterior == 7 && r.QuantidadeNova == 3);
     }
@@ -49,7 +49,7 @@ public class AtualizarEstoqueTests(ApiFactory factory) : TesteDeIntegracao(facto
     [Fact]
     public async Task ItemInexistente_Retorna404SemHistorico()
     {
-        var resposta = await AtualizarEstoque(await ClienteVoluntario(), Guid.NewGuid(), 1);
+        var resposta = await AtualizarEstoque(await ClienteAdmin(), Guid.NewGuid(), 1);
 
         Assert.Equal(HttpStatusCode.NotFound, resposta.StatusCode);
         Assert.Equal("Item não encontrado", (await LerJson(resposta)).GetProperty("error").GetString());
@@ -79,7 +79,7 @@ public class AtualizarEstoqueTests(ApiFactory factory) : TesteDeIntegracao(facto
     {
         var item = await CriarItem(await ClienteAdmin(), "Sabão");
 
-        var resposta = await AtualizarEstoque(await ClienteVoluntario(), item.Id, -1);
+        var resposta = await AtualizarEstoque(await ClienteAdmin(), item.Id, -1);
 
         Assert.Equal(HttpStatusCode.BadRequest, resposta.StatusCode);
         Assert.Equal("application/problem+json", resposta.Content.Headers.ContentType?.MediaType);
@@ -94,7 +94,7 @@ public class AtualizarEstoqueTests(ApiFactory factory) : TesteDeIntegracao(facto
     {
         var item = await CriarItem(await ClienteAdmin(), "Sabão");
 
-        var resposta = await (await ClienteVoluntario()).PutAsJsonAsync($"/api/itens/{item.Id}/estoque", new { });
+        var resposta = await (await ClienteAdmin()).PutAsJsonAsync($"/api/itens/{item.Id}/estoque", new { });
 
         Assert.Equal(HttpStatusCode.BadRequest, resposta.StatusCode);
     }
@@ -102,7 +102,7 @@ public class AtualizarEstoqueTests(ApiFactory factory) : TesteDeIntegracao(facto
     [Fact]
     public async Task IdQueNaoEhGuid_Retorna404()
     {
-        var resposta = await (await ClienteVoluntario()).PutAsJsonAsync("/api/itens/abc/estoque", new { novaQuantidade = 1 });
+        var resposta = await (await ClienteAdmin()).PutAsJsonAsync("/api/itens/abc/estoque", new { novaQuantidade = 1 });
 
         Assert.Equal(HttpStatusCode.NotFound, resposta.StatusCode);
     }
@@ -110,14 +110,14 @@ public class AtualizarEstoqueTests(ApiFactory factory) : TesteDeIntegracao(facto
     [Fact]
     public async Task ItemTravadoPorOutraTransacao_EsperaELeQuantidadeAtualizada()
     {
-        var item = await CriarItem(await ClienteAdmin(), "Sabão");
-        var voluntario = await ClienteVoluntario();
+        var admin = await ClienteAdmin();
+        var item = await CriarItem(admin, "Sabão");
 
         await using var conexao = await AbrirConexao();
         await using var transacao = await conexao.BeginTransactionAsync();
         await Executar(conexao, "SELECT 1 FROM \"Itens\" WHERE \"Id\" = @id FOR UPDATE", item.Id);
 
-        var atualizacao = AtualizarEstoque(voluntario, item.Id, 9);
+        var atualizacao = AtualizarEstoque(admin, item.Id, 9);
         await AguardarBloqueio();
 
         await Executar(conexao, "UPDATE \"Itens\" SET \"EstoqueAtual\" = 5 WHERE \"Id\" = @id", item.Id);
@@ -131,11 +131,11 @@ public class AtualizarEstoqueTests(ApiFactory factory) : TesteDeIntegracao(facto
     [Fact]
     public async Task AtualizacoesSimultaneas_FormamHistoricoEncadeado()
     {
-        var item = await CriarItem(await ClienteAdmin(), "Sabão");
-        var voluntario = await ClienteVoluntario();
+        var admin = await ClienteAdmin();
+        var item = await CriarItem(admin, "Sabão");
         var quantidades = Enumerable.Range(1, 10).ToList();
 
-        var respostas = await Task.WhenAll(quantidades.Select(q => AtualizarEstoque(voluntario, item.Id, q)));
+        var respostas = await Task.WhenAll(quantidades.Select(q => AtualizarEstoque(admin, item.Id, q)));
 
         Assert.All(respostas, r => Assert.Equal(HttpStatusCode.OK, r.StatusCode));
 
@@ -155,14 +155,14 @@ public class AtualizarEstoqueTests(ApiFactory factory) : TesteDeIntegracao(facto
     [Fact]
     public async Task ItemRemovidoDuranteAtualizacao_Retorna404SemHistorico()
     {
-        var item = await CriarItem(await ClienteAdmin(), "Sabão");
-        var voluntario = await ClienteVoluntario();
+        var admin = await ClienteAdmin();
+        var item = await CriarItem(admin, "Sabão");
 
         await using var conexao = await AbrirConexao();
         await using var transacao = await conexao.BeginTransactionAsync();
         await Executar(conexao, "UPDATE \"Itens\" SET \"Ativo\" = false WHERE \"Id\" = @id", item.Id);
 
-        var atualizacao = AtualizarEstoque(voluntario, item.Id, 4);
+        var atualizacao = AtualizarEstoque(admin, item.Id, 4);
         await AguardarBloqueio();
         await transacao.CommitAsync();
 
@@ -180,7 +180,7 @@ public class AtualizarEstoqueTests(ApiFactory factory) : TesteDeIntegracao(facto
         await using var comFalha = FactoryCom(servicos =>
             servicos.ConfigureDbContext<AppDbContext>(o => o.AddInterceptors(new FalhaAoConfirmarContagem())));
 
-        var resposta = await AtualizarEstoque(await ClienteVoluntario(comFalha), item.Id, 8);
+        var resposta = await AtualizarEstoque(await ClienteAdmin(comFalha), item.Id, 8);
 
         Assert.Equal(HttpStatusCode.InternalServerError, resposta.StatusCode);
         var salvo = await NoBanco(db => db.Itens.AsNoTracking().SingleAsync(i => i.Id == item.Id));

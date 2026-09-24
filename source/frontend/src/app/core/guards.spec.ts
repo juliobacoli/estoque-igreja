@@ -3,12 +3,12 @@ import { ActivatedRouteSnapshot, CanActivateFn, provideRouter, Router, RouterSta
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, firstValueFrom, of } from 'rxjs';
 import { alteracoesNaoSalvasGuard, PodeTerAlteracoes } from './alteracoes-nao-salvas.guard';
-import { adminGuard, authGuard } from './auth.guard';
+import { adminGuard, authGuard, moduloGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { ConfirmacaoDialog } from '../shared/confirmacao-dialog';
 
-describe('authGuard e adminGuard', () => {
-  const auth = { carregarSessao: vi.fn(), ehAdmin: vi.fn() };
+describe('authGuard, adminGuard e moduloGuard', () => {
+  const auth = { carregarSessao: vi.fn(), ehAdmin: vi.fn(), temModulo: vi.fn(), rotaInicial: vi.fn() };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -47,11 +47,19 @@ describe('authGuard e adminGuard', () => {
     expect(await executar(adminGuard)).toBe(true);
   });
 
-  it('adminGuard manda voluntário para /dashboard', async () => {
+  it('moduloGuard libera quem tem o módulo', async () => {
     auth.carregarSessao.mockReturnValue(of(true));
-    auth.ehAdmin.mockReturnValue(false);
+    auth.temModulo.mockImplementation((modulo) => modulo === 'Obreiros');
 
-    expect(destino(await executar(adminGuard))).toBe('/dashboard');
+    expect(await executar(moduloGuard('Obreiros'))).toBe(true);
+  });
+
+  it('moduloGuard manda quem não tem o módulo para a própria área', async () => {
+    auth.carregarSessao.mockReturnValue(of(true));
+    auth.temModulo.mockImplementation((modulo) => modulo === 'AcaoSocial');
+    auth.rotaInicial.mockReturnValue('/acao-social');
+
+    expect(destino(await executar(moduloGuard('Obreiros')))).toBe('/acao-social');
   });
 });
 
