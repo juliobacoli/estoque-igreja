@@ -12,6 +12,7 @@ Os testes de unidade e de integração verificam peças isoladas. O E2E verifica
 
 | Arquivo | O que testa |
 |---|---|
+| `testes/acao-social.spec.ts` | Ação Social: cadastra item, registra doação com doador e ajusta com motivo |
 | `testes/autenticacao.spec.ts` | Login inválido, login válido, redirecionamento para o login sem sessão, logout |
 | `testes/permissoes.spec.ts` | Admin vê o cadastro no menu e consegue abrir |
 | `testes/cadastro.spec.ts` | Admin cadastra item e ele aparece no dashboard; remover item com histórico tira do dashboard e mantém no histórico |

@@ -43,6 +43,12 @@ export const routes: Routes = [
         canActivate: [moduloGuard('AcaoSocial')],
         loadComponent: () =>
           import('./paginas/acao-social/acao-social').then((m) => m.AcaoSocial)
+      },
+      {
+        path: 'acao-social/itens',
+        canActivate: [moduloGuard('AcaoSocial'), adminGuard],
+        loadComponent: () =>
+          import('./paginas/cadastro-item-social/cadastro-item-social').then((m) => m.CadastroItemSocial)
       }
     ]
   },

@@ -1,0 +1,52 @@
+<h1>Estoque da Ação Social</h1>
+
+@if (carregando()) {
+  <div class="centro">
+    <mat-progress-spinner diameter="36" mode="indeterminate" />
+  </div>
+} @else if (falhaAoCarregar()) {
+  <p class="erro" role="alert">Não foi possível carregar os itens.</p>
+} @else if (itens().length === 0) {
+  <p class="muted">Nenhum item cadastrado ainda.</p>
+  @if (ehAdmin()) {
+    <a mat-flat-button class="cadastrar" routerLink="/acao-social/itens">Cadastrar itens</a>
+  }
+} @else {
+  <ul class="lista">
+    @for (item of itens(); track item.id) {
+      <li class="linha glass">
+        <div class="linha__topo">
+          <span class="linha__nome">{{ item.nome }}</span>
+          <span class="linha__qtd">
+            {{ item.estoqueAtual }}
+            <small class="muted">{{ item.unidade }}</small>
+          </span>
+        </div>
+
+        <div class="linha__acoes">
+          <button
+            mat-flat-button
+            class="doacao"
+            type="button"
+            [attr.aria-label]="'Registrar doação de ' + item.nome"
+            [disabled]="salvando() !== null"
+            (click)="registrarDoacao(item)">
+            <mat-icon>add</mat-icon>
+            Doação
+          </button>
+
+          <button
+            mat-stroked-button
+            class="ajuste"
+            type="button"
+            [attr.aria-label]="'Ajustar ' + item.nome"
+            [disabled]="salvando() !== null"
+            (click)="ajustar(item)">
+            <mat-icon>tune</mat-icon>
+            Ajustar
+          </button>
+        </div>
+      </li>
+    }
+  </ul>
+}
