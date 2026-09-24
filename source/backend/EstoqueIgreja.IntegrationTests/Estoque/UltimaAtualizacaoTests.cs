@@ -14,7 +14,7 @@ public class UltimaAtualizacaoTests(ApiFactory factory) : TesteDeIntegracao(fact
     [Fact]
     public async Task SemContagens_RetornaDataNula()
     {
-        var resposta = await (await ClienteVoluntario()).GetAsync(Rota);
+        var resposta = await (await ClienteAdmin()).GetAsync(Rota);
 
         Assert.Equal(HttpStatusCode.OK, resposta.StatusCode);
         Assert.Null((await resposta.Content.ReadFromJsonAsync<UltimaAtualizacaoResult>())!.Data);
@@ -28,7 +28,7 @@ public class UltimaAtualizacaoTests(ApiFactory factory) : TesteDeIntegracao(fact
         await AtualizarEstoque(admin, item.Id, 1);
         await AtualizarEstoque(admin, item.Id, 2);
 
-        var resultado = await (await ClienteVoluntario()).GetFromJsonAsync<UltimaAtualizacaoResult>(Rota);
+        var resultado = await (await ClienteAdmin()).GetFromJsonAsync<UltimaAtualizacaoResult>(Rota);
 
         var maisRecente = await NoBanco(db => db.AtualizacoesEstoque.MaxAsync(a => a.Data));
         Assert.Equal(maisRecente, resultado!.Data);

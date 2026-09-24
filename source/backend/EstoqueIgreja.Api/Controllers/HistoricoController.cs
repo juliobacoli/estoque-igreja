@@ -1,10 +1,13 @@
+using EstoqueIgreja.Api.Services;
 using EstoqueIgreja.Application.Historico.Queries.ListarHistorico;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstoqueIgreja.Api.Controllers;
 
 [ApiController]
+[Authorize(Policy = Politicas.Obreiros)]
 [Route("api/historico")]
 public class HistoricoController : ControllerBase
 {

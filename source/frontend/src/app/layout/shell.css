@@ -99,3 +99,14 @@
   margin-right: 0.35rem;
   color: var(--dourado);
 }
+
+.modulo {
+  font-size: 0.95rem;
+  color: var(--texto-muted);
+}
+
+.menu__versao {
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  text-align: center;
+}

@@ -82,7 +82,7 @@ public class BancoTests(ApiFactory factory) : TesteDeIntegracao(factory)
     {
         await AssertViolacao(PostgresErrorCodes.UniqueViolation, () => NoBanco(async db =>
         {
-            db.Usuarios.Add(Usuario.Criar("admin", "outro-hash", PerfilUsuario.Voluntario));
+            db.Usuarios.Add(Usuario.Criar("admin", "outro-hash", PerfilUsuario.Admin));
             await db.SaveChangesAsync();
         }));
     }
@@ -109,13 +109,13 @@ public class BancoTests(ApiFactory factory) : TesteDeIntegracao(factory)
     public async Task Perfil_EhGravadoComoTextoELidoDeVolta()
     {
         var gravado = await NoBanco(db => db.Database
-            .SqlQuery<string>($"SELECT \"Perfil\" AS \"Value\" FROM \"Usuarios\" WHERE \"Id\" = {Voluntario.Id}")
+            .SqlQuery<string>($"SELECT \"Perfil\" AS \"Value\" FROM \"Usuarios\" WHERE \"Id\" = {Admin.Id}")
             .SingleAsync());
 
-        var lido = await NoBanco(db => db.Usuarios.AsNoTracking().SingleAsync(u => u.Id == Voluntario.Id));
+        var lido = await NoBanco(db => db.Usuarios.AsNoTracking().SingleAsync(u => u.Id == Admin.Id));
 
-        Assert.Equal("Voluntario", gravado);
-        Assert.Equal(PerfilUsuario.Voluntario, lido.Perfil);
+        Assert.Equal("Admin", gravado);
+        Assert.Equal(PerfilUsuario.Admin, lido.Perfil);
     }
 
     private async Task<Item> CriarItemComHistorico()

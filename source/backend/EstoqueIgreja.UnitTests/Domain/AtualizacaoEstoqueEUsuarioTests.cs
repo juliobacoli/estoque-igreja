@@ -33,12 +33,24 @@ public class AtualizacaoEstoqueEUsuarioTests
     [Fact]
     public void Usuario_Criar_PreencheTodosOsCampos()
     {
-        var usuario = Usuario.Criar("admin", "hash", PerfilUsuario.Admin);
+        var usuario = Usuario.Criar("admin", "hash", PerfilUsuario.Admin, Modulo.Obreiros);
 
         Assert.NotEqual(Guid.Empty, usuario.Id);
         Assert.Equal("admin", usuario.Login);
         Assert.Equal("hash", usuario.SenhaHash);
         Assert.Equal(PerfilUsuario.Admin, usuario.Perfil);
+        Assert.True(usuario.AcessoObreiros);
+        Assert.False(usuario.AcessoAcaoSocial);
         Assert.Equal(DateTimeKind.Utc, usuario.CriadoEm.Kind);
+    }
+
+    [Fact]
+    public void Usuario_Modulos_ListaOsModulosLiberados()
+    {
+        Assert.Empty(Usuario.Criar("a", "hash", PerfilUsuario.Admin).Modulos());
+        Assert.Equal([Modulo.AcaoSocial], Usuario.Criar("b", "hash", PerfilUsuario.Admin, Modulo.AcaoSocial).Modulos());
+        Assert.Equal(
+            [Modulo.Obreiros, Modulo.AcaoSocial],
+            Usuario.Criar("c", "hash", PerfilUsuario.Admin, Modulo.AcaoSocial, Modulo.Obreiros).Modulos());
     }
 }
