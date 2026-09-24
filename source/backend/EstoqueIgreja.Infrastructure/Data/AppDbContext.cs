@@ -16,6 +16,9 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<AtualizacaoEstoque> AtualizacoesEstoque => Set<AtualizacaoEstoque>();
     public DbSet<ItemSocial> ItensSociais => Set<ItemSocial>();
     public DbSet<MovimentacaoSocial> MovimentacoesSociais => Set<MovimentacaoSocial>();
+    public DbSet<ModeloCesta> ModelosCesta => Set<ModeloCesta>();
+    public DbSet<ModeloCestaItem> ModeloCestaItens => Set<ModeloCestaItem>();
+    public DbSet<MontagemCesta> MontagensCesta => Set<MontagemCesta>();
 
     public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
@@ -87,6 +90,51 @@ public class AppDbContext : DbContext, IAppDbContext
                 .OnDelete(DeleteBehavior.Restrict);
 
             entidade.HasIndex(m => new { m.ItemSocialId, m.Data });
+            entidade.HasIndex(m => m.Data);
+        });
+
+        modelBuilder.Entity<MovimentacaoSocial>()
+            .HasOne<MontagemCesta>()
+            .WithMany()
+            .HasForeignKey(m => m.MontagemCestaId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<ModeloCesta>(entidade =>
+        {
+            entidade.HasKey(m => m.Id);
+
+            entidade.HasMany(m => m.Itens)
+                .WithOne()
+                .HasForeignKey(i => i.ModeloCestaId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entidade.Navigation(m => m.Itens).UsePropertyAccessMode(PropertyAccessMode.Field);
+        });
+
+        modelBuilder.Entity<ModeloCestaItem>(entidade =>
+        {
+            entidade.HasKey(i => i.Id);
+
+            // O Id nasce no código (ModeloCestaItem.Criar). Sem isso, o EF vê um item novo
+            // com Id preenchido na coleção do modelo e tenta um UPDATE em vez de INSERT.
+            entidade.Property(i => i.Id).ValueGeneratedNever();
+            entidade.HasIndex(i => new { i.ModeloCestaId, i.ItemSocialId }).IsUnique();
+
+            entidade.HasOne(i => i.ItemSocial)
+                .WithMany()
+                .HasForeignKey(i => i.ItemSocialId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<MontagemCesta>(entidade =>
+        {
+            entidade.HasKey(m => m.Id);
+
+            entidade.HasOne(m => m.Usuario)
+                .WithMany()
+                .HasForeignKey(m => m.UsuarioId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             entidade.HasIndex(m => m.Data);
         });
 
