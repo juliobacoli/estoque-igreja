@@ -54,7 +54,7 @@ export class Login {
     this.enviando.set(true);
 
     this.auth.login(this.login, this.senha).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => this.router.navigate([this.auth.rotaInicial()]),
       error: (resposta) => {
         this.erro.set(resposta.error?.error ?? 'Login ou senha inválidos');
         this.enviando.set(false);

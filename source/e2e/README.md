@@ -17,6 +17,7 @@ Os testes de unidade e de integração verificam peças isoladas. O E2E verifica
 | `testes/cadastro.spec.ts` | Admin cadastra item e ele aparece no dashboard; remover item com histórico tira do dashboard e mantém no histórico |
 | `testes/contagem.spec.ts` | Admin conta, salva, e o dashboard mostra a quantidade nova e o card "Estoque em dia"; sair sem salvar pede confirmação |
 | `testes/historico.spec.ts` | Histórico mostra a contagem feita e filtra por item |
+| `testes/modulos.spec.ts` | Módulo no cabeçalho, login e versão no menu; usuário da Ação Social não vê nem acessa os Obreiros |
 | `testes/pdf.spec.ts` | Exportar baixa um PDF válido |
 
 ---
@@ -128,13 +129,14 @@ O app roda em modo **Production**, igual ao deploy (o Chromium aceita o cookie `
 
 ### Dados de teste
 
-Antes de **cada** teste, o banco é esvaziado e recebe uma conta:
+Antes de **cada** teste, o banco é esvaziado e recebe duas contas:
 
-| Perfil | Login | Senha |
-|---|---|---|
-| Admin | `admin` | `e2e-admin-senha` |
+| Perfil | Login | Senha | Módulo |
+|---|---|---|---|
+| Admin | `admin` | `e2e-admin-senha` | Obreiros |
+| Admin | `social` | `e2e-admin-senha` | Ação Social |
 
-Essa conta só existe no banco descartável dos testes. Por usarem o mesmo banco, **os testes rodam um de cada vez**.
+Essas contas só existem no banco descartável dos testes. Por usarem o mesmo banco, **os testes rodam um de cada vez**.
 
 ---
 
@@ -148,7 +150,7 @@ Essa conta só existe no banco descartável dos testes. Por usarem o mesmo banco
 
 | Helper | Arquivo | O que faz |
 |---|---|---|
-| `entrarComo(page, 'admin')` | `suporte/fixtures.ts` | Faz login e espera o dashboard |
+| `entrarComo(page, 'admin' \| 'social')` | `suporte/fixtures.ts` | Faz login e espera a tela inicial do módulo |
 | `preencherLogin(page, login, senha)` | `suporte/fixtures.ts` | Preenche e envia o login, sem esperar resultado |
 | `abrirMenu(page)` | `suporte/fixtures.ts` | Abre o menu lateral |
 | `criarItem(nome, unidade?, estoque?)` | `suporte/banco.ts` | Cadastra um item direto no banco e devolve o id |

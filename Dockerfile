@@ -5,7 +5,12 @@ COPY source/frontend/package*.json ./
 RUN npm ci
 
 COPY source/frontend/ ./
-RUN npm run build -- --configuration production
+
+# O Railway entrega o commit do deploy nesta variável quando o ARG é declarado.
+# O front mostra os 7 primeiros caracteres no menu; fora do Railway fica "dev".
+ARG RAILWAY_GIT_COMMIT_SHA=dev
+RUN VERSAO=$(echo "$RAILWAY_GIT_COMMIT_SHA" | cut -c1-7) && \
+    npm run build -- --configuration production --define "VERSAO_APP='$VERSAO'"
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS backend-build
 WORKDIR /app/backend

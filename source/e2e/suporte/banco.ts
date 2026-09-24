@@ -3,16 +3,16 @@ import { Client } from 'pg';
 
 const CONEXAO = process.env.E2E_DATABASE_URL ?? 'postgres://postgres:postgres@localhost:15432/estoque';
 
+// telaInicial: título da primeira tela depois do login, que o entrarComo espera aparecer.
 export const USUARIOS = {
-  admin: { login: 'admin', senha: 'e2e-admin-senha', perfil: 'Admin' }
+  admin: { login: 'admin', senha: 'e2e-admin-senha', perfil: 'Admin', obreiros: true, acaoSocial: false, telaInicial: 'Estoque atual' },
+  social: { login: 'social', senha: 'e2e-admin-senha', perfil: 'Admin', obreiros: false, acaoSocial: true, telaInicial: 'Ação Social' }
 } as const;
 
 export type Usuario = keyof typeof USUARIOS;
 
-// Hashes BCrypt das senhas acima. Só existem no banco descartável dos testes.
-const HASHES: Record<Usuario, string> = {
-  admin: '$2y$10$iPwEkWrddebdl.x1Nr7GkO.QxyO6Bi0ytYjxAcFMMVVyg2ZTPpXS2'
-};
+// Hash BCrypt da senha acima, a mesma nas duas contas. Só existe no banco descartável dos testes.
+const HASH_SENHA = '$2y$10$iPwEkWrddebdl.x1Nr7GkO.QxyO6Bi0ytYjxAcFMMVVyg2ZTPpXS2';
 
 async function comBanco<T>(acao: (cliente: Client) => Promise<T>): Promise<T> {
   const cliente = new Client({ connectionString: CONEXAO });
@@ -30,15 +30,18 @@ function normalizar(nome: string) {
   return nome.trim().normalize('NFD').replace(/\p{Mn}/gu, '').normalize('NFC').toLowerCase();
 }
 
-/** Banco limpo, só com a conta de admin. */
+/** Banco limpo, só com as contas de admin (Obreiros) e social (Ação Social). */
 export function prepararBanco() {
   return comBanco(async (cliente) => {
     await cliente.query('TRUNCATE TABLE "AtualizacoesEstoque", "Itens", "Usuarios" CASCADE');
 
     for (const usuario of Object.keys(USUARIOS) as Usuario[]) {
+      const { login, perfil, obreiros, acaoSocial } = USUARIOS[usuario];
+
       await cliente.query(
-        'INSERT INTO "Usuarios" ("Id", "Login", "SenhaHash", "Perfil", "CriadoEm") VALUES ($1, $2, $3, $4, now())',
-        [randomUUID(), USUARIOS[usuario].login, HASHES[usuario], USUARIOS[usuario].perfil]
+        `INSERT INTO "Usuarios" ("Id", "Login", "SenhaHash", "Perfil", "CriadoEm", "AcessoObreiros", "AcessoAcaoSocial")
+         VALUES ($1, $2, $3, $4, now(), $5, $6)`,
+        [randomUUID(), login, HASH_SENHA, perfil, obreiros, acaoSocial]
       );
     }
   });

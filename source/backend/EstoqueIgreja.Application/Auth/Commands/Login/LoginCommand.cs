@@ -8,4 +8,4 @@ namespace EstoqueIgreja.Application.Auth.Commands.Login;
 /// </summary>
 public record LoginCommand(string Login, string Senha) : IRequest<LoginResult?>;
 
-public record LoginResult(Guid UsuarioId, string Perfil);
+public record LoginResult(Guid UsuarioId, string Login, string Perfil, IReadOnlyList<string> Modulos);

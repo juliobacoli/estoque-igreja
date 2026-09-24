@@ -12,7 +12,7 @@ public class LoginCommandHandlerTests
 {
     private readonly AppDbContext _db = BancoEmMemoria.Criar();
     private readonly Mock<IPasswordHasher> _hasher = new();
-    private readonly Usuario _admin = Usuario.Criar("admin", "hash-admin", PerfilUsuario.Admin);
+    private readonly Usuario _admin = Usuario.Criar("admin", "hash-admin", PerfilUsuario.Admin, Modulo.Obreiros);
 
     public LoginCommandHandlerTests()
     {
@@ -23,7 +23,7 @@ public class LoginCommandHandlerTests
     private LoginCommandHandler CriarHandler() => new(_db, _hasher.Object);
 
     [Fact]
-    public async Task CredenciaisCorretas_RetornaUsuarioEPerfil()
+    public async Task CredenciaisCorretas_RetornaUsuarioPerfilEModulos()
     {
         _hasher.Setup(h => h.Verificar("senha", "hash-admin")).Returns(true);
 
@@ -32,6 +32,8 @@ public class LoginCommandHandlerTests
         Assert.NotNull(resultado);
         Assert.Equal(_admin.Id, resultado.UsuarioId);
         Assert.Equal("Admin", resultado.Perfil);
+        Assert.Equal("admin", resultado.Login);
+        Assert.Equal(["Obreiros"], resultado.Modulos);
     }
 
     [Fact]

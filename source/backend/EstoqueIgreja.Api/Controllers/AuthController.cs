@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using EstoqueIgreja.Api.Services;
 using EstoqueIgreja.Application.Auth.Commands.Login;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
@@ -30,11 +31,17 @@ public class AuthController : ControllerBase
         if (resultado is null)
             return Unauthorized(new { error = "Login ou senha inválidos" });
 
+        if (resultado.Modulos.Count == 0)
+            return StatusCode(StatusCodes.Status403Forbidden, new { error = "Usuário sem acesso" });
+
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, resultado.UsuarioId.ToString()),
+            new(ClaimTypes.Name, resultado.Login),
             new(ClaimTypes.Role, resultado.Perfil)
         };
+
+        claims.AddRange(resultado.Modulos.Select(modulo => new Claim(Politicas.ClaimModulo, modulo)));
 
         var identidade = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -43,7 +50,7 @@ public class AuthController : ControllerBase
             new ClaimsPrincipal(identidade),
             new AuthenticationProperties { IsPersistent = true });
 
-        return Ok(new { perfil = resultado.Perfil });
+        return Ok(new { perfil = resultado.Perfil, login = resultado.Login, modulos = resultado.Modulos });
     }
 
     [HttpPost("logout")]
@@ -57,6 +64,11 @@ public class AuthController : ControllerBase
     [HttpGet("me")]
     public IActionResult Me()
     {
-        return Ok(new { perfil = User.FindFirstValue(ClaimTypes.Role) });
+        return Ok(new
+        {
+            perfil = User.FindFirstValue(ClaimTypes.Role),
+            login = User.FindFirstValue(ClaimTypes.Name),
+            modulos = User.FindAll(Politicas.ClaimModulo).Select(c => c.Value)
+        });
     }
 }

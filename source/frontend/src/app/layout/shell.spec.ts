@@ -4,7 +4,7 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { AuthService } from '../core/auth.service';
-import { Perfil } from '../core/models';
+import { Modulo } from '../core/models';
 import { Shell } from './shell';
 
 @Component({ template: '' })
@@ -13,15 +13,16 @@ class Vazio {}
 describe('Shell (menu)', () => {
   let fixture: ComponentFixture<Shell>;
   let el: HTMLElement;
+  let modulos: Modulo[];
   const auth = {
     ehAdmin: signal(true),
-    perfil: signal<Perfil | null>('Admin'),
+    usuario: signal<string | null>('obreiros'),
+    temModulo: (modulo: Modulo) => modulos.includes(modulo),
     logout: vi.fn()
   };
 
-  function criar(perfil: Perfil) {
-    auth.ehAdmin.set(perfil === 'Admin');
-    auth.perfil.set(perfil);
+  function criar(liberados: Modulo[] = ['Obreiros']) {
+    modulos = liberados;
 
     TestBed.configureTestingModule({
       imports: [Shell],
@@ -38,21 +39,53 @@ describe('Shell (menu)', () => {
   }
 
   const menuAberto = () => fixture.componentInstance['menuAberto']();
+  const texto = (seletor: string) => el.querySelector(seletor)?.textContent?.trim();
 
   it('admin vê o link de cadastro', () => {
-    criar('Admin');
+    criar();
 
     expect(el.querySelector('a[href="/cadastro"]')).not.toBeNull();
   });
 
-  it('mostra com qual perfil está conectado', () => {
-    criar('Admin');
+  it('mostra com qual login está conectado e a versão do app', () => {
+    criar();
 
-    expect(el.querySelector('.menu__perfil')?.textContent?.trim()).toBe('Conectado como Admin');
+    expect(texto('.menu__perfil')).toBe('Conectado como obreiros');
+    expect(texto('.menu__versao')).toBe('Versão dev');
+  });
+
+  it('usuário só da Ação Social não vê os links dos Obreiros', () => {
+    criar(['AcaoSocial']);
+
+    expect(el.querySelector('a[href="/acao-social"]')).not.toBeNull();
+    expect(el.querySelector('a[href="/dashboard"]')).toBeNull();
+    expect(el.querySelector('a[href="/atualizar"]')).toBeNull();
+    expect(el.querySelector('a[href="/cadastro"]')).toBeNull();
+    expect(el.querySelector('a[href="/historico"]')).toBeNull();
+  });
+
+  it('usuário só dos Obreiros não vê o link da Ação Social', () => {
+    criar(['Obreiros']);
+
+    expect(el.querySelector('a[href="/dashboard"]')).not.toBeNull();
+    expect(el.querySelector('a[href="/acao-social"]')).toBeNull();
+  });
+
+  it('o cabeçalho mostra o módulo da tela atual', async () => {
+    criar(['Obreiros', 'AcaoSocial']);
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/dashboard');
+    fixture.detectChanges();
+    expect(texto('.modulo')).toBe('· Obreiros');
+
+    await router.navigateByUrl('/acao-social');
+    fixture.detectChanges();
+    expect(texto('.modulo')).toBe('· Ação Social');
   });
 
   it('o botão de menu abre e fecha a gaveta, e clicar num link fecha', async () => {
-    criar('Admin');
+    criar();
     const botaoMenu = el.querySelector('button[aria-label="Abrir menu"]') as HTMLButtonElement;
 
     botaoMenu.click();
@@ -72,7 +105,7 @@ describe('Shell (menu)', () => {
     ['sucesso', () => of({})],
     ['erro', () => throwError(() => new Error('falhou'))]
   ])('sair com %s no logout fecha o menu e vai para /login', (_, resposta) => {
-    criar('Admin');
+    criar();
     const navegar = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
     auth.logout.mockReturnValue(resposta());
     fixture.componentInstance['alternarMenu']();

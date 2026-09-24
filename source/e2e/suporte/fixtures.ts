@@ -23,7 +23,7 @@ export async function preencherLogin(page: Page, login: string, senha: string) {
 
 export async function entrarComo(page: Page, usuario: Usuario) {
   await preencherLogin(page, USUARIOS[usuario].login, USUARIOS[usuario].senha);
-  await expect(page.getByRole('heading', { name: 'Estoque atual' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: USUARIOS[usuario].telaInicial })).toBeVisible();
 }
 
 export async function abrirMenu(page: Page) {
