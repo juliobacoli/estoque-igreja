@@ -240,5 +240,5 @@ docker exec -it estoque-pg psql -U postgres -d estoque -c "INSERT INTO \"Usuario
 - **Portas reservadas no Windows**: o Hyper-V/WSL reserva faixas de portas (a `55432` já falhou). Veja com `netsh interface ipv4 show excludedportrange protocol=tcp`.
 - **Migrations sem usuários**: um banco novo não tem login; é preciso inserir os usuários (seção 7).
 - **Horário do PDF**: o container roda em UTC e o relatório converte para `America/Sao_Paulo`. Por isso a imagem precisa do pacote `tzdata`.
-- **Versão no menu**: vem do `ARG RAILWAY_GIT_COMMIT_SHA` do `Dockerfile`, passado ao front com `--define VERSAO_APP`. Fora do Railway (CI, E2E, local) aparece `dev`.
+- **Versão no menu**: é o `version` do `source/frontend/package.json`, passado ao front no build do `Dockerfile` com `--define VERSAO_APP`. Em `ng serve` e nos testes unitários aparece `dev`.
 - **Usuário novo precisa de módulo**: o `INSERT` manual (seção 7) tem de marcar `AcessoObreiros` e/ou `AcessoAcaoSocial`, senão o login responde "Usuário sem acesso".
