@@ -59,6 +59,7 @@ describe('Shell (menu)', () => {
 
     expect(el.querySelector('a[href="/acao-social"]')).not.toBeNull();
     expect(el.querySelector('a[href="/acao-social/itens"]')).not.toBeNull();
+    expect(el.querySelector('a[href="/acao-social/cesta"]')).not.toBeNull();
     expect(el.querySelectorAll('[matsubheader]')).toHaveLength(0);
     expect(el.querySelector('a[href="/dashboard"]')).toBeNull();
     expect(el.querySelector('a[href="/atualizar"]')).toBeNull();

@@ -53,6 +53,11 @@
           <span matListItemTitle>Estoque da Ação Social</span>
         </a>
 
+        <a mat-list-item routerLink="/acao-social/cesta" routerLinkActive="ativo" (click)="fecharMenu()">
+          <mat-icon matListItemIcon>shopping_basket</mat-icon>
+          <span matListItemTitle>Cestas</span>
+        </a>
+
         @if (ehAdmin()) {
           <a mat-list-item routerLink="/acao-social/itens" routerLinkActive="ativo" (click)="fecharMenu()">
             <mat-icon matListItemIcon>add_box</mat-icon>

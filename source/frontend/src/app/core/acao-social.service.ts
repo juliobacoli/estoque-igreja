@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { EstoqueSocialAlterado, ItemRemovido, ItemSocial } from './models';
+import { CestaResumo, CestasMontadas, EstoqueSocialAlterado, ItemRemovido, ItemSocial } from './models';
 
 const API = '/api/acao-social/itens';
+const CESTA = '/api/acao-social/cesta';
 
 @Injectable({ providedIn: 'root' })
 export class AcaoSocialService {
@@ -26,5 +27,17 @@ export class AcaoSocialService {
 
   ajustar(id: string, novaQuantidade: number, motivo: string) {
     return this.http.post<EstoqueSocialAlterado>(`${API}/${id}/ajustes`, { novaQuantidade, motivo });
+  }
+
+  obterCesta() {
+    return this.http.get<CestaResumo>(CESTA);
+  }
+
+  definirModelo(itens: { itemId: string; quantidade: number }[]) {
+    return this.http.put<void>(`${CESTA}/modelo`, { itens });
+  }
+
+  montar(quantidade: number) {
+    return this.http.post<CestasMontadas>(`${CESTA}/montagens`, { quantidade });
   }
 }

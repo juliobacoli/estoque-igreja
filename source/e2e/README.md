@@ -16,6 +16,7 @@ Os testes de unidade e de integração verificam peças isoladas. O E2E verifica
 | `testes/autenticacao.spec.ts` | Login inválido, login válido, redirecionamento para o login sem sessão, logout |
 | `testes/permissoes.spec.ts` | Admin vê o cadastro no menu e consegue abrir |
 | `testes/cadastro.spec.ts` | Admin cadastra item e ele aparece no dashboard; remover item com histórico tira do dashboard e mantém no histórico |
+| `testes/cesta.spec.ts` | Define a cesta, mostra quantas dá para montar e o que falta, monta e é barrado sem estoque |
 | `testes/contagem.spec.ts` | Admin conta, salva, e o dashboard mostra a quantidade nova e o card "Estoque em dia"; sair sem salvar pede confirmação |
 | `testes/historico.spec.ts` | Histórico mostra a contagem feita e filtra por item |
 | `testes/modulos.spec.ts` | Módulo no cabeçalho, login e versão no menu; usuário da Ação Social não vê nem acessa os Obreiros |

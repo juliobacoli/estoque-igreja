@@ -58,3 +58,30 @@ export interface EstoqueSocialAlterado {
   quantidadeAnterior: number;
   quantidadeNova: number;
 }
+
+export interface ItemDaCesta {
+  itemId: string;
+  nome: string;
+  unidade: string;
+  quantidadePorCesta: number;
+  estoqueAtual: number;
+}
+
+export interface FaltaParaCesta {
+  nome: string;
+  unidade: string;
+  tem: number;
+  precisa: number;
+}
+
+export interface CestaResumo {
+  cestasProntas: number;
+  podeMontar: number;
+  itens: ItemDaCesta[];
+  faltasParaProxima: FaltaParaCesta[];
+}
+
+export interface CestasMontadas {
+  montadas: number;
+  cestasProntas: number;
+}

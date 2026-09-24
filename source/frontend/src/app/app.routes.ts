@@ -49,6 +49,16 @@ export const routes: Routes = [
         canActivate: [moduloGuard('AcaoSocial'), adminGuard],
         loadComponent: () =>
           import('./paginas/cadastro-item-social/cadastro-item-social').then((m) => m.CadastroItemSocial)
+      },
+      {
+        path: 'acao-social/cesta',
+        canActivate: [moduloGuard('AcaoSocial')],
+        loadComponent: () => import('./paginas/cesta/cesta').then((m) => m.Cesta)
+      },
+      {
+        path: 'acao-social/cesta/modelo',
+        canActivate: [moduloGuard('AcaoSocial'), adminGuard],
+        loadComponent: () => import('./paginas/modelo-cesta/modelo-cesta').then((m) => m.ModeloCesta)
       }
     ]
   },

@@ -53,4 +53,19 @@ describe('AcaoSocialService', () => {
     service.ajustar('abc', 2, 'Venceu').subscribe();
     esperar('/api/acao-social/itens/abc/ajustes', 'POST', { novaQuantidade: 2, motivo: 'Venceu' });
   });
+
+  it('obterCesta busca o resumo da cesta', () => {
+    service.obterCesta().subscribe();
+    esperar('/api/acao-social/cesta', 'GET');
+  });
+
+  it('definirModelo envia os itens da cesta', () => {
+    service.definirModelo([{ itemId: 'a', quantidade: 5 }]).subscribe();
+    esperar('/api/acao-social/cesta/modelo', 'PUT', { itens: [{ itemId: 'a', quantidade: 5 }] });
+  });
+
+  it('montar envia a quantidade de cestas', () => {
+    service.montar(3).subscribe();
+    esperar('/api/acao-social/cesta/montagens', 'POST', { quantidade: 3 });
+  });
 });

@@ -6,6 +6,8 @@ import { adminGuard, authGuard } from './core/auth.guard';
 import { AuthService } from './core/auth.service';
 import { Shell } from './layout/shell';
 import { AcaoSocial } from './paginas/acao-social/acao-social';
+import { Cesta } from './paginas/cesta/cesta';
+import { ModeloCesta } from './paginas/modelo-cesta/modelo-cesta';
 import { CadastroItemSocial } from './paginas/cadastro-item-social/cadastro-item-social';
 import { AtualizarEstoque } from './paginas/atualizar-estoque/atualizar-estoque';
 import { CadastroItem } from './paginas/cadastro-item/cadastro-item';
@@ -33,14 +35,14 @@ describe('Rotas', () => {
     expect(shell.canActivate).toContain(authGuard);
   });
 
-  it.each(['dashboard', 'atualizar', 'cadastro', 'historico', 'acao-social', 'acao-social/itens'])(
+  it.each(['dashboard', 'atualizar', 'cadastro', 'historico', 'acao-social', 'acao-social/itens', 'acao-social/cesta', 'acao-social/cesta/modelo'])(
     'rota %s exige o módulo dela',
     (path) => {
       expect(filha(path).canActivate?.length).toBeGreaterThan(0);
     }
   );
 
-  it.each(['cadastro', 'acao-social/itens'])('%s exige admin', (path) => {
+  it.each(['cadastro', 'acao-social/itens', 'acao-social/cesta/modelo'])('%s exige admin', (path) => {
     expect(filha(path).canActivate).toContain(adminGuard);
   });
 
@@ -56,7 +58,9 @@ describe('Rotas', () => {
     ['cadastro', () => filha('cadastro'), CadastroItem],
     ['historico', () => filha('historico'), Historico],
     ['acao-social', () => filha('acao-social'), AcaoSocial],
-    ['acao-social/itens', () => filha('acao-social/itens'), CadastroItemSocial]
+    ['acao-social/itens', () => filha('acao-social/itens'), CadastroItemSocial],
+    ['acao-social/cesta', () => filha('acao-social/cesta'), Cesta],
+    ['acao-social/cesta/modelo', () => filha('acao-social/cesta/modelo'), ModeloCesta]
   ])('rota %s carrega o componente certo', async (_, rota, componente) => {
     expect(await rota().loadComponent!()).toBe(componente);
   });

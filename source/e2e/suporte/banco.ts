@@ -33,7 +33,7 @@ function normalizar(nome: string) {
 /** Banco limpo, só com as contas de admin (Obreiros) e social (Ação Social). */
 export function prepararBanco() {
   return comBanco(async (cliente) => {
-    await cliente.query('TRUNCATE TABLE "MovimentacoesSociais", "ItensSociais", "AtualizacoesEstoque", "Itens", "Usuarios" CASCADE');
+    await cliente.query('TRUNCATE TABLE "ModeloCestaItens", "ModelosCesta", "MovimentacoesSociais", "MontagensCesta", "ItensSociais", "AtualizacoesEstoque", "Itens", "Usuarios" CASCADE');
 
     for (const usuario of Object.keys(USUARIOS) as Usuario[]) {
       const { login, perfil, obreiros, acaoSocial } = USUARIOS[usuario];
