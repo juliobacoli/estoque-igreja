@@ -2,8 +2,7 @@
 
 Controle de estoque dos itens de limpeza da igreja ICPA, feito para uso no celular.
 
-- **Voluntários** contam o estoque, acompanham o dashboard e o histórico e exportam um PDF para compartilhar.
-- **Admins** também cadastram e removem itens.
+- **Admins** contam o estoque, acompanham o dashboard e o histórico, exportam um PDF para compartilhar e cadastram e removem itens.
 - O dashboard mostra há quantos dias o estoque não é contado, para lembrar o pessoal de atualizar.
 
 > Regras do projeto, padrões de código e convenções de trabalho: **[CLAUDE.md](CLAUDE.md)**.
