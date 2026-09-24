@@ -8,7 +8,7 @@ import { DicaSenhaDialog } from './dica-senha-dialog';
 import { Login } from './login';
 
 describe('Login', () => {
-  const auth = { login: vi.fn() };
+  const auth = { login: vi.fn(), rotaInicial: vi.fn() };
   let fixture: ComponentFixture<Login>;
   let el: HTMLElement;
   let navegar: ReturnType<typeof vi.spyOn>;
@@ -50,13 +50,14 @@ describe('Login', () => {
   const botaoOlho = () => el.querySelector('button[matsuffix]') as HTMLButtonElement;
   const botaoEntrar = () => el.querySelector('button.entrar') as HTMLButtonElement;
 
-  it('login com sucesso envia as credenciais e vai para o dashboard', () => {
-    auth.login.mockReturnValue(of({ perfil: 'Admin' }));
+  it('login com sucesso envia as credenciais e vai para a área do usuário', () => {
+    auth.login.mockReturnValue(of({ perfil: 'Admin', login: 'social', modulos: ['AcaoSocial'] }));
+    auth.rotaInicial.mockReturnValue('/acao-social');
 
     enviar('admin', 'senha-certa');
 
     expect(auth.login).toHaveBeenCalledWith('admin', 'senha-certa');
-    expect(navegar).toHaveBeenCalledWith(['/dashboard']);
+    expect(navegar).toHaveBeenCalledWith(['/acao-social']);
   });
 
   it('login com erro mostra a mensagem da API, sacode e reabilita o botão', () => {

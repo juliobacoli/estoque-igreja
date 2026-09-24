@@ -1,11 +1,14 @@
+using EstoqueIgreja.Api.Services;
 using EstoqueIgreja.Application.Estoque.Queries.ExportarEstoquePdf;
 using EstoqueIgreja.Application.Estoque.Queries.ObterUltimaAtualizacao;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EstoqueIgreja.Api.Controllers;
 
 [ApiController]
+[Authorize(Policy = Politicas.Obreiros)]
 [Route("api/estoque")]
 public class EstoqueController : ControllerBase
 {

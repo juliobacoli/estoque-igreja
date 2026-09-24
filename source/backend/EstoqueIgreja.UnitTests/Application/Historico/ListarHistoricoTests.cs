@@ -45,13 +45,13 @@ public class ListarHistoricoQueryHandlerTests
     private static readonly DateTime Base = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 
     private readonly AppDbContext _db = BancoEmMemoria.Criar();
-    private readonly Usuario _voluntario = Usuario.Criar("voluntario", "hash", PerfilUsuario.Voluntario);
+    private readonly Usuario _admin = Usuario.Criar("admin", "hash", PerfilUsuario.Admin);
     private readonly Item _sabao = Item.Criar("Sabão", "unidade");
     private readonly Item _esponja = Item.Criar("Esponja", "unidade");
 
     public ListarHistoricoQueryHandlerTests()
     {
-        _db.Usuarios.Add(_voluntario);
+        _db.Usuarios.Add(_admin);
         _db.Itens.AddRange(_sabao, _esponja);
         _db.SaveChanges();
     }
@@ -60,7 +60,7 @@ public class ListarHistoricoQueryHandlerTests
 
     private AtualizacaoEstoque Registrar(Item item, DateTime data, int quantidadeNova = 1, Guid? id = null)
     {
-        var registro = AtualizacaoEstoque.Criar(item.Id, 0, quantidadeNova, _voluntario.Id);
+        var registro = AtualizacaoEstoque.Criar(item.Id, 0, quantidadeNova, _admin.Id);
         Reflexao.Definir(registro, nameof(AtualizacaoEstoque.Data), data);
 
         if (id is not null)
@@ -163,7 +163,7 @@ public class ListarHistoricoQueryHandlerTests
 
         var registro = Assert.Single(resultado.Registros);
         Assert.Equal("Sabão", registro.ItemNome);
-        Assert.Equal("Voluntario", registro.Perfil);
+        Assert.Equal("Admin", registro.Perfil);
         Assert.Equal(Base, registro.Data);
     }
 }

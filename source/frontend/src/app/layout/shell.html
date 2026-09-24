@@ -6,31 +6,40 @@
     mode="over"
     [opened]="menuAberto()"
     (openedChange)="menuAberto.set($event)">
-    <p class="menu__perfil muted">Conectado como {{ perfil() }}</p>
+    <p class="menu__perfil muted">Conectado como {{ usuario() }}</p>
 
     <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard" routerLinkActive="ativo" (click)="fecharMenu()">
-        <mat-icon matListItemIcon>inventory_2</mat-icon>
-        <span matListItemTitle>Dashboard</span>
-      </a>
+      @if (temModulo('Obreiros')) {
+        <a mat-list-item routerLink="/dashboard" routerLinkActive="ativo" (click)="fecharMenu()">
+          <mat-icon matListItemIcon>inventory_2</mat-icon>
+          <span matListItemTitle>Dashboard</span>
+        </a>
 
-      <a mat-list-item routerLink="/atualizar" routerLinkActive="ativo" (click)="fecharMenu()">
-        <mat-icon matListItemIcon>edit</mat-icon>
-        <span matListItemTitle>Atualizar Estoque</span>
-      </a>
+        <a mat-list-item routerLink="/atualizar" routerLinkActive="ativo" (click)="fecharMenu()">
+          <mat-icon matListItemIcon>edit</mat-icon>
+          <span matListItemTitle>Atualizar Estoque</span>
+        </a>
 
-      <!-- Só o Admin enxerga o cadastro. A barreira real é o 403 do servidor. -->
-      @if (ehAdmin()) {
-        <a mat-list-item routerLink="/cadastro" routerLinkActive="ativo" (click)="fecharMenu()">
-          <mat-icon matListItemIcon>add_box</mat-icon>
-          <span matListItemTitle>Cadastro de Itens</span>
+        <!-- Só o Admin enxerga o cadastro. A barreira real é o 403 do servidor. -->
+        @if (ehAdmin()) {
+          <a mat-list-item routerLink="/cadastro" routerLinkActive="ativo" (click)="fecharMenu()">
+            <mat-icon matListItemIcon>add_box</mat-icon>
+            <span matListItemTitle>Cadastro de Itens</span>
+          </a>
+        }
+
+        <a mat-list-item routerLink="/historico" routerLinkActive="ativo" (click)="fecharMenu()">
+          <mat-icon matListItemIcon>history</mat-icon>
+          <span matListItemTitle>Histórico</span>
         </a>
       }
 
-      <a mat-list-item routerLink="/historico" routerLinkActive="ativo" (click)="fecharMenu()">
-        <mat-icon matListItemIcon>history</mat-icon>
-        <span matListItemTitle>Histórico</span>
-      </a>
+      @if (temModulo('AcaoSocial')) {
+        <a mat-list-item routerLink="/acao-social" routerLinkActive="ativo" (click)="fecharMenu()">
+          <mat-icon matListItemIcon>volunteer_activism</mat-icon>
+          <span matListItemTitle>Ação Social</span>
+        </a>
+      }
     </mat-nav-list>
 
     <div class="menu__rodape">
@@ -38,6 +47,8 @@
         <mat-icon>logout</mat-icon>
         Sair
       </button>
+
+      <p class="menu__versao muted">Versão {{ versao }}</p>
     </div>
   </mat-sidenav>
 
@@ -48,6 +59,7 @@
       </button>
 
       <span class="marca">Estoque <strong class="dourado">ICPA</strong></span>
+      <span class="modulo">· {{ moduloAtual() }}</span>
     </mat-toolbar>
 
     <main class="container">

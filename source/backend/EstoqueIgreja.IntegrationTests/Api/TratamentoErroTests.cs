@@ -16,7 +16,7 @@ public class TratamentoErroTests(ApiFactory factory) : TesteDeIntegracao(factory
     {
         await using var comFalha = FactoryCom(servicos => servicos.AddSingleton<IGeradorPdf, GeradorQueFalha>());
 
-        var resposta = await (await ClienteVoluntario(comFalha)).GetAsync("/api/estoque/exportar-pdf");
+        var resposta = await (await ClienteAdmin(comFalha)).GetAsync("/api/estoque/exportar-pdf");
 
         Assert.Equal(HttpStatusCode.InternalServerError, resposta.StatusCode);
 

@@ -1,4 +1,12 @@
-export type Perfil = 'Admin' | 'Voluntario';
+export type Perfil = 'Admin';
+
+export type Modulo = 'Obreiros' | 'AcaoSocial';
+
+export interface Sessao {
+  perfil: Perfil;
+  login: string;
+  modulos: Modulo[];
+}
 
 export interface Item {
   id: string;
