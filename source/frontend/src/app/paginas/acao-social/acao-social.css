@@ -1,0 +1,68 @@
+.centro {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0;
+}
+
+.lista {
+  list-style: none;
+  margin: 0.5rem 0 1.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.linha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+}
+
+.linha__topo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.linha__nome {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.linha__qtd {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: 1.2rem;
+  white-space: nowrap;
+}
+
+.linha__acoes {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.linha__acoes button {
+  flex: 1;
+  min-height: 44px;
+}
+
+.doacao,
+.cadastrar {
+  --mat-button-filled-container-color: var(--roxo-primario);
+  --mat-button-filled-label-text-color: #fff;
+}
+
+.ajuste {
+  color: var(--texto);
+
+  --mat-button-outlined-outline-color: rgba(255, 255, 255, 0.35);
+  --mat-button-outlined-label-text-color: var(--texto);
+}
+
+.cadastrar {
+  margin-top: 0.5rem;
+  min-height: 48px;
+}

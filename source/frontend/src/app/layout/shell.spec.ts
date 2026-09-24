@@ -58,6 +58,8 @@ describe('Shell (menu)', () => {
     criar(['AcaoSocial']);
 
     expect(el.querySelector('a[href="/acao-social"]')).not.toBeNull();
+    expect(el.querySelector('a[href="/acao-social/itens"]')).not.toBeNull();
+    expect(el.querySelectorAll('[matsubheader]')).toHaveLength(0);
     expect(el.querySelector('a[href="/dashboard"]')).toBeNull();
     expect(el.querySelector('a[href="/atualizar"]')).toBeNull();
     expect(el.querySelector('a[href="/cadastro"]')).toBeNull();
@@ -69,6 +71,13 @@ describe('Shell (menu)', () => {
 
     expect(el.querySelector('a[href="/dashboard"]')).not.toBeNull();
     expect(el.querySelector('a[href="/acao-social"]')).toBeNull();
+  });
+
+  it('com os dois módulos, o menu separa as seções', () => {
+    criar(['Obreiros', 'AcaoSocial']);
+
+    const secoes = Array.from(el.querySelectorAll('[matsubheader]')).map((s) => s.textContent?.trim());
+    expect(secoes).toEqual(['Obreiros', 'Ação Social']);
   });
 
   it('o cabeçalho mostra o módulo da tela atual', async () => {

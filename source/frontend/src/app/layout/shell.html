@@ -10,6 +10,10 @@
 
     <mat-nav-list>
       @if (temModulo('Obreiros')) {
+        @if (temModulo('AcaoSocial')) {
+          <h3 matSubheader>Obreiros</h3>
+        }
+
         <a mat-list-item routerLink="/dashboard" routerLinkActive="ativo" (click)="fecharMenu()">
           <mat-icon matListItemIcon>inventory_2</mat-icon>
           <span matListItemTitle>Dashboard</span>
@@ -35,10 +39,26 @@
       }
 
       @if (temModulo('AcaoSocial')) {
-        <a mat-list-item routerLink="/acao-social" routerLinkActive="ativo" (click)="fecharMenu()">
+        @if (temModulo('Obreiros')) {
+          <h3 matSubheader>Ação Social</h3>
+        }
+
+        <a
+          mat-list-item
+          routerLink="/acao-social"
+          routerLinkActive="ativo"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="fecharMenu()">
           <mat-icon matListItemIcon>volunteer_activism</mat-icon>
-          <span matListItemTitle>Ação Social</span>
+          <span matListItemTitle>Estoque da Ação Social</span>
         </a>
+
+        @if (ehAdmin()) {
+          <a mat-list-item routerLink="/acao-social/itens" routerLinkActive="ativo" (click)="fecharMenu()">
+            <mat-icon matListItemIcon>add_box</mat-icon>
+            <span matListItemTitle>Cadastro de Itens</span>
+          </a>
+        }
       }
     </mat-nav-list>
 

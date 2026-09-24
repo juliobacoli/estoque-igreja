@@ -45,3 +45,16 @@ export interface UltimaAtualizacao {
 export interface ErroApi {
   error: string;
 }
+
+export interface ItemSocial {
+  id: string;
+  nome: string;
+  unidade: string;
+  estoqueAtual: number;
+}
+
+export interface EstoqueSocialAlterado {
+  itemId: string;
+  quantidadeAnterior: number;
+  quantidadeNova: number;
+}

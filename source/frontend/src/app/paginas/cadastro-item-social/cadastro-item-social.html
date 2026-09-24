@@ -1,0 +1,64 @@
+<h1>Cadastro de itens da Ação Social</h1>
+
+<form class="cartao glass" [@shake]="shakeState()" (ngSubmit)="cadastrar()">
+  <mat-form-field appearance="outline" class="campo-mat">
+    <mat-label>Nome</mat-label>
+    <input matInput name="nome" type="text" [(ngModel)]="nome" [disabled]="salvando()" required>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="campo-mat">
+    <mat-label>Unidade</mat-label>
+    <mat-select name="unidade" [(ngModel)]="unidade" [disabled]="salvando()" required>
+      @for (opcao of unidades; track opcao) {
+        <mat-option [value]="opcao">{{ opcao }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if (erro(); as mensagem) {
+    <p class="erro" role="alert">{{ mensagem }}</p>
+  }
+
+  <button mat-flat-button class="cadastrar" type="submit" [disabled]="salvando()">
+    @if (salvando()) {
+      <mat-progress-spinner diameter="20" mode="indeterminate" />
+    } @else {
+      Cadastrar item
+    }
+  </button>
+</form>
+
+<h2 class="titulo-lista">Itens cadastrados</h2>
+
+@if (carregando()) {
+  <div class="centro">
+    <mat-progress-spinner diameter="36" mode="indeterminate" />
+  </div>
+} @else if (itens().length === 0) {
+  <p class="muted">Nenhum item cadastrado ainda.</p>
+} @else {
+  <ul class="lista">
+    @for (item of itens(); track item.id) {
+      <li class="linha glass">
+        <div class="linha__info">
+          <span class="linha__nome">{{ item.nome }}</span>
+          <span class="muted linha__unidade">{{ item.unidade }} · {{ item.estoqueAtual }} em estoque</span>
+        </div>
+
+        <button
+          mat-icon-button
+          type="button"
+          class="remover"
+          [attr.aria-label]="'Remover ' + item.nome"
+          [disabled]="removendo() !== null"
+          (click)="remover(item)">
+          @if (removendo() === item.id) {
+            <mat-progress-spinner diameter="20" mode="indeterminate" />
+          } @else {
+            <mat-icon>delete_outline</mat-icon>
+          }
+        </button>
+      </li>
+    }
+  </ul>
+}

@@ -6,7 +6,7 @@ const CONEXAO = process.env.E2E_DATABASE_URL ?? 'postgres://postgres:postgres@lo
 // telaInicial: título da primeira tela depois do login, que o entrarComo espera aparecer.
 export const USUARIOS = {
   admin: { login: 'admin', senha: 'e2e-admin-senha', perfil: 'Admin', obreiros: true, acaoSocial: false, telaInicial: 'Estoque atual' },
-  social: { login: 'social', senha: 'e2e-admin-senha', perfil: 'Admin', obreiros: false, acaoSocial: true, telaInicial: 'Ação Social' }
+  social: { login: 'social', senha: 'e2e-admin-senha', perfil: 'Admin', obreiros: false, acaoSocial: true, telaInicial: 'Estoque da Ação Social' }
 } as const;
 
 export type Usuario = keyof typeof USUARIOS;
@@ -33,7 +33,7 @@ function normalizar(nome: string) {
 /** Banco limpo, só com as contas de admin (Obreiros) e social (Ação Social). */
 export function prepararBanco() {
   return comBanco(async (cliente) => {
-    await cliente.query('TRUNCATE TABLE "AtualizacoesEstoque", "Itens", "Usuarios" CASCADE');
+    await cliente.query('TRUNCATE TABLE "MovimentacoesSociais", "ItensSociais", "AtualizacoesEstoque", "Itens", "Usuarios" CASCADE');
 
     for (const usuario of Object.keys(USUARIOS) as Usuario[]) {
       const { login, perfil, obreiros, acaoSocial } = USUARIOS[usuario];
