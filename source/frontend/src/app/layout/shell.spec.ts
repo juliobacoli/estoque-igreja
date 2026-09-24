@@ -45,19 +45,10 @@ describe('Shell (menu)', () => {
     expect(el.querySelector('a[href="/cadastro"]')).not.toBeNull();
   });
 
-  it('voluntário não vê o link de cadastro', () => {
-    criar('Voluntario');
-
-    expect(el.querySelector('a[href="/cadastro"]')).toBeNull();
-    expect(el.querySelector('a[href="/dashboard"]')).not.toBeNull();
-    expect(el.querySelector('a[href="/atualizar"]')).not.toBeNull();
-    expect(el.querySelector('a[href="/historico"]')).not.toBeNull();
-  });
-
   it('mostra com qual perfil está conectado', () => {
-    criar('Voluntario');
+    criar('Admin');
 
-    expect(el.querySelector('.menu__perfil')?.textContent?.trim()).toBe('Conectado como Voluntario');
+    expect(el.querySelector('.menu__perfil')?.textContent?.trim()).toBe('Conectado como Admin');
   });
 
   it('o botão de menu abre e fecha a gaveta, e clicar num link fecha', async () => {

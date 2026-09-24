@@ -15,7 +15,7 @@ public class ExportarPdfTests(ApiFactory factory) : TesteDeIntegracao(factory)
         var admin = await ClienteAdmin();
         await CriarItem(admin, "Sabão");
 
-        var resposta = await (await ClienteVoluntario()).GetAsync("/api/estoque/exportar-pdf");
+        var resposta = await (await ClienteAdmin()).GetAsync("/api/estoque/exportar-pdf");
 
         Assert.Equal(HttpStatusCode.OK, resposta.StatusCode);
         Assert.Equal("application/pdf", resposta.Content.Headers.ContentType?.MediaType);

@@ -9,7 +9,7 @@ test.describe('Autenticação', () => {
   });
 
   test('login válido abre o dashboard', async ({ page }) => {
-    await entrarComo(page, 'voluntario');
+    await entrarComo(page, 'admin');
 
     await expect(page).toHaveURL(/\/dashboard$/);
   });

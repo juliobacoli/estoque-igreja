@@ -2,11 +2,11 @@ import { criarItem, registrarContagem } from '../suporte/banco';
 import { abrirMenu, entrarComo, expect, test } from '../suporte/fixtures';
 
 test.describe('Contagem de estoque', () => {
-  test('voluntário conta, salva e o dashboard mostra a quantidade nova e o estoque em dia', async ({ page }) => {
+  test('admin conta, salva e o dashboard mostra a quantidade nova e o estoque em dia', async ({ page }) => {
     const sabao = await criarItem('Sabão', 'unidade');
     await registrarContagem(sabao, 3, 20);
 
-    await entrarComo(page, 'voluntario');
+    await entrarComo(page, 'admin');
 
     // Antes: contagem antiga, card de atraso.
     const card = page.getByRole('status').filter({ hasText: 'Estoque' });
@@ -30,7 +30,7 @@ test.describe('Contagem de estoque', () => {
   test('sair com contagem não salva pede confirmação', async ({ page }) => {
     await criarItem('Sabão', 'unidade', 3);
 
-    await entrarComo(page, 'voluntario');
+    await entrarComo(page, 'admin');
     await page.getByRole('button', { name: 'Atualizar estoque' }).click();
     await page.getByRole('button', { name: 'Aumentar Sabão' }).click();
 

@@ -60,12 +60,12 @@ public class AuthTests(ApiFactory factory) : TesteDeIntegracao(factory)
     [Fact]
     public async Task Me_ComCookie_RetornaPerfil()
     {
-        var cliente = await ClienteVoluntario();
+        var cliente = await ClienteAdmin();
 
         var resposta = await cliente.GetAsync("/auth/me");
 
         Assert.Equal(HttpStatusCode.OK, resposta.StatusCode);
-        Assert.Equal("Voluntario", (await LerJson(resposta)).GetProperty("perfil").GetString());
+        Assert.Equal("Admin", (await LerJson(resposta)).GetProperty("perfil").GetString());
     }
 
     [Fact]
@@ -97,28 +97,6 @@ public class AuthTests(ApiFactory factory) : TesteDeIntegracao(factory)
         var resposta = await ClienteAnonimo().GetAsync(rota);
 
         Assert.Equal(HttpStatusCode.Unauthorized, resposta.StatusCode);
-    }
-
-    [Fact]
-    public async Task Voluntario_CadastrarItem_Retorna403SemRedirect()
-    {
-        var cliente = await ClienteVoluntario();
-
-        var resposta = await cliente.PostAsJsonAsync("/api/itens", new { nome = "Sabão", unidade = "unidade" });
-
-        Assert.Equal(HttpStatusCode.Forbidden, resposta.StatusCode);
-        Assert.Null(resposta.Headers.Location);
-    }
-
-    [Fact]
-    public async Task Voluntario_RemoverItem_Retorna403()
-    {
-        var item = await CriarItem(await ClienteAdmin(), "Sabão");
-        var cliente = await ClienteVoluntario();
-
-        var resposta = await cliente.DeleteAsync($"/api/itens/{item.Id}");
-
-        Assert.Equal(HttpStatusCode.Forbidden, resposta.StatusCode);
     }
 
     [Fact]

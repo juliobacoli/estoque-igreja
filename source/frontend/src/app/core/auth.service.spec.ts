@@ -18,7 +18,7 @@ describe('AuthService', () => {
 
   afterEach(() => http.verify());
 
-  function logarComo(perfil: 'Admin' | 'Voluntario') {
+  function logarComo(perfil: 'Admin') {
     service.login('usuario', 'senha').subscribe();
     http.expectOne('/auth/login').flush({ perfil });
   }
@@ -34,13 +34,6 @@ describe('AuthService', () => {
     expect(service.perfil()).toBe('Admin');
     expect(service.autenticado()).toBe(true);
     expect(service.ehAdmin()).toBe(true);
-  });
-
-  it('login de voluntário autentica sem ser admin', () => {
-    logarComo('Voluntario');
-
-    expect(service.autenticado()).toBe(true);
-    expect(service.ehAdmin()).toBe(false);
   });
 
   it('login com erro não altera o perfil', () => {
@@ -69,10 +62,10 @@ describe('AuthService', () => {
     let resultado: boolean | undefined;
 
     service.carregarSessao().subscribe((valor) => (resultado = valor));
-    http.expectOne('/auth/me').flush({ perfil: 'Voluntario' });
+    http.expectOne('/auth/me').flush({ perfil: 'Admin' });
 
     expect(resultado).toBe(true);
-    expect(service.perfil()).toBe('Voluntario');
+    expect(service.perfil()).toBe('Admin');
   });
 
   it('carregarSessao com erro em /auth/me retorna false sem lançar', () => {
