@@ -1,0 +1,49 @@
+<h1>O que vai na cesta</h1>
+<p class="muted">Informe quanto de cada item vai em uma cesta. Deixe em branco o que não vai.</p>
+
+@if (falhaAoCarregar()) {
+  <p class="erro" role="alert">Não foi possível carregar os itens.</p>
+} @else if (linhas(); as lista) {
+  @if (lista.length === 0) {
+    <p class="muted">Nenhum item cadastrado ainda.</p>
+    <a mat-flat-button class="salvar" routerLink="/acao-social/itens">Cadastrar itens</a>
+  } @else {
+    <form (ngSubmit)="salvar()">
+      <ul class="lista">
+        @for (linha of lista; track linha.item.id) {
+          <li class="linha glass">
+            <span class="linha__nome">{{ linha.item.nome }}</span>
+            <mat-form-field appearance="outline" class="linha__campo" subscriptSizing="dynamic">
+              <input
+                matInput
+                type="number"
+                inputmode="numeric"
+                min="0"
+                [name]="'qtd-' + linha.item.id"
+                [attr.aria-label]="'Quantidade de ' + linha.item.nome + ' por cesta'"
+                [(ngModel)]="linha.quantidade"
+                [disabled]="salvando()">
+              <span matTextSuffix>{{ linha.item.unidade }}</span>
+            </mat-form-field>
+          </li>
+        }
+      </ul>
+
+      @if (erro(); as mensagem) {
+        <p class="erro" role="alert">{{ mensagem }}</p>
+      }
+
+      <button mat-flat-button class="salvar" type="submit" [disabled]="salvando()">
+        @if (salvando()) {
+          <mat-progress-spinner diameter="20" mode="indeterminate" />
+        } @else {
+          Salvar cesta
+        }
+      </button>
+    </form>
+  }
+} @else {
+  <div class="centro">
+    <mat-progress-spinner diameter="36" mode="indeterminate" />
+  </div>
+}

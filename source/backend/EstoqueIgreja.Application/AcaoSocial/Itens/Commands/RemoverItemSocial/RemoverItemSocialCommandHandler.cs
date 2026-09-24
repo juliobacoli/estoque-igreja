@@ -22,6 +22,11 @@ public class RemoverItemSocialCommandHandler : IRequestHandler<RemoverItemSocial
         if (item is null)
             throw new NaoEncontradoException("Item não encontrado");
 
+        // Sem essa trava, a cesta passaria a pedir um item que sumiu do estoque e
+        // nenhuma montagem seria possível até alguém refazer o modelo.
+        if (await _db.ModeloCestaItens.AnyAsync(i => i.ItemSocialId == item.Id, ct))
+            throw new ConflitoException("Tire o item da cesta antes de remover.");
+
         var jaFoiMovimentado = await _db.MovimentacoesSociais
             .AnyAsync(m => m.ItemSocialId == item.Id, ct);
 

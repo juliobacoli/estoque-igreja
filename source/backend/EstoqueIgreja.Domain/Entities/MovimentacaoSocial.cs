@@ -22,6 +22,9 @@ public class MovimentacaoSocial
     /// <summary>Por que o estoque foi corrigido, só nos ajustes. Obrigatório neles.</summary>
     public string? Motivo { get; private set; }
 
+    /// <summary>Montagem que consumiu o item, só nas movimentações de montagem.</summary>
+    public Guid? MontagemCestaId { get; private set; }
+
     public Guid UsuarioId { get; private set; }
     public DateTime Data { get; private set; }
 
@@ -40,6 +43,14 @@ public class MovimentacaoSocial
     {
         return Criar(itemSocialId, TipoMovimentacaoSocial.Ajuste, quantidadeAnterior, quantidadeNova, usuarioId,
             motivo: motivo.Trim());
+    }
+
+    public static MovimentacaoSocial Montagem(
+        Guid itemSocialId, int quantidadeAnterior, int quantidadeNova, Guid montagemCestaId, Guid usuarioId)
+    {
+        var movimentacao = Criar(itemSocialId, TipoMovimentacaoSocial.Montagem, quantidadeAnterior, quantidadeNova, usuarioId);
+        movimentacao.MontagemCestaId = montagemCestaId;
+        return movimentacao;
     }
 
     private static MovimentacaoSocial Criar(

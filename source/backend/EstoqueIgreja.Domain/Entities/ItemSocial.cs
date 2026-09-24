@@ -56,6 +56,17 @@ public class ItemSocial
         EstoqueAtual += quantidade;
     }
 
+    public void Retirar(int quantidade)
+    {
+        if (quantidade <= 0)
+            throw new ArgumentOutOfRangeException(nameof(quantidade), "A quantidade precisa ser maior que zero.");
+
+        if (quantidade > EstoqueAtual)
+            throw new InvalidOperationException("Estoque insuficiente.");
+
+        EstoqueAtual -= quantidade;
+    }
+
     public void Ajustar(int novaQuantidade)
     {
         if (novaQuantidade < 0)

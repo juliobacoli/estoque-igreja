@@ -11,6 +11,9 @@ public interface IAppDbContext
     DbSet<AtualizacaoEstoque> AtualizacoesEstoque { get; }
     DbSet<ItemSocial> ItensSociais { get; }
     DbSet<MovimentacaoSocial> MovimentacoesSociais { get; }
+    DbSet<ModeloCesta> ModelosCesta { get; }
+    DbSet<ModeloCestaItem> ModeloCestaItens { get; }
+    DbSet<MontagemCesta> MontagensCesta { get; }
 
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

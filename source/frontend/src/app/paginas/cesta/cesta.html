@@ -1,0 +1,85 @@
+<h1>Cestas</h1>
+
+@if (falhaAoCarregar()) {
+  <p class="erro" role="alert">Não foi possível carregar a cesta.</p>
+} @else if (resumo(); as cesta) {
+  <section class="numeros">
+    <div class="numero glass">
+      <span class="numero__valor">{{ cesta.cestasProntas }}</span>
+      <span class="muted">cestas prontas</span>
+    </div>
+    <div class="numero glass">
+      <span class="numero__valor">{{ cesta.podeMontar }}</span>
+      <span class="muted">dá para montar</span>
+    </div>
+  </section>
+
+  @if (cesta.itens.length === 0) {
+    <p class="muted">A cesta ainda não foi definida.</p>
+  } @else {
+    <form class="cartao glass" (ngSubmit)="montar()">
+      <mat-form-field appearance="outline" class="campo-mat">
+        <mat-label>Quantas cestas vai montar?</mat-label>
+        <input
+          matInput
+          name="quantidade"
+          type="number"
+          inputmode="numeric"
+          min="1"
+          [(ngModel)]="quantidade"
+          [disabled]="montando()"
+          required>
+      </mat-form-field>
+
+      @if (erro(); as mensagem) {
+        <p class="erro" role="alert">{{ mensagem }}</p>
+      }
+
+      <button mat-flat-button class="montar" type="submit" [disabled]="montando() || cesta.podeMontar === 0">
+        @if (montando()) {
+          <mat-progress-spinner diameter="20" mode="indeterminate" />
+        } @else {
+          Montar cestas
+        }
+      </button>
+    </form>
+
+    @if (cesta.faltasParaProxima.length > 0) {
+      <section class="faltas glass" role="status">
+        <p class="faltas__titulo">
+          <mat-icon aria-hidden="true">info</mat-icon>
+          Para montar mais uma, falta:
+        </p>
+        <ul>
+          @for (falta of cesta.faltasParaProxima; track falta.nome) {
+            <li>{{ falta.nome }}: {{ falta.precisa - falta.tem }} {{ falta.unidade }}</li>
+          }
+        </ul>
+      </section>
+    }
+
+    <h2 class="titulo-lista">Cada cesta leva</h2>
+    <ul class="lista">
+      @for (item of cesta.itens; track item.itemId) {
+        <li class="linha glass">
+          <span class="linha__nome">{{ item.nome }}</span>
+          <span>
+            {{ item.quantidadePorCesta }} {{ item.unidade }}
+            <small class="muted">· tem {{ item.estoqueAtual }}</small>
+          </span>
+        </li>
+      }
+    </ul>
+  }
+
+  @if (ehAdmin()) {
+    <a mat-stroked-button class="editar" routerLink="/acao-social/cesta/modelo">
+      <mat-icon>edit</mat-icon>
+      {{ cesta.itens.length === 0 ? 'Definir a cesta' : 'Editar a cesta' }}
+    </a>
+  }
+} @else {
+  <div class="centro">
+    <mat-progress-spinner diameter="36" mode="indeterminate" />
+  </div>
+}

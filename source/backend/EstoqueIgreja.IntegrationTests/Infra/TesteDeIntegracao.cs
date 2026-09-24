@@ -44,7 +44,7 @@ public abstract class TesteDeIntegracao : IAsyncLifetime
         await NoBanco(async db =>
         {
             await db.Database.ExecuteSqlRawAsync(
-                "TRUNCATE TABLE \"MovimentacoesSociais\", \"ItensSociais\", \"AtualizacoesEstoque\", \"Itens\", \"Usuarios\" CASCADE");
+                "TRUNCATE TABLE \"ModeloCestaItens\", \"ModelosCesta\", \"MovimentacoesSociais\", \"MontagensCesta\", \"ItensSociais\", \"AtualizacoesEstoque\", \"Itens\", \"Usuarios\" CASCADE");
 
             db.Usuarios.AddRange(Admin, Social, SemAcesso);
             await db.SaveChangesAsync();
