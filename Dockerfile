@@ -6,10 +6,8 @@ RUN npm ci
 
 COPY source/frontend/ ./
 
-# O Railway entrega o commit do deploy nesta variável quando o ARG é declarado.
-# O front mostra os 7 primeiros caracteres no menu; fora do Railway fica "dev".
-ARG RAILWAY_GIT_COMMIT_SHA=dev
-RUN VERSAO=$(echo "$RAILWAY_GIT_COMMIT_SHA" | cut -c1-7) && \
+# A versão mostrada no menu é a do package.json do front (ex.: 1.0.0).
+RUN VERSAO=$(node -p "require('./package.json').version") && \
     npm run build -- --configuration production --define "VERSAO_APP='$VERSAO'"
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS backend-build
