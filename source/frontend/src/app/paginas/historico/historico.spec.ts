@@ -16,7 +16,7 @@ const registro = (itemNome: string, anterior: number, nova: number): RegistroHis
   itemNome,
   quantidadeAnterior: anterior,
   quantidadeNova: nova,
-  perfil: 'Voluntario',
+  perfil: 'Admin',
   data: new Date(2026, 8, 10, 13, 30).toISOString()
 });
 
@@ -69,7 +69,7 @@ describe('Historico', () => {
 
     expect(texto(el.querySelector('.registro__item'))).toBe('Sabão');
     expect(texto(el.querySelector('.registro__qtd'))).toBe('3 → 5');
-    expect(texto(el.querySelector('.registro__meta'))).toBe('Voluntario · 10/09/2026 13:30');
+    expect(texto(el.querySelector('.registro__meta'))).toBe('Admin · 10/09/2026 13:30');
   });
 
   it('sem registros mostra a mensagem própria', () => {

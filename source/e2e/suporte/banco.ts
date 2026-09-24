@@ -4,16 +4,14 @@ import { Client } from 'pg';
 const CONEXAO = process.env.E2E_DATABASE_URL ?? 'postgres://postgres:postgres@localhost:15432/estoque';
 
 export const USUARIOS = {
-  admin: { login: 'admin', senha: 'e2e-admin-senha', perfil: 'Admin' },
-  voluntario: { login: 'voluntario', senha: 'e2e-voluntario-senha', perfil: 'Voluntario' }
+  admin: { login: 'admin', senha: 'e2e-admin-senha', perfil: 'Admin' }
 } as const;
 
 export type Usuario = keyof typeof USUARIOS;
 
 // Hashes BCrypt das senhas acima. Só existem no banco descartável dos testes.
 const HASHES: Record<Usuario, string> = {
-  admin: '$2y$10$iPwEkWrddebdl.x1Nr7GkO.QxyO6Bi0ytYjxAcFMMVVyg2ZTPpXS2',
-  voluntario: '$2y$10$v9t7ECKKOPKtauRk9pxfG.0JRprUFHELJCkP0xlkP6pgb.oFaH4qi'
+  admin: '$2y$10$iPwEkWrddebdl.x1Nr7GkO.QxyO6Bi0ytYjxAcFMMVVyg2ZTPpXS2'
 };
 
 async function comBanco<T>(acao: (cliente: Client) => Promise<T>): Promise<T> {
@@ -32,7 +30,7 @@ function normalizar(nome: string) {
   return nome.trim().normalize('NFD').replace(/\p{Mn}/gu, '').normalize('NFC').toLowerCase();
 }
 
-/** Banco limpo, só com as contas de admin e voluntário. */
+/** Banco limpo, só com a conta de admin. */
 export function prepararBanco() {
   return comBanco(async (cliente) => {
     await cliente.query('TRUNCATE TABLE "AtualizacoesEstoque", "Itens", "Usuarios" CASCADE');

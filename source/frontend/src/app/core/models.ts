@@ -1,4 +1,4 @@
-export type Perfil = 'Admin' | 'Voluntario';
+export type Perfil = 'Admin';
 
 export interface Item {
   id: string;

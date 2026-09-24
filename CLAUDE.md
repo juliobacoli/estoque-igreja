@@ -10,8 +10,7 @@ App web de controle de estoque dos itens de limpeza da igreja ICPA, feito para u
 
 | Perfil | Pode |
 |---|---|
-| **Admin** | Tudo o que o voluntário faz, e também cadastrar e remover itens |
-| **Voluntário** | Ver o dashboard, contar o estoque, ver o histórico, exportar PDF |
+| **Admin** | Ver o dashboard, contar o estoque, ver o histórico, exportar PDF, cadastrar e remover itens |
 
 Deploy: um único container (front + API na mesma origem) publicado no Railway.
 

@@ -12,19 +12,18 @@ public class HistoricoTests(ApiFactory factory) : TesteDeIntegracao(factory)
     public async Task ListaEmOrdemDecrescenteComNomeDoItemEPerfil()
     {
         var admin = await ClienteAdmin();
-        var voluntario = await ClienteVoluntario();
         var sabao = await CriarItem(admin, "Sabão");
         var esponja = await CriarItem(admin, "Esponja");
 
-        await AtualizarEstoque(voluntario, sabao.Id, 1);
+        await AtualizarEstoque(admin, sabao.Id, 1);
         await AtualizarEstoque(admin, esponja.Id, 2);
-        await AtualizarEstoque(voluntario, sabao.Id, 3);
+        await AtualizarEstoque(admin, sabao.Id, 3);
 
         var historico = (await admin.GetFromJsonAsync<HistoricoPaginado>("/api/historico"))!;
 
         Assert.Equal([3, 2, 1], historico.Registros.Select(r => r.QuantidadeNova));
         Assert.Equal(["Sabão", "Esponja", "Sabão"], historico.Registros.Select(r => r.ItemNome));
-        Assert.Equal(["Voluntario", "Admin", "Voluntario"], historico.Registros.Select(r => r.Perfil));
+        Assert.Equal(["Admin", "Admin", "Admin"], historico.Registros.Select(r => r.Perfil));
     }
 
     [Fact]

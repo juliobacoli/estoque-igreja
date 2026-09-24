@@ -46,13 +46,6 @@ describe('authGuard e adminGuard', () => {
 
     expect(await executar(adminGuard)).toBe(true);
   });
-
-  it('adminGuard manda voluntário para /dashboard', async () => {
-    auth.carregarSessao.mockReturnValue(of(true));
-    auth.ehAdmin.mockReturnValue(false);
-
-    expect(destino(await executar(adminGuard))).toBe('/dashboard');
-  });
 });
 
 describe('alteracoesNaoSalvasGuard', () => {

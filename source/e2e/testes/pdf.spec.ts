@@ -12,7 +12,7 @@ test.describe('Exportar PDF', () => {
     });
     await criarItem('Sabão', 'unidade', 3);
 
-    await entrarComo(page, 'voluntario');
+    await entrarComo(page, 'admin');
 
     const download = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Exportar PDF' }).click();
