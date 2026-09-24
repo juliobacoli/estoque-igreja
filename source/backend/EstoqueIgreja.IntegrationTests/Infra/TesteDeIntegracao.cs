@@ -15,7 +15,8 @@ using Npgsql;
 namespace EstoqueIgreja.IntegrationTests.Infra;
 
 /// <summary>
-/// Cada teste começa com o banco limpo e com a conta fixa de admin.
+/// Cada teste começa com o banco limpo e com as contas fixas: admin (Obreiros), social (Ação Social) e
+/// semacesso (nenhum módulo). As três usam a mesma senha.
 /// </summary>
 public abstract class TesteDeIntegracao : IAsyncLifetime
 {
@@ -31,17 +32,21 @@ public abstract class TesteDeIntegracao : IAsyncLifetime
 
     protected ApiFactory Factory { get; }
     protected Usuario Admin { get; private set; } = null!;
+    protected Usuario Social { get; private set; } = null!;
+    protected Usuario SemAcesso { get; private set; } = null!;
 
     public async Task InitializeAsync()
     {
-        Admin = Usuario.Criar("admin", HashAdmin.Value, PerfilUsuario.Admin);
+        Admin = Usuario.Criar("admin", HashAdmin.Value, PerfilUsuario.Admin, Modulo.Obreiros);
+        Social = Usuario.Criar("social", HashAdmin.Value, PerfilUsuario.Admin, Modulo.AcaoSocial);
+        SemAcesso = Usuario.Criar("semacesso", HashAdmin.Value, PerfilUsuario.Admin);
 
         await NoBanco(async db =>
         {
             await db.Database.ExecuteSqlRawAsync(
                 "TRUNCATE TABLE \"AtualizacoesEstoque\", \"Itens\", \"Usuarios\" CASCADE");
 
-            db.Usuarios.Add(Admin);
+            db.Usuarios.AddRange(Admin, Social, SemAcesso);
             await db.SaveChangesAsync();
         });
     }
@@ -117,6 +122,9 @@ public abstract class TesteDeIntegracao : IAsyncLifetime
 
     protected Task<HttpClient> ClienteAdmin(WebApplicationFactory<Program>? factory = null) =>
         Logar(factory, "admin", SenhaAdmin);
+
+    protected Task<HttpClient> ClienteSocial(WebApplicationFactory<Program>? factory = null) =>
+        Logar(factory, "social", SenhaAdmin);
 
     private async Task<HttpClient> Logar(WebApplicationFactory<Program>? factory, string login, string senha)
     {

@@ -28,6 +28,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult?>
         if (usuario is null || !_hasher.Verificar(request.Senha, usuario.SenhaHash))
             return null;
 
-        return new LoginResult(usuario.Id, usuario.Perfil.ToString());
+        return new LoginResult(
+            usuario.Id,
+            usuario.Login,
+            usuario.Perfil.ToString(),
+            usuario.Modulos().Select(m => m.ToString()).ToList());
     }
 }
