@@ -96,6 +96,8 @@ Application/Itens/Commands/CriarItem/
 └── CriarItemCommandValidator.cs   # FluentValidation
 ```
 
+Os casos de uso da Ação Social ficam em `Application/AcaoSocial/` (tabelas `ItensSociais` e `MovimentacoesSociais`, rotas em `/api/acao-social`), separados dos Obreiros.
+
 - **Controllers** só recebem a requisição, fazem `_mediator.Send(...)` e devolvem o resultado. Nada de lógica.
 - **Validação** de entrada fica no `Validator`. O `ValidationBehavior` roda todos os validators antes do handler.
 - **Erros de negócio** são exceções da Application, traduzidas pelo `TratamentoErroMiddleware`:
@@ -134,7 +136,7 @@ Application/Itens/Commands/CriarItem/
   | Pasta | Conteúdo |
   |---|---|
   | `core/` | Services HTTP, guards, interceptor, `models.ts` |
-  | `paginas/` | Uma pasta por tela (`dashboard`, `atualizar-estoque`, `cadastro-item`, `historico`, `login`) |
+  | `paginas/` | Uma pasta por tela (`dashboard`, `atualizar-estoque`, `cadastro-item`, `historico`, `login`; da Ação Social: `acao-social`, `cadastro-item-social`) |
   | `shared/` | Diálogos e animações reutilizados |
   | `layout/` | Shell com o menu lateral |
 
