@@ -30,17 +30,17 @@ export interface MovimentacaoInformada {
         </p>
 
         @if (porPacote) {
-          <div class="pacotes">
-            <mat-form-field appearance="outline" class="campo-mat">
-              <mat-label>Pacotes</mat-label>
-              <input matInput name="pacotes" type="number" inputmode="numeric" min="1" [(ngModel)]="pacotes" required>
-            </mat-form-field>
+          <mat-form-field appearance="outline" class="campo-mat">
+            <mat-label>Quantos pacotes?</mat-label>
+            <input matInput name="pacotes" type="number" inputmode="numeric" min="1" [(ngModel)]="pacotes" required>
+            <span matTextSuffix>pacotes</span>
+          </mat-form-field>
 
-            <mat-form-field appearance="outline" class="campo-mat">
-              <mat-label>Kg de cada pacote</mat-label>
-              <input matInput name="kgPorPacote" type="number" inputmode="numeric" min="1" [(ngModel)]="kgPorPacote" required>
-            </mat-form-field>
-          </div>
+          <mat-form-field appearance="outline" class="campo-mat">
+            <mat-label>Peso de cada pacote</mat-label>
+            <input matInput name="kgPorPacote" type="number" inputmode="numeric" min="1" [(ngModel)]="kgPorPacote" required>
+            <span matTextSuffix>kg</span>
+          </mat-form-field>
 
           @if (totalKg(); as total) {
             <p class="total">Entra +{{ total }} kg</p>
@@ -80,15 +80,25 @@ export interface MovimentacaoInformada {
       width: 100%;
     }
 
-    .pacotes {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
+    /* As setas nativas do campo numérico cobrem o sufixo; no celular o teclado já é numérico. */
+    input[type="number"] {
+      appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     .total {
       margin: 0 0 1rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--dourado) 15%, transparent);
+      color: var(--dourado);
       font-weight: 600;
+      text-align: center;
     }
 
     .salvar {
