@@ -29,18 +29,36 @@ export interface MovimentacaoInformada {
           {{ dados.item.nome }} · hoje: {{ dados.item.estoqueAtual }} {{ dados.item.unidade }}
         </p>
 
-        <mat-form-field appearance="outline" class="campo-mat">
-          <mat-label>{{ entrada ? 'Quantidade recebida' : 'Quantidade que existe agora' }}</mat-label>
-          <input
-            matInput
-            name="quantidade"
-            type="number"
-            inputmode="numeric"
-            [min]="entrada ? 1 : 0"
-            [(ngModel)]="quantidade"
-            required>
-          <span matTextSuffix>{{ dados.item.unidade }}</span>
-        </mat-form-field>
+        @if (porPacote) {
+          <div class="pacotes">
+            <mat-form-field appearance="outline" class="campo-mat">
+              <mat-label>Pacotes</mat-label>
+              <input matInput name="pacotes" type="number" inputmode="numeric" min="1" [(ngModel)]="pacotes" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="campo-mat">
+              <mat-label>Kg de cada pacote</mat-label>
+              <input matInput name="kgPorPacote" type="number" inputmode="numeric" min="1" [(ngModel)]="kgPorPacote" required>
+            </mat-form-field>
+          </div>
+
+          @if (totalKg(); as total) {
+            <p class="total">Entra +{{ total }} kg</p>
+          }
+        } @else {
+          <mat-form-field appearance="outline" class="campo-mat">
+            <mat-label>{{ entrada ? 'Quantidade recebida' : 'Quantidade que existe agora' }}</mat-label>
+            <input
+              matInput
+              name="quantidade"
+              type="number"
+              inputmode="numeric"
+              [min]="entrada ? 1 : 0"
+              [(ngModel)]="quantidade"
+              required>
+            <span matTextSuffix>{{ dados.item.unidade }}</span>
+          </mat-form-field>
+        }
 
         @if (!entrada) {
           <mat-form-field appearance="outline" class="campo-mat">
@@ -62,6 +80,17 @@ export interface MovimentacaoInformada {
       width: 100%;
     }
 
+    .pacotes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .total {
+      margin: 0 0 1rem;
+      font-weight: 600;
+    }
+
     .salvar {
       --mat-button-filled-container-color: var(--roxo-primario);
       --mat-button-filled-label-text-color: #fff;
@@ -76,11 +105,22 @@ export class MovimentacaoDialog {
   protected quantidade: number | null = this.entrada ? null : this.dados.item.estoqueAtual;
   protected texto = '';
 
+  // Doação em kg chega em pacotes de tamanhos variados: a tela soma o peso pela pessoa.
+  protected readonly porPacote = this.entrada && this.dados.item.unidade === 'kg';
+  protected pacotes: number | null = null;
+  protected kgPorPacote: number | null = null;
+
+  protected totalKg(): number | null {
+    return this.pacotes && this.kgPorPacote ? this.pacotes * this.kgPorPacote : null;
+  }
+
   protected confirmar() {
-    if (this.quantidade === null) {
+    const quantidade = this.porPacote ? this.totalKg() : this.quantidade;
+
+    if (quantidade === null) {
       return;
     }
 
-    this.dialogRef.close({ quantidade: this.quantidade, texto: this.texto.trim() });
+    this.dialogRef.close({ quantidade, texto: this.texto.trim() });
   }
 }

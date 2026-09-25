@@ -22,8 +22,10 @@ test.describe('Ação Social', () => {
 
     await page.getByRole('button', { name: 'Registrar doação de Arroz' }).click();
     const dialogo = page.getByRole('dialog');
-    await dialogo.getByLabel('Quantidade recebida').fill('10');
     await expect(dialogo.getByLabel('Quem doou')).toHaveCount(0);
+    await dialogo.getByLabel('Pacotes').fill('2');
+    await dialogo.getByLabel('Kg de cada pacote').fill('5');
+    await expect(dialogo.getByText('Entra +10 kg')).toBeVisible();
     await dialogo.getByRole('button', { name: 'Salvar' }).click();
 
     await expect(page.getByText('Arroz: agora 10 kg.')).toBeVisible();
