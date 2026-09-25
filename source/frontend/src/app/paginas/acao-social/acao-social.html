@@ -18,6 +18,9 @@
         <div class="linha__topo">
           <span class="linha__nome">{{ item.nome }}</span>
           <span class="linha__qtd">
+            @if (salvando().has(item.id)) {
+              <mat-progress-spinner diameter="18" mode="indeterminate" aria-label="Salvando" />
+            }
             {{ item.estoqueAtual }}
             <small class="muted">{{ unidadePara(item.estoqueAtual, item.unidade) }}</small>
           </span>
@@ -29,7 +32,7 @@
             class="doacao"
             type="button"
             [attr.aria-label]="'Registrar doação de ' + item.nome"
-            [disabled]="salvando() !== null"
+            [disabled]="salvando().has(item.id)"
             (click)="registrarDoacao(item)">
             <mat-icon>add</mat-icon>
             Doação
@@ -40,7 +43,7 @@
             class="ajuste"
             type="button"
             [attr.aria-label]="'Ajustar ' + item.nome"
-            [disabled]="salvando() !== null"
+            [disabled]="salvando().has(item.id)"
             (click)="ajustar(item)">
             <mat-icon>tune</mat-icon>
             Ajustar
