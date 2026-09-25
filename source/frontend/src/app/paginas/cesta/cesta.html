@@ -52,7 +52,7 @@
         </p>
         <ul>
           @for (falta of cesta.faltasParaProxima; track falta.nome) {
-            <li>{{ falta.nome }}: {{ falta.precisa - falta.tem }} {{ falta.unidade }}</li>
+            <li>{{ falta.nome }}: {{ falta.precisa - falta.tem }} {{ unidadePara(falta.precisa - falta.tem, falta.unidade) }}</li>
           }
         </ul>
       </section>
@@ -64,7 +64,7 @@
         <li class="linha glass">
           <span class="linha__nome">{{ item.nome }}</span>
           <span>
-            {{ item.quantidadePorCesta }} {{ item.unidade }}
+            {{ item.quantidadePorCesta }} {{ unidadePara(item.quantidadePorCesta, item.unidade) }}
             <small class="muted">· tem {{ item.estoqueAtual }}</small>
           </span>
         </li>

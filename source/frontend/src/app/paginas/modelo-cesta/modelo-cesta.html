@@ -23,7 +23,7 @@
                 [attr.aria-label]="'Quantidade de ' + linha.item.nome + ' por cesta'"
                 [(ngModel)]="linha.quantidade"
                 [disabled]="salvando()">
-              <span matTextSuffix>{{ linha.item.unidade }}</span>
+              <span matTextSuffix>{{ unidadePara(linha.quantidade, linha.item.unidade) }}</span>
             </mat-form-field>
           </li>
         }

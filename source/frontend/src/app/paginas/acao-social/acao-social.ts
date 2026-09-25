@@ -10,6 +10,7 @@ import { AcaoSocialService } from '../../core/acao-social.service';
 import { AuthService } from '../../core/auth.service';
 import { EstoqueSocialAlterado, ItemSocial } from '../../core/models';
 import { MovimentacaoDados, MovimentacaoDialog, MovimentacaoInformada } from './movimentacao-dialog';
+import { unidadePara } from '../../core/unidade';
 
 @Component({
   selector: 'app-acao-social',
@@ -18,6 +19,7 @@ import { MovimentacaoDados, MovimentacaoDialog, MovimentacaoInformada } from './
   styleUrl: './acao-social.css'
 })
 export class AcaoSocial implements OnInit {
+  protected readonly unidadePara = unidadePara;
   private readonly acaoSocial = inject(AcaoSocialService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
@@ -26,7 +28,8 @@ export class AcaoSocial implements OnInit {
   protected readonly itens = signal<ItemSocial[]>([]);
   protected readonly carregando = signal(true);
   protected readonly falhaAoCarregar = signal(false);
-  protected readonly salvando = signal<string | null>(null);
+  // Por item: o backend trava só o item alterado, então os outros seguem liberados.
+  protected readonly salvando = signal<ReadonlySet<string>>(new Set());
 
   ngOnInit(): void {
     this.carregar();
@@ -48,7 +51,7 @@ export class AcaoSocial implements OnInit {
 
   protected registrarDoacao(item: ItemSocial) {
     this.movimentar({ tipo: 'entrada', item }, (informado) =>
-      this.acaoSocial.registrarEntrada(item.id, informado.quantidade, informado.texto || null)
+      this.acaoSocial.registrarEntrada(item.id, informado.quantidade)
     );
   }
 
@@ -70,18 +73,30 @@ export class AcaoSocial implements OnInit {
       return;
     }
 
-    this.salvando.set(dados.item.id);
+    const id = dados.item.id;
+    this.salvando.update((ids) => new Set(ids).add(id));
 
     enviar(informado).subscribe({
       next: (resultado) => {
-        this.avisar(`${dados.item.nome}: agora ${resultado.quantidadeNova} ${dados.item.unidade}.`);
-        this.salvando.set(null);
-        this.carregar();
+        this.avisar(`${dados.item.nome}: agora ${resultado.quantidadeNova} ${unidadePara(resultado.quantidadeNova, dados.item.unidade)}.`);
+        // A resposta já traz o estoque novo: atualiza a linha sem buscar a lista de novo.
+        this.itens.update((itens) =>
+          itens.map((i) => (i.id === id ? { ...i, estoqueAtual: resultado.quantidadeNova } : i))
+        );
+        this.pararDeSalvar(id);
       },
       error: (resposta) => {
         this.avisar(resposta.error?.error ?? 'Não foi possível salvar.');
-        this.salvando.set(null);
+        this.pararDeSalvar(id);
       }
+    });
+  }
+
+  private pararDeSalvar(id: string) {
+    this.salvando.update((ids) => {
+      const restantes = new Set(ids);
+      restantes.delete(id);
+      return restantes;
     });
   }
 

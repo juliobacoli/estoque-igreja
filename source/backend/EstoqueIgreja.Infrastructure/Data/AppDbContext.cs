@@ -76,7 +76,6 @@ public class AppDbContext : DbContext, IAppDbContext
         {
             entidade.HasKey(m => m.Id);
             entidade.Property(m => m.Tipo).HasConversion<string>().HasMaxLength(20).IsRequired();
-            entidade.Property(m => m.Doador).HasMaxLength(120);
             entidade.Property(m => m.Motivo).HasMaxLength(200);
 
             entidade.HasOne(m => m.ItemSocial)

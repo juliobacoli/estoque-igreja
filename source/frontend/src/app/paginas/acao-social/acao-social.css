@@ -66,3 +66,9 @@
   margin-top: 0.5rem;
   min-height: 48px;
 }
+
+.linha__qtd mat-progress-spinner {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+}

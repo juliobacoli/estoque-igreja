@@ -21,8 +21,8 @@ export class AcaoSocialService {
     return this.http.delete<ItemRemovido>(`${API}/${id}`);
   }
 
-  registrarEntrada(id: string, quantidade: number, doador: string | null) {
-    return this.http.post<EstoqueSocialAlterado>(`${API}/${id}/entradas`, { quantidade, doador });
+  registrarEntrada(id: string, quantidade: number) {
+    return this.http.post<EstoqueSocialAlterado>(`${API}/${id}/entradas`, { quantidade });
   }
 
   ajustar(id: string, novaQuantidade: number, motivo: string) {

@@ -27,7 +27,7 @@ public class RegistrarEntradaCommandHandler
         item.Adicionar(request.Quantidade);
 
         _db.MovimentacoesSociais.Add(MovimentacaoSocial.Entrada(
-            item.Id, quantidadeAnterior, item.EstoqueAtual, request.Doador, _usuarioAtual.Id));
+            item.Id, quantidadeAnterior, item.EstoqueAtual, _usuarioAtual.Id));
 
         await _db.SaveChangesAsync(ct);
         await transaction.CommitAsync(ct);

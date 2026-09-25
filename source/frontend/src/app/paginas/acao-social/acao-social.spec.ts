@@ -4,14 +4,15 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { of, throwError } from 'rxjs';
+import { Subject, of, throwError } from 'rxjs';
 import { AcaoSocialService } from '../../core/acao-social.service';
 import { AuthService } from '../../core/auth.service';
-import { ItemSocial } from '../../core/models';
+import { EstoqueSocialAlterado, ItemSocial } from '../../core/models';
 import { AcaoSocial } from './acao-social';
 import { MovimentacaoDialog, MovimentacaoInformada } from './movimentacao-dialog';
 
 const ARROZ: ItemSocial = { id: '1', nome: 'Arroz', unidade: 'kg', estoqueAtual: 10 };
+const MACARRAO: ItemSocial = { id: '2', nome: 'Macarrão', unidade: 'pacote', estoqueAtual: 8 };
 
 const texto = (elemento: Element | null | undefined) => (elemento?.textContent ?? '').replace(/\s+/g, ' ').trim();
 
@@ -69,7 +70,7 @@ describe('AcaoSocial (estoque)', () => {
     expect(el.querySelector('a[href="/acao-social/itens"]')).not.toBeNull();
   });
 
-  it('doação envia a quantidade, sem doador quando ele fica em branco, e recarrega', async () => {
+  it('doação envia a quantidade e atualiza a linha sem buscar a lista de novo', async () => {
     criar();
     dialogoFechandoCom({ quantidade: 5, texto: '' });
 
@@ -79,9 +80,38 @@ describe('AcaoSocial (estoque)', () => {
       MovimentacaoDialog,
       expect.objectContaining({ data: { tipo: 'entrada', item: ARROZ } })
     );
-    expect(servico.registrarEntrada).toHaveBeenCalledWith('1', 5, null);
+    expect(servico.registrarEntrada).toHaveBeenCalledWith('1', 5);
     expect(avisar).toHaveBeenCalledWith('Arroz: agora 15 kg.', 'Fechar', expect.anything());
-    expect(servico.listar).toHaveBeenCalledTimes(2);
+    expect(servico.listar).toHaveBeenCalledTimes(1);
+    fixture.detectChanges();
+    expect(texto(el.querySelector('.linha__qtd'))).toBe('15 kg');
+  });
+
+  it('enquanto um item salva, só os botões dele ficam travados', async () => {
+    criar([ARROZ, MACARRAO]);
+    const resposta = new Subject<EstoqueSocialAlterado>();
+    servico.registrarEntrada.mockReturnValue(resposta);
+    dialogoFechandoCom({ quantidade: 5, texto: '' });
+
+    await clicar('Registrar doação de Arroz');
+    fixture.detectChanges();
+
+    const botao = (rotulo: string) => el.querySelector('button[aria-label="' + rotulo + '"]') as HTMLButtonElement;
+    expect(botao('Registrar doação de Arroz').disabled).toBe(true);
+    expect(botao('Ajustar Arroz').disabled).toBe(true);
+    expect(botao('Registrar doação de Macarrão').disabled).toBe(false);
+    expect(botao('Ajustar Macarrão').disabled).toBe(false);
+
+    resposta.next({ itemId: '1', quantidadeAnterior: 10, quantidadeNova: 15 });
+    fixture.detectChanges();
+    expect(botao('Registrar doação de Arroz').disabled).toBe(false);
+  });
+
+  it('unidade vai para o plural só acima de 1', () => {
+    criar([MACARRAO, { ...MACARRAO, id: '3', nome: 'Óleo', unidade: 'garrafa', estoqueAtual: 0 }]);
+
+    const quantidades = [...el.querySelectorAll('.linha__qtd')].map(texto);
+    expect(quantidades).toEqual(['8 pacotes', '0 garrafa']);
   });
 
   it('ajuste envia a nova quantidade e o motivo', async () => {

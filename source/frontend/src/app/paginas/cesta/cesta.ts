@@ -10,6 +10,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AcaoSocialService } from '../../core/acao-social.service';
 import { AuthService } from '../../core/auth.service';
 import { CestaResumo } from '../../core/models';
+import { unidadePara } from '../../core/unidade';
 
 @Component({
   selector: 'app-cesta',
@@ -27,6 +28,7 @@ import { CestaResumo } from '../../core/models';
   styleUrl: './cesta.css'
 })
 export class Cesta implements OnInit {
+  protected readonly unidadePara = unidadePara;
   private readonly acaoSocial = inject(AcaoSocialService);
   private readonly snackBar = inject(MatSnackBar);
 

@@ -22,8 +22,8 @@ public class AcaoSocialItensTests(ApiFactory factory) : TesteDeIntegracao(factor
         return (await resposta.Content.ReadFromJsonAsync<ItemSocialCriadoResult>())!;
     }
 
-    private static Task<HttpResponseMessage> Entrada(HttpClient cliente, Guid itemId, int quantidade, string? doador = null) =>
-        cliente.PostAsJsonAsync($"{Rota}/{itemId}/entradas", new { quantidade, doador });
+    private static Task<HttpResponseMessage> Entrada(HttpClient cliente, Guid itemId, int quantidade) =>
+        cliente.PostAsJsonAsync($"{Rota}/{itemId}/entradas", new { quantidade });
 
     private static Task<HttpResponseMessage> Ajuste(HttpClient cliente, Guid itemId, int novaQuantidade, string motivo) =>
         cliente.PostAsJsonAsync($"{Rota}/{itemId}/ajustes", new { novaQuantidade, motivo });
@@ -61,13 +61,13 @@ public class AcaoSocialItensTests(ApiFactory factory) : TesteDeIntegracao(factor
     }
 
     [Fact]
-    public async Task Entrada_SomaAoEstoqueEGravaMovimentacaoComDoadorEUsuario()
+    public async Task Entrada_SomaAoEstoqueEGravaMovimentacaoComUsuario()
     {
         var social = await ClienteSocial();
         var item = await CriarItemSocial(social, "Arroz");
 
         await Entrada(social, item.Id, 5);
-        var resposta = await Entrada(social, item.Id, 3, "  Mercado Bom ");
+        var resposta = await Entrada(social, item.Id, 3);
 
         Assert.Equal(HttpStatusCode.OK, resposta.StatusCode);
         var resultado = await resposta.Content.ReadFromJsonAsync<EstoqueSocialAlteradoResult>();
@@ -77,8 +77,8 @@ public class AcaoSocialItensTests(ApiFactory factory) : TesteDeIntegracao(factor
         Assert.Equal(2, movimentacoes.Count);
         Assert.All(movimentacoes, m => Assert.Equal(TipoMovimentacaoSocial.Entrada, m.Tipo));
         Assert.All(movimentacoes, m => Assert.Equal(Social.Id, m.UsuarioId));
-        Assert.Contains(movimentacoes, m => m.QuantidadeAnterior == 5 && m.QuantidadeNova == 8 && m.Doador == "Mercado Bom");
-        Assert.Contains(movimentacoes, m => m.QuantidadeAnterior == 0 && m.QuantidadeNova == 5 && m.Doador == null);
+        Assert.Contains(movimentacoes, m => m.QuantidadeAnterior == 5 && m.QuantidadeNova == 8);
+        Assert.Contains(movimentacoes, m => m.QuantidadeAnterior == 0 && m.QuantidadeNova == 5);
     }
 
     [Theory]

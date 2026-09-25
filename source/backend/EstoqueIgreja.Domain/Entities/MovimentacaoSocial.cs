@@ -16,9 +16,6 @@ public class MovimentacaoSocial
     public int QuantidadeAnterior { get; private set; }
     public int QuantidadeNova { get; private set; }
 
-    /// <summary>Quem doou, só nas entradas. Opcional.</summary>
-    public string? Doador { get; private set; }
-
     /// <summary>Por que o estoque foi corrigido, só nos ajustes. Obrigatório neles.</summary>
     public string? Motivo { get; private set; }
 
@@ -32,10 +29,9 @@ public class MovimentacaoSocial
     public Usuario Usuario { get; private set; } = null!;
 
     public static MovimentacaoSocial Entrada(
-        Guid itemSocialId, int quantidadeAnterior, int quantidadeNova, string? doador, Guid usuarioId)
+        Guid itemSocialId, int quantidadeAnterior, int quantidadeNova, Guid usuarioId)
     {
-        return Criar(itemSocialId, TipoMovimentacaoSocial.Entrada, quantidadeAnterior, quantidadeNova, usuarioId,
-            doador: string.IsNullOrWhiteSpace(doador) ? null : doador.Trim());
+        return Criar(itemSocialId, TipoMovimentacaoSocial.Entrada, quantidadeAnterior, quantidadeNova, usuarioId);
     }
 
     public static MovimentacaoSocial Ajuste(
@@ -59,7 +55,6 @@ public class MovimentacaoSocial
         int quantidadeAnterior,
         int quantidadeNova,
         Guid usuarioId,
-        string? doador = null,
         string? motivo = null)
     {
         return new MovimentacaoSocial
@@ -69,7 +64,6 @@ public class MovimentacaoSocial
             Tipo = tipo,
             QuantidadeAnterior = quantidadeAnterior,
             QuantidadeNova = quantidadeNova,
-            Doador = doador,
             Motivo = motivo,
             UsuarioId = usuarioId,
             Data = DateTime.UtcNow

@@ -51,7 +51,7 @@ public class AcaoSocialController : ControllerBase
         [FromBody] RegistrarEntradaRequest request,
         CancellationToken ct)
     {
-        return Ok(await _mediator.Send(new RegistrarEntradaCommand(id, request.Quantidade, request.Doador), ct));
+        return Ok(await _mediator.Send(new RegistrarEntradaCommand(id, request.Quantidade), ct));
     }
 
     [HttpPost("itens/{id:guid}/ajustes")]
