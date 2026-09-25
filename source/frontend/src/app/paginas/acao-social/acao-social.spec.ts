@@ -12,6 +12,7 @@ import { AcaoSocial } from './acao-social';
 import { MovimentacaoDialog, MovimentacaoInformada } from './movimentacao-dialog';
 
 const ARROZ: ItemSocial = { id: '1', nome: 'Arroz', unidade: 'kg', estoqueAtual: 10 };
+const MACARRAO: ItemSocial = { id: '2', nome: 'Macarrão', unidade: 'pacote', estoqueAtual: 8 };
 
 const texto = (elemento: Element | null | undefined) => (elemento?.textContent ?? '').replace(/\s+/g, ' ').trim();
 
@@ -82,6 +83,13 @@ describe('AcaoSocial (estoque)', () => {
     expect(servico.registrarEntrada).toHaveBeenCalledWith('1', 5);
     expect(avisar).toHaveBeenCalledWith('Arroz: agora 15 kg.', 'Fechar', expect.anything());
     expect(servico.listar).toHaveBeenCalledTimes(2);
+  });
+
+  it('unidade vai para o plural só acima de 1', () => {
+    criar([MACARRAO, { ...MACARRAO, id: '3', nome: 'Óleo', unidade: 'garrafa', estoqueAtual: 0 }]);
+
+    const quantidades = [...el.querySelectorAll('.linha__qtd')].map(texto);
+    expect(quantidades).toEqual(['8 pacotes', '0 garrafa']);
   });
 
   it('ajuste envia a nova quantidade e o motivo', async () => {

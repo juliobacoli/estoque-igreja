@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ItemSocial } from '../../core/models';
+import { unidadePara } from '../../core/unidade';
 
 export interface MovimentacaoDados {
   tipo: 'entrada' | 'ajuste';
@@ -26,14 +27,14 @@ export interface MovimentacaoInformada {
 
       <mat-dialog-content>
         <p class="muted">
-          {{ dados.item.nome }} · hoje: {{ dados.item.estoqueAtual }} {{ dados.item.unidade }}
+          {{ dados.item.nome }} · hoje: {{ dados.item.estoqueAtual }} {{ unidadePara(dados.item.estoqueAtual, dados.item.unidade) }}
         </p>
 
         @if (porPacote) {
           <mat-form-field appearance="outline" class="campo-mat">
             <mat-label>Quantos pacotes?</mat-label>
             <input matInput name="pacotes" type="number" inputmode="numeric" min="1" [(ngModel)]="pacotes" required>
-            <span matTextSuffix>pacotes</span>
+            <span matTextSuffix>{{ unidadePara(pacotes, 'pacote') }}</span>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-mat">
@@ -56,7 +57,7 @@ export interface MovimentacaoInformada {
               [min]="entrada ? 1 : 0"
               [(ngModel)]="quantidade"
               required>
-            <span matTextSuffix>{{ dados.item.unidade }}</span>
+            <span matTextSuffix>{{ unidadePara(quantidade, dados.item.unidade) }}</span>
           </mat-form-field>
         }
 
@@ -108,6 +109,7 @@ export interface MovimentacaoInformada {
   `
 })
 export class MovimentacaoDialog {
+  protected readonly unidadePara = unidadePara;
   protected readonly dialogRef = inject(MatDialogRef<MovimentacaoDialog, MovimentacaoInformada>);
   protected readonly dados = inject<MovimentacaoDados>(MAT_DIALOG_DATA);
 

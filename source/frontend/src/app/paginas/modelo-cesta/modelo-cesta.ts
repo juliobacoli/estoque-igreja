@@ -9,6 +9,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { forkJoin } from 'rxjs';
 import { AcaoSocialService } from '../../core/acao-social.service';
 import { ItemSocial } from '../../core/models';
+import { unidadePara } from '../../core/unidade';
 
 interface LinhaDoModelo {
   item: ItemSocial;
@@ -31,6 +32,7 @@ interface LinhaDoModelo {
   styleUrl: './modelo-cesta.css'
 })
 export class ModeloCesta implements OnInit {
+  protected readonly unidadePara = unidadePara;
   private readonly acaoSocial = inject(AcaoSocialService);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);

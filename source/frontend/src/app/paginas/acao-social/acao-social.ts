@@ -10,6 +10,7 @@ import { AcaoSocialService } from '../../core/acao-social.service';
 import { AuthService } from '../../core/auth.service';
 import { EstoqueSocialAlterado, ItemSocial } from '../../core/models';
 import { MovimentacaoDados, MovimentacaoDialog, MovimentacaoInformada } from './movimentacao-dialog';
+import { unidadePara } from '../../core/unidade';
 
 @Component({
   selector: 'app-acao-social',
@@ -18,6 +19,7 @@ import { MovimentacaoDados, MovimentacaoDialog, MovimentacaoInformada } from './
   styleUrl: './acao-social.css'
 })
 export class AcaoSocial implements OnInit {
+  protected readonly unidadePara = unidadePara;
   private readonly acaoSocial = inject(AcaoSocialService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
@@ -74,7 +76,7 @@ export class AcaoSocial implements OnInit {
 
     enviar(informado).subscribe({
       next: (resultado) => {
-        this.avisar(`${dados.item.nome}: agora ${resultado.quantidadeNova} ${dados.item.unidade}.`);
+        this.avisar(`${dados.item.nome}: agora ${resultado.quantidadeNova} ${unidadePara(resultado.quantidadeNova, dados.item.unidade)}.`);
         this.salvando.set(null);
         this.carregar();
       },

@@ -19,7 +19,7 @@
           <span class="linha__nome">{{ item.nome }}</span>
           <span class="linha__qtd">
             {{ item.estoqueAtual }}
-            <small class="muted">{{ item.unidade }}</small>
+            <small class="muted">{{ unidadePara(item.estoqueAtual, item.unidade) }}</small>
           </span>
         </div>
 
