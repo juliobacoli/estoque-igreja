@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
 
-namespace EstoqueIgreja.IntegrationTests;
+namespace EstoqueIgreja.IntegrationTests.Banco;
 
 [Collection(ApiCollection.Nome)]
 public class BancoTests(ApiFactory factory) : TesteDeIntegracao(factory)

@@ -5,7 +5,7 @@ using EstoqueIgreja.Application.Itens.Commands.CriarItem;
 using EstoqueIgreja.Application.Itens.Queries.ListarItens;
 using EstoqueIgreja.IntegrationTests.Infra;
 
-namespace EstoqueIgreja.IntegrationTests;
+namespace EstoqueIgreja.IntegrationTests.Itens;
 
 [Collection(ApiCollection.Nome)]
 public class CadastroItemTests(ApiFactory factory) : TesteDeIntegracao(factory)

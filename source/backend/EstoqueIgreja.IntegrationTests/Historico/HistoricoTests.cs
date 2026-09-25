@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using EstoqueIgreja.Application.Historico.Queries.ListarHistorico;
 using EstoqueIgreja.IntegrationTests.Infra;
 
-namespace EstoqueIgreja.IntegrationTests;
+namespace EstoqueIgreja.IntegrationTests.Historico;
 
 [Collection(ApiCollection.Nome)]
 public class HistoricoTests(ApiFactory factory) : TesteDeIntegracao(factory)

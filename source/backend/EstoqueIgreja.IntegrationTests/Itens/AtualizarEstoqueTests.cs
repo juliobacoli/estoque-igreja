@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EstoqueIgreja.IntegrationTests;
+namespace EstoqueIgreja.IntegrationTests.Itens;
 
 [Collection(ApiCollection.Nome)]
 public class AtualizarEstoqueTests(ApiFactory factory) : TesteDeIntegracao(factory)

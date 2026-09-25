@@ -7,7 +7,7 @@ using EstoqueIgreja.Domain.Enums;
 using EstoqueIgreja.IntegrationTests.Infra;
 using Microsoft.EntityFrameworkCore;
 
-namespace EstoqueIgreja.IntegrationTests;
+namespace EstoqueIgreja.IntegrationTests.AcaoSocial;
 
 [Collection(ApiCollection.Nome)]
 public class AcaoSocialItensTests(ApiFactory factory) : TesteDeIntegracao(factory)
