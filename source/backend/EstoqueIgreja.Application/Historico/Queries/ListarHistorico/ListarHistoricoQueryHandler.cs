@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.Historico.Queries.ListarHistorico;
 
-public class ListarHistoricoQueryHandler : IRequestHandler<ListarHistoricoQuery, HistoricoPaginado>
+public class ListarHistoricoQueryHandler(IAppDbContext db) : IRequestHandler<ListarHistoricoQuery, HistoricoPaginado>
 {
-    private readonly IAppDbContext _db;
-
-    public ListarHistoricoQueryHandler(IAppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly IAppDbContext _db = db;
 
     public async Task<HistoricoPaginado> Handle(ListarHistoricoQuery request, CancellationToken ct)
     {

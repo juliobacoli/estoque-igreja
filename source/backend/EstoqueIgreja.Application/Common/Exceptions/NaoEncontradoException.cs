@@ -1,8 +1,5 @@
 namespace EstoqueIgreja.Application.Common.Exceptions;
 
-public class NaoEncontradoException : Exception
+public class NaoEncontradoException(string mensagem) : Exception(mensagem)
 {
-    public NaoEncontradoException(string mensagem) : base(mensagem)
-    {
-    }
 }

@@ -30,9 +30,7 @@ public class MovimentacaoSocial
 
     public static MovimentacaoSocial Entrada(
         Guid itemSocialId, int quantidadeAnterior, int quantidadeNova, Guid usuarioId)
-    {
-        return Criar(itemSocialId, TipoMovimentacaoSocial.Entrada, quantidadeAnterior, quantidadeNova, usuarioId);
-    }
+        => Criar(itemSocialId, TipoMovimentacaoSocial.Entrada, quantidadeAnterior, quantidadeNova, usuarioId);
 
     public static MovimentacaoSocial Ajuste(
         Guid itemSocialId, int quantidadeAnterior, int quantidadeNova, string motivo, Guid usuarioId)

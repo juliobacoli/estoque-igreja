@@ -6,14 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.AcaoSocial.Cesta.Queries.ObterCesta;
 
-public class ObterCestaQueryHandler : IRequestHandler<ObterCestaQuery, CestaResumo>
+public class ObterCestaQueryHandler(IAppDbContext db) : IRequestHandler<ObterCestaQuery, CestaResumo>
 {
-    private readonly IAppDbContext _db;
-
-    public ObterCestaQueryHandler(IAppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly IAppDbContext _db = db;
 
     public async Task<CestaResumo> Handle(ObterCestaQuery request, CancellationToken ct)
     {

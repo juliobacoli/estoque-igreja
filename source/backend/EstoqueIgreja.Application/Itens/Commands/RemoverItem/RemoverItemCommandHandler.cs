@@ -5,14 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.Itens.Commands.RemoverItem;
 
-public class RemoverItemCommandHandler : IRequestHandler<RemoverItemCommand, ItemRemovidoResult>
+public class RemoverItemCommandHandler(IAppDbContext db) : IRequestHandler<RemoverItemCommand, ItemRemovidoResult>
 {
-    private readonly IAppDbContext _db;
-
-    public RemoverItemCommandHandler(IAppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly IAppDbContext _db = db;
 
     public async Task<ItemRemovidoResult> Handle(RemoverItemCommand request, CancellationToken ct)
     {

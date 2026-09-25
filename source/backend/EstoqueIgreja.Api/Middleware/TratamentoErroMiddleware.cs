@@ -3,16 +3,10 @@ using FluentValidation;
 
 namespace EstoqueIgreja.Api.Middleware;
 
-public class TratamentoErroMiddleware
+public class TratamentoErroMiddleware(RequestDelegate proximo, ILogger<TratamentoErroMiddleware> logger)
 {
-    private readonly RequestDelegate _proximo;
-    private readonly ILogger<TratamentoErroMiddleware> _logger;
-
-    public TratamentoErroMiddleware(RequestDelegate proximo, ILogger<TratamentoErroMiddleware> logger)
-    {
-        _proximo = proximo;
-        _logger = logger;
-    }
+    private readonly RequestDelegate _proximo = proximo;
+    private readonly ILogger<TratamentoErroMiddleware> _logger = logger;
 
     public async Task InvokeAsync(HttpContext contexto)
     {

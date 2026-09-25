@@ -3,14 +3,9 @@ using EstoqueIgreja.Application.Common.Interfaces;
 
 namespace EstoqueIgreja.Api.Services;
 
-public class UsuarioAtual : IUsuarioAtual
+public class UsuarioAtual(IHttpContextAccessor acessor) : IUsuarioAtual
 {
-    private readonly IHttpContextAccessor _acessor;
-
-    public UsuarioAtual(IHttpContextAccessor acessor)
-    {
-        _acessor = acessor;
-    }
+    private readonly IHttpContextAccessor _acessor = acessor;
 
     public Guid Id
     {

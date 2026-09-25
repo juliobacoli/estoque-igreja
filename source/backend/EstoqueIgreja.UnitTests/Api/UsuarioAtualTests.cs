@@ -26,19 +26,12 @@ public class UsuarioAtualTests
 
     [Fact]
     public void SemClaim_LancaExcecao()
-    {
-        Assert.Throws<InvalidOperationException>(() => Criar(ContextoComClaim(null)).Id);
-    }
+        => Assert.Throws<InvalidOperationException>(() => Criar(ContextoComClaim(null)).Id);
 
     [Fact]
     public void ClaimComGuidInvalido_LancaExcecao()
-    {
-        Assert.Throws<InvalidOperationException>(() => Criar(ContextoComClaim("nao-e-guid")).Id);
-    }
+        => Assert.Throws<InvalidOperationException>(() => Criar(ContextoComClaim("nao-e-guid")).Id);
 
     [Fact]
-    public void SemHttpContext_LancaExcecao()
-    {
-        Assert.Throws<InvalidOperationException>(() => Criar(null).Id);
-    }
+    public void SemHttpContext_LancaExcecao() => Assert.Throws<InvalidOperationException>(() => Criar(null).Id);
 }

@@ -6,17 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.Itens.Commands.AtualizarEstoque;
 
-public class AtualizarEstoqueCommandHandler
-    : IRequestHandler<AtualizarEstoqueCommand, EstoqueAtualizadoResult>
+public class AtualizarEstoqueCommandHandler(IAppDbContext db, IUsuarioAtual usuarioAtual)
+        : IRequestHandler<AtualizarEstoqueCommand, EstoqueAtualizadoResult>
 {
-    private readonly IAppDbContext _db;
-    private readonly IUsuarioAtual _usuarioAtual;
-
-    public AtualizarEstoqueCommandHandler(IAppDbContext db, IUsuarioAtual usuarioAtual)
-    {
-        _db = db;
-        _usuarioAtual = usuarioAtual;
-    }
+    private readonly IAppDbContext _db = db;
+    private readonly IUsuarioAtual _usuarioAtual = usuarioAtual;
 
     public async Task<EstoqueAtualizadoResult> Handle(AtualizarEstoqueCommand request, CancellationToken ct)
     {

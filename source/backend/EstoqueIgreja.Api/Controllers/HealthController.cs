@@ -7,22 +7,13 @@ namespace EstoqueIgreja.Api.Controllers;
 [AllowAnonymous]
 [ApiController]
 [Route("health")]
-public class HealthController : ControllerBase
+public class HealthController(AppDbContext db, ILogger<HealthController> logger) : ControllerBase
 {
-    private readonly AppDbContext _db;
-    private readonly ILogger<HealthController> _logger;
-
-    public HealthController(AppDbContext db, ILogger<HealthController> logger)
-    {
-        _db = db;
-        _logger = logger;
-    }
+    private readonly AppDbContext _db = db;
+    private readonly ILogger<HealthController> _logger = logger;
 
     [HttpGet]
-    public IActionResult Get()
-    {
-        return Ok(new { status = "healthy", timestamp = DateTime.UtcNow });
-    }
+    public IActionResult Get() => Ok(new { status = "healthy", timestamp = DateTime.UtcNow });
 
     [HttpGet("db")]
     public async Task<IActionResult> GetDb()
@@ -32,12 +23,14 @@ public class HealthController : ControllerBase
             bool conectou = await _db.Database.CanConnectAsync();
 
             if (conectou)
+            {
                 return Ok(new
                 {
                     status = "healthy",
                     database = "connected",
                     timestamp = DateTime.UtcNow
                 });
+            }
 
             return StatusCode(503, new
             {

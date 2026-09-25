@@ -24,6 +24,8 @@ csharp_prefer_braces = when_multiline:suggestion
 
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
 dotnet_diagnostic.IDE0005.severity = warning
+# Padrão do projeto (CLAUDE.md): "if (x is null) throw ..." em vez de "?? throw".
+dotnet_diagnostic.IDE0270.severity = none
 
 [**/Migrations/*.cs]
 generated_code = true

@@ -11,20 +11,12 @@ namespace EstoqueIgreja.Api.Controllers;
 [ApiController]
 [Authorize(Policy = Politicas.AcaoSocial)]
 [Route("api/acao-social/cesta")]
-public class CestaController : ControllerBase
+public class CestaController(ISender mediator) : ControllerBase
 {
-    private readonly ISender _mediator;
-
-    public CestaController(ISender mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly ISender _mediator = mediator;
 
     [HttpGet]
-    public async Task<IActionResult> Obter(CancellationToken ct)
-    {
-        return Ok(await _mediator.Send(new ObterCestaQuery(), ct));
-    }
+    public async Task<IActionResult> Obter(CancellationToken ct) => Ok(await _mediator.Send(new ObterCestaQuery(), ct));
 
     [Authorize(Roles = "Admin")]
     [HttpPut("modelo")]
@@ -37,7 +29,5 @@ public class CestaController : ControllerBase
 
     [HttpPost("montagens")]
     public async Task<IActionResult> Montar([FromBody] MontarCestasCommand command, CancellationToken ct)
-    {
-        return Ok(await _mediator.Send(command, ct));
-    }
+        => Ok(await _mediator.Send(command, ct));
 }

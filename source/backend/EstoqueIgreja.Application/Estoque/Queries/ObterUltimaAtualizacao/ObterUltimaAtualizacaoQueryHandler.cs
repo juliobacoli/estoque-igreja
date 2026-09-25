@@ -4,14 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.Estoque.Queries.ObterUltimaAtualizacao;
 
-public class ObterUltimaAtualizacaoQueryHandler : IRequestHandler<ObterUltimaAtualizacaoQuery, UltimaAtualizacaoResult>
+public class ObterUltimaAtualizacaoQueryHandler(IAppDbContext db)
+    : IRequestHandler<ObterUltimaAtualizacaoQuery, UltimaAtualizacaoResult>
 {
-    private readonly IAppDbContext _db;
-
-    public ObterUltimaAtualizacaoQueryHandler(IAppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly IAppDbContext _db = db;
 
     public async Task<UltimaAtualizacaoResult> Handle(ObterUltimaAtualizacaoQuery request, CancellationToken ct)
     {

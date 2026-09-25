@@ -9,14 +9,9 @@ namespace EstoqueIgreja.Api.Controllers;
 [ApiController]
 [Authorize(Policy = Politicas.Obreiros)]
 [Route("api/historico")]
-public class HistoricoController : ControllerBase
+public class HistoricoController(ISender mediator) : ControllerBase
 {
-    private readonly ISender _mediator;
-
-    public HistoricoController(ISender mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly ISender _mediator = mediator;
 
     [HttpGet]
     public async Task<IActionResult> Listar(
@@ -24,7 +19,5 @@ public class HistoricoController : ControllerBase
         [FromQuery] int pagina = 1,
         [FromQuery] int tamanhoPagina = 20,
         CancellationToken ct = default)
-    {
-        return Ok(await _mediator.Send(new ListarHistoricoQuery(itemId, pagina, tamanhoPagina), ct));
-    }
+        => Ok(await _mediator.Send(new ListarHistoricoQuery(itemId, pagina, tamanhoPagina), ct));
 }

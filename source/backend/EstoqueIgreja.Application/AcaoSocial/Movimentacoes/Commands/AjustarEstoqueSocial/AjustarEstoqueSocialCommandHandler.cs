@@ -5,17 +5,11 @@ using MediatR;
 
 namespace EstoqueIgreja.Application.AcaoSocial.Movimentacoes.Commands.AjustarEstoqueSocial;
 
-public class AjustarEstoqueSocialCommandHandler
-    : IRequestHandler<AjustarEstoqueSocialCommand, EstoqueSocialAlteradoResult>
+public class AjustarEstoqueSocialCommandHandler(IAppDbContext db, IUsuarioAtual usuarioAtual)
+        : IRequestHandler<AjustarEstoqueSocialCommand, EstoqueSocialAlteradoResult>
 {
-    private readonly IAppDbContext _db;
-    private readonly IUsuarioAtual _usuarioAtual;
-
-    public AjustarEstoqueSocialCommandHandler(IAppDbContext db, IUsuarioAtual usuarioAtual)
-    {
-        _db = db;
-        _usuarioAtual = usuarioAtual;
-    }
+    private readonly IAppDbContext _db = db;
+    private readonly IUsuarioAtual _usuarioAtual = usuarioAtual;
 
     public async Task<EstoqueSocialAlteradoResult> Handle(AjustarEstoqueSocialCommand request, CancellationToken ct)
     {

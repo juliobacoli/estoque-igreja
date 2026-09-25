@@ -30,10 +30,7 @@ public class ItemSocial
         };
     }
 
-    public void Inativar()
-    {
-        Ativo = false;
-    }
+    public void Inativar() => Ativo = false;
 
     /// <summary>
     /// Mesmo comportamento do <see cref="Item.Reativar"/>: recadastrar um nome

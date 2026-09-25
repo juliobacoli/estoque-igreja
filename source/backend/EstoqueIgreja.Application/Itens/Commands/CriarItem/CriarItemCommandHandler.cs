@@ -6,14 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.Itens.Commands.CriarItem;
 
-public class CriarItemCommandHandler : IRequestHandler<CriarItemCommand, ItemCriadoResult>
+public class CriarItemCommandHandler(IAppDbContext db) : IRequestHandler<CriarItemCommand, ItemCriadoResult>
 {
-    private readonly IAppDbContext _db;
-
-    public CriarItemCommandHandler(IAppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly IAppDbContext _db = db;
 
     public async Task<ItemCriadoResult> Handle(CriarItemCommand request, CancellationToken ct)
     {

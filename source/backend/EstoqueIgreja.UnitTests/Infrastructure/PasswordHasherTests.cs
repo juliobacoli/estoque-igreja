@@ -24,13 +24,8 @@ public class PasswordHasherTests
 
     [Fact]
     public void Verificar_HashInvalido_RetornaFalseSemLancar()
-    {
-        Assert.False(_hasher.Verificar("senha", "isto-nao-e-um-hash"));
-    }
+        => Assert.False(_hasher.Verificar("senha", "isto-nao-e-um-hash"));
 
     [Fact]
-    public void Hash_MesmaSenha_GeraHashesDiferentes()
-    {
-        Assert.NotEqual(_hasher.Hash("senha"), _hasher.Hash("senha"));
-    }
+    public void Hash_MesmaSenha_GeraHashesDiferentes() => Assert.NotEqual(_hasher.Hash("senha"), _hasher.Hash("senha"));
 }
