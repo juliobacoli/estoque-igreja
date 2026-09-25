@@ -44,9 +44,9 @@ describe('AcaoSocialService', () => {
     esperar('/api/acao-social/itens/abc', 'DELETE');
   });
 
-  it('registrarEntrada envia quantidade e doador', () => {
-    service.registrarEntrada('abc', 5, 'Mercado').subscribe();
-    esperar('/api/acao-social/itens/abc/entradas', 'POST', { quantidade: 5, doador: 'Mercado' });
+  it('registrarEntrada envia só a quantidade', () => {
+    service.registrarEntrada('abc', 5).subscribe();
+    esperar('/api/acao-social/itens/abc/entradas', 'POST', { quantidade: 5 });
   });
 
   it('ajustar envia a nova quantidade e o motivo', () => {

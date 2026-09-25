@@ -72,16 +72,14 @@ public class ItemSocialTests
         Assert.Equal("pacote", item.Unidade);
     }
 
-    [Theory]
-    [InlineData(null, null)]
-    [InlineData("   ", null)]
-    [InlineData(" Mercado Bom ", "Mercado Bom")]
-    public void Entrada_GuardaDoadorSemEspacosOuNulo(string? doador, string? esperado)
+    [Fact]
+    public void Entrada_GuardaTipoEQuantidadesSemMotivo()
     {
-        var movimentacao = MovimentacaoSocial.Entrada(Guid.NewGuid(), 0, 5, doador, Guid.NewGuid());
+        var movimentacao = MovimentacaoSocial.Entrada(Guid.NewGuid(), 0, 5, Guid.NewGuid());
 
         Assert.Equal(TipoMovimentacaoSocial.Entrada, movimentacao.Tipo);
-        Assert.Equal(esperado, movimentacao.Doador);
+        Assert.Equal(0, movimentacao.QuantidadeAnterior);
+        Assert.Equal(5, movimentacao.QuantidadeNova);
         Assert.Null(movimentacao.Motivo);
     }
 
@@ -95,7 +93,6 @@ public class ItemSocialTests
 
         Assert.Equal(TipoMovimentacaoSocial.Ajuste, movimentacao.Tipo);
         Assert.Equal("Venceu", movimentacao.Motivo);
-        Assert.Null(movimentacao.Doador);
         Assert.Equal(10, movimentacao.QuantidadeAnterior);
         Assert.Equal(7, movimentacao.QuantidadeNova);
         Assert.Equal(itemId, movimentacao.ItemSocialId);

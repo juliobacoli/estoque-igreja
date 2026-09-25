@@ -15,26 +15,18 @@ public class MovimentacoesSociaisValidatorTests
     [InlineData(-3)]
     public void Entrada_QuantidadeNaoPositiva_RetornaErro(int quantidade)
     {
-        var resultado = _entrada.TestValidate(new RegistrarEntradaCommand(Guid.NewGuid(), quantidade, null));
+        var resultado = _entrada.TestValidate(new RegistrarEntradaCommand(Guid.NewGuid(), quantidade));
 
         resultado.ShouldHaveValidationErrorFor(x => x.Quantidade)
             .WithErrorMessage("A quantidade precisa ser maior que zero.");
     }
 
     [Fact]
-    public void Entrada_SemDoador_EhValida()
+    public void Entrada_QuantidadePositiva_EhValida()
     {
-        var resultado = _entrada.TestValidate(new RegistrarEntradaCommand(Guid.NewGuid(), 1, null));
+        var resultado = _entrada.TestValidate(new RegistrarEntradaCommand(Guid.NewGuid(), 1));
 
         resultado.ShouldNotHaveAnyValidationErrors();
-    }
-
-    [Fact]
-    public void Entrada_DoadorLongo_RetornaErro()
-    {
-        var resultado = _entrada.TestValidate(new RegistrarEntradaCommand(Guid.NewGuid(), 1, new string('a', 121)));
-
-        resultado.ShouldHaveValidationErrorFor(x => x.Doador);
     }
 
     [Theory]

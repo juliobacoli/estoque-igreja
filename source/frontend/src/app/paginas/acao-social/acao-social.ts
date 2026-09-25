@@ -48,7 +48,7 @@ export class AcaoSocial implements OnInit {
 
   protected registrarDoacao(item: ItemSocial) {
     this.movimentar({ tipo: 'entrada', item }, (informado) =>
-      this.acaoSocial.registrarEntrada(item.id, informado.quantidade, informado.texto || null)
+      this.acaoSocial.registrarEntrada(item.id, informado.quantidade)
     );
   }
 

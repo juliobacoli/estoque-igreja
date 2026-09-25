@@ -11,7 +11,7 @@ export interface MovimentacaoDados {
   item: ItemSocial;
 }
 
-/** Na entrada, "texto" é o doador (opcional); no ajuste, é o motivo (obrigatório). */
+/** "texto" é o motivo do ajuste; na entrada fica vazio. */
 export interface MovimentacaoInformada {
   quantidade: number;
   texto: string;
@@ -42,13 +42,13 @@ export interface MovimentacaoInformada {
           <span matTextSuffix>{{ dados.item.unidade }}</span>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="campo-mat">
-          <mat-label>{{ entrada ? 'Quem doou (opcional)' : 'Motivo' }}</mat-label>
-          <input matInput name="texto" type="text" [(ngModel)]="texto" [required]="!entrada">
-          @if (!entrada) {
+        @if (!entrada) {
+          <mat-form-field appearance="outline" class="campo-mat">
+            <mat-label>Motivo</mat-label>
+            <input matInput name="texto" type="text" [(ngModel)]="texto" required>
             <mat-hint>Ex.: vencido, perdido</mat-hint>
-          }
-        </mat-form-field>
+          </mat-form-field>
+        }
       </mat-dialog-content>
 
       <mat-dialog-actions align="end">

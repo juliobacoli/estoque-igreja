@@ -26,18 +26,18 @@ describe('MovimentacaoDialog', () => {
     return fixture;
   }
 
-  it('doação começa sem quantidade e devolve o doador sem espaços', () => {
+  it('doação começa sem quantidade e não tem campo de doador', () => {
     const fixture = criar('entrada');
     const componente = fixture.componentInstance;
 
     expect(fixture.nativeElement.textContent).toContain('Registrar doação');
     expect(componente['quantidade']).toBeNull();
+    expect(fixture.nativeElement.textContent).not.toContain('Quem doou');
 
     componente['quantidade'] = 5;
-    componente['texto'] = '  Mercado ';
     componente['confirmar']();
 
-    expect(fechar).toHaveBeenCalledWith({ quantidade: 5, texto: 'Mercado' });
+    expect(fechar).toHaveBeenCalledWith({ quantidade: 5, texto: '' });
   });
 
   it('ajuste começa com a quantidade atual', () => {

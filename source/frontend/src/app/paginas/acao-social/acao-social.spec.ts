@@ -69,7 +69,7 @@ describe('AcaoSocial (estoque)', () => {
     expect(el.querySelector('a[href="/acao-social/itens"]')).not.toBeNull();
   });
 
-  it('doação envia a quantidade, sem doador quando ele fica em branco, e recarrega', async () => {
+  it('doação envia a quantidade e recarrega', async () => {
     criar();
     dialogoFechandoCom({ quantidade: 5, texto: '' });
 
@@ -79,7 +79,7 @@ describe('AcaoSocial (estoque)', () => {
       MovimentacaoDialog,
       expect.objectContaining({ data: { tipo: 'entrada', item: ARROZ } })
     );
-    expect(servico.registrarEntrada).toHaveBeenCalledWith('1', 5, null);
+    expect(servico.registrarEntrada).toHaveBeenCalledWith('1', 5);
     expect(avisar).toHaveBeenCalledWith('Arroz: agora 15 kg.', 'Fechar', expect.anything());
     expect(servico.listar).toHaveBeenCalledTimes(2);
   });
