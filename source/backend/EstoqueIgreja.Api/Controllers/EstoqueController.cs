@@ -10,14 +10,9 @@ namespace EstoqueIgreja.Api.Controllers;
 [ApiController]
 [Authorize(Policy = Politicas.Obreiros)]
 [Route("api/estoque")]
-public class EstoqueController : ControllerBase
+public class EstoqueController(ISender mediator) : ControllerBase
 {
-    private readonly ISender _mediator;
-
-    public EstoqueController(ISender mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly ISender _mediator = mediator;
 
     [HttpGet("exportar-pdf")]
     public async Task<IActionResult> ExportarPdf(CancellationToken ct)
@@ -29,7 +24,5 @@ public class EstoqueController : ControllerBase
 
     [HttpGet("ultima-atualizacao")]
     public async Task<IActionResult> UltimaAtualizacao(CancellationToken ct)
-    {
-        return Ok(await _mediator.Send(new ObterUltimaAtualizacaoQuery(), ct));
-    }
+        => Ok(await _mediator.Send(new ObterUltimaAtualizacaoQuery(), ct));
 }

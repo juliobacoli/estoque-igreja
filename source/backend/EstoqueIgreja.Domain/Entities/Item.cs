@@ -34,10 +34,7 @@ public class Item
         };
     }
 
-    public void Inativar()
-    {
-        Ativo = false;
-    }
+    public void Inativar() => Ativo = false;
 
     /// <summary>
     /// Reaproveita um item inativo quando o mesmo nome é cadastrado de novo. O

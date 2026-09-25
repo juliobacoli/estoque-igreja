@@ -5,12 +5,8 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EstoqueIgreja.Infrastructure.Data;
 
-public class AppDbContext : DbContext, IAppDbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IAppDbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-    }
-
     public DbSet<Usuario> Usuarios => Set<Usuario>();
     public DbSet<Item> Itens => Set<Item>();
     public DbSet<AtualizacaoEstoque> AtualizacoesEstoque => Set<AtualizacaoEstoque>();
@@ -21,9 +17,7 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<MontagemCesta> MontagensCesta => Set<MontagemCesta>();
 
     public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
-    {
-        return Database.BeginTransactionAsync(cancellationToken);
-    }
+        => Database.BeginTransactionAsync(cancellationToken);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

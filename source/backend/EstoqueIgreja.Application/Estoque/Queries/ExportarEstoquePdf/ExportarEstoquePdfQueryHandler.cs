@@ -4,16 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.Estoque.Queries.ExportarEstoquePdf;
 
-public class ExportarEstoquePdfQueryHandler : IRequestHandler<ExportarEstoquePdfQuery, byte[]>
+public class ExportarEstoquePdfQueryHandler(IAppDbContext db, IGeradorPdf geradorPdf)
+    : IRequestHandler<ExportarEstoquePdfQuery, byte[]>
 {
-    private readonly IAppDbContext _db;
-    private readonly IGeradorPdf _geradorPdf;
-
-    public ExportarEstoquePdfQueryHandler(IAppDbContext db, IGeradorPdf geradorPdf)
-    {
-        _db = db;
-        _geradorPdf = geradorPdf;
-    }
+    private readonly IAppDbContext _db = db;
+    private readonly IGeradorPdf _geradorPdf = geradorPdf;
 
     public async Task<byte[]> Handle(ExportarEstoquePdfQuery request, CancellationToken ct)
     {

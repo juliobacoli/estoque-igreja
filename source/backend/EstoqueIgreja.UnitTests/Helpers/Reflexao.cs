@@ -7,15 +7,11 @@ public static class Reflexao
     /// (datas, ids), o valor é definido por reflexão.
     /// </summary>
     public static void Definir(object alvo, string propriedade, object valor)
-    {
-        alvo.GetType().GetProperty(propriedade)!.SetValue(alvo, valor);
-    }
+        => alvo.GetType().GetProperty(propriedade)!.SetValue(alvo, valor);
 
     /// <summary>
     /// Lê uma propriedade de objeto anônimo devolvido por controller ou middleware.
     /// </summary>
     public static object? Ler(object alvo, string propriedade)
-    {
-        return alvo.GetType().GetProperty(propriedade)!.GetValue(alvo);
-    }
+        => alvo.GetType().GetProperty(propriedade)!.GetValue(alvo);
 }

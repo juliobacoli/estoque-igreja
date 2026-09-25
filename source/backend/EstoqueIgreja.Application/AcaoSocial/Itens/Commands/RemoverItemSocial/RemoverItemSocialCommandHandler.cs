@@ -5,14 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.AcaoSocial.Itens.Commands.RemoverItemSocial;
 
-public class RemoverItemSocialCommandHandler : IRequestHandler<RemoverItemSocialCommand, ItemSocialRemovidoResult>
+public class RemoverItemSocialCommandHandler(IAppDbContext db)
+    : IRequestHandler<RemoverItemSocialCommand, ItemSocialRemovidoResult>
 {
-    private readonly IAppDbContext _db;
-
-    public RemoverItemSocialCommandHandler(IAppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly IAppDbContext _db = db;
 
     public async Task<ItemSocialRemovidoResult> Handle(RemoverItemSocialCommand request, CancellationToken ct)
     {

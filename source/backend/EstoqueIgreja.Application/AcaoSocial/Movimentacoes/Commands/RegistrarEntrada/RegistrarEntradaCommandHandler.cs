@@ -5,17 +5,11 @@ using MediatR;
 
 namespace EstoqueIgreja.Application.AcaoSocial.Movimentacoes.Commands.RegistrarEntrada;
 
-public class RegistrarEntradaCommandHandler
-    : IRequestHandler<RegistrarEntradaCommand, EstoqueSocialAlteradoResult>
+public class RegistrarEntradaCommandHandler(IAppDbContext db, IUsuarioAtual usuarioAtual)
+        : IRequestHandler<RegistrarEntradaCommand, EstoqueSocialAlteradoResult>
 {
-    private readonly IAppDbContext _db;
-    private readonly IUsuarioAtual _usuarioAtual;
-
-    public RegistrarEntradaCommandHandler(IAppDbContext db, IUsuarioAtual usuarioAtual)
-    {
-        _db = db;
-        _usuarioAtual = usuarioAtual;
-    }
+    private readonly IAppDbContext _db = db;
+    private readonly IUsuarioAtual _usuarioAtual = usuarioAtual;
 
     public async Task<EstoqueSocialAlteradoResult> Handle(RegistrarEntradaCommand request, CancellationToken ct)
     {

@@ -18,19 +18,14 @@ namespace EstoqueIgreja.IntegrationTests.Infra;
 /// Cada teste começa com o banco limpo e com as contas fixas: admin (Obreiros), social (Ação Social) e
 /// semacesso (nenhum módulo). As três usam a mesma senha.
 /// </summary>
-public abstract class TesteDeIntegracao : IAsyncLifetime
+public abstract class TesteDeIntegracao(ApiFactory factory) : IAsyncLifetime
 {
     protected const string SenhaAdmin = "senha-admin";
 
     // BCrypt é lento de propósito; o hash é gerado uma vez só para a execução inteira.
     private static readonly Lazy<string> HashAdmin = new(() => new PasswordHasher().Hash(SenhaAdmin));
 
-    protected TesteDeIntegracao(ApiFactory factory)
-    {
-        Factory = factory;
-    }
-
-    protected ApiFactory Factory { get; }
+    protected ApiFactory Factory { get; } = factory;
     protected Usuario Admin { get; private set; } = null!;
     protected Usuario Social { get; private set; } = null!;
     protected Usuario SemAcesso { get; private set; } = null!;

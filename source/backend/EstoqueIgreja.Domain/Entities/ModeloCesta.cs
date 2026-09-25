@@ -17,10 +17,7 @@ public class ModeloCesta
     public int CestasProntas { get; private set; }
     public IReadOnlyList<ModeloCestaItem> Itens => _itens;
 
-    public static ModeloCesta Criar()
-    {
-        return new ModeloCesta { Id = IdUnico, CestasProntas = 0 };
-    }
+    public static ModeloCesta Criar() => new() { Id = IdUnico, CestasProntas = 0 };
 
     /// <summary>Substitui a composição inteira. Mudar o modelo não altera montagens antigas.</summary>
     public void DefinirItens(IEnumerable<(Guid ItemSocialId, int Quantidade)> itens)

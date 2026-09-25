@@ -7,16 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.AcaoSocial.Cesta.Commands.MontarCestas;
 
-public class MontarCestasCommandHandler : IRequestHandler<MontarCestasCommand, CestasMontadasResult>
+public class MontarCestasCommandHandler(IAppDbContext db, IUsuarioAtual usuarioAtual)
+    : IRequestHandler<MontarCestasCommand, CestasMontadasResult>
 {
-    private readonly IAppDbContext _db;
-    private readonly IUsuarioAtual _usuarioAtual;
-
-    public MontarCestasCommandHandler(IAppDbContext db, IUsuarioAtual usuarioAtual)
-    {
-        _db = db;
-        _usuarioAtual = usuarioAtual;
-    }
+    private readonly IAppDbContext _db = db;
+    private readonly IUsuarioAtual _usuarioAtual = usuarioAtual;
 
     public async Task<CestasMontadasResult> Handle(MontarCestasCommand request, CancellationToken ct)
     {

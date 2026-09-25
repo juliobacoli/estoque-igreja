@@ -17,15 +17,10 @@ public class CriarItemConcorrenciaTests
     /// O provider em memória não tem índice único: este contexto falha no SaveChanges
     /// como o PostgreSQL falharia, e permite gravar o item concorrente antes disso.
     /// </summary>
-    private sealed class BancoQueFalhaAoSalvar : AppDbContext
+    private sealed class BancoQueFalhaAoSalvar(DbContextOptions<AppDbContext> opcoes, Action antesDeFalhar)
+        : AppDbContext(opcoes)
     {
-        private readonly Action _antesDeFalhar;
-
-        public BancoQueFalhaAoSalvar(DbContextOptions<AppDbContext> opcoes, Action antesDeFalhar)
-            : base(opcoes)
-        {
-            _antesDeFalhar = antesDeFalhar;
-        }
+        private readonly Action _antesDeFalhar = antesDeFalhar;
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

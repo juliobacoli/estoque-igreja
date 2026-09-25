@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.Itens.Queries.ListarItens;
 
-public class ListarItensQueryHandler : IRequestHandler<ListarItensQuery, IReadOnlyList<ItemListado>>
+public class ListarItensQueryHandler(IAppDbContext db) : IRequestHandler<ListarItensQuery, IReadOnlyList<ItemListado>>
 {
-    private readonly IAppDbContext _db;
-
-    public ListarItensQueryHandler(IAppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly IAppDbContext _db = db;
 
     public async Task<IReadOnlyList<ItemListado>> Handle(ListarItensQuery request, CancellationToken ct)
     {

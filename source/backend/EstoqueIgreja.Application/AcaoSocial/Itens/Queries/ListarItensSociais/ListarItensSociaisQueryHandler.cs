@@ -4,15 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.AcaoSocial.Itens.Queries.ListarItensSociais;
 
-public class ListarItensSociaisQueryHandler
-    : IRequestHandler<ListarItensSociaisQuery, IReadOnlyList<ItemSocialListado>>
+public class ListarItensSociaisQueryHandler(IAppDbContext db)
+        : IRequestHandler<ListarItensSociaisQuery, IReadOnlyList<ItemSocialListado>>
 {
-    private readonly IAppDbContext _db;
-
-    public ListarItensSociaisQueryHandler(IAppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly IAppDbContext _db = db;
 
     public async Task<IReadOnlyList<ItemSocialListado>> Handle(ListarItensSociaisQuery request, CancellationToken ct)
     {

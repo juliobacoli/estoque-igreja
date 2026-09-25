@@ -10,14 +10,10 @@ namespace EstoqueIgreja.Application.AcaoSocial.Itens.Commands.CriarItemSocial;
 /// Mesmas regras do cadastro dos Obreiros: nome único sem diferenciar acento e
 /// maiúscula, e nome removido é reaproveitado.
 /// </summary>
-public class CriarItemSocialCommandHandler : IRequestHandler<CriarItemSocialCommand, ItemSocialCriadoResult>
+public class CriarItemSocialCommandHandler(IAppDbContext db)
+    : IRequestHandler<CriarItemSocialCommand, ItemSocialCriadoResult>
 {
-    private readonly IAppDbContext _db;
-
-    public CriarItemSocialCommandHandler(IAppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly IAppDbContext _db = db;
 
     public async Task<ItemSocialCriadoResult> Handle(CriarItemSocialCommand request, CancellationToken ct)
     {

@@ -6,14 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.AcaoSocial.Cesta.Commands.DefinirModeloCesta;
 
-public class DefinirModeloCestaCommandHandler : IRequestHandler<DefinirModeloCestaCommand, Unit>
+public class DefinirModeloCestaCommandHandler(IAppDbContext db) : IRequestHandler<DefinirModeloCestaCommand, Unit>
 {
-    private readonly IAppDbContext _db;
-
-    public DefinirModeloCestaCommandHandler(IAppDbContext db)
-    {
-        _db = db;
-    }
+    private readonly IAppDbContext _db = db;
 
     public async Task<Unit> Handle(DefinirModeloCestaCommand request, CancellationToken ct)
     {

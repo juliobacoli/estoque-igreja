@@ -38,15 +38,11 @@ public class ItemTests
     [InlineData("Sabão", "sabao")]
     [InlineData("Detergente 500ml - neutro", "detergente 500ml - neutro")]
     public void Normalizar_RemoveAcentosEspacosDasPontasEMaiusculas(string entrada, string esperado)
-    {
-        Assert.Equal(esperado, Item.Normalizar(entrada));
-    }
+        => Assert.Equal(esperado, Item.Normalizar(entrada));
 
     [Fact]
     public void Normalizar_NomesComESemAcentoColidem()
-    {
-        Assert.Equal(Item.Normalizar("Álcool"), Item.Normalizar("alcool"));
-    }
+        => Assert.Equal(Item.Normalizar("Álcool"), Item.Normalizar("alcool"));
 
     [Theory]
     [InlineData(1)]

@@ -11,14 +11,9 @@ namespace EstoqueIgreja.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
-public class AuthController : ControllerBase
+public class AuthController(ISender mediator) : ControllerBase
 {
-    private readonly ISender _mediator;
-
-    public AuthController(ISender mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly ISender _mediator = mediator;
 
     [AllowAnonymous]
     [HttpPost("login")]

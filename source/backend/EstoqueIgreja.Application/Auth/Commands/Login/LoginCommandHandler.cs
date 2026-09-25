@@ -4,16 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EstoqueIgreja.Application.Auth.Commands.Login;
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult?>
+public class LoginCommandHandler(IAppDbContext db, IPasswordHasher hasher) : IRequestHandler<LoginCommand, LoginResult?>
 {
-    private readonly IAppDbContext _db;
-    private readonly IPasswordHasher _hasher;
-
-    public LoginCommandHandler(IAppDbContext db, IPasswordHasher hasher)
-    {
-        _db = db;
-        _hasher = hasher;
-    }
+    private readonly IAppDbContext _db = db;
+    private readonly IPasswordHasher _hasher = hasher;
 
     public async Task<LoginResult?> Handle(LoginCommand request, CancellationToken ct)
     {
@@ -32,6 +26,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult?>
             usuario.Id,
             usuario.Login,
             usuario.Perfil.ToString(),
-            usuario.Modulos().Select(m => m.ToString()).ToList());
+            [.. usuario.Modulos().Select(m => m.ToString())]);
     }
 }

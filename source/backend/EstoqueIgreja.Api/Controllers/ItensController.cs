@@ -13,14 +13,9 @@ namespace EstoqueIgreja.Api.Controllers;
 [ApiController]
 [Authorize(Policy = Politicas.Obreiros)]
 [Route("api/itens")]
-public class ItensController : ControllerBase
+public class ItensController(ISender mediator) : ControllerBase
 {
-    private readonly ISender _mediator;
-
-    public ItensController(ISender mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly ISender _mediator = mediator;
 
     /// <summary>
     /// Só itens ativos por padrão. O filtro do Histórico usa
@@ -30,9 +25,7 @@ public class ItensController : ControllerBase
     public async Task<IActionResult> Listar(
         [FromQuery] bool incluirInativos = false,
         CancellationToken ct = default)
-    {
-        return Ok(await _mediator.Send(new ListarItensQuery(incluirInativos), ct));
-    }
+        => Ok(await _mediator.Send(new ListarItensQuery(incluirInativos), ct));
 
     /// <summary>
     /// Restrito a Admin no servidor — esconder a opção no menu do Angular é
@@ -65,7 +58,5 @@ public class ItensController : ControllerBase
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Remover(Guid id, CancellationToken ct)
-    {
-        return Ok(await _mediator.Send(new RemoverItemCommand(id), ct));
-    }
+        => Ok(await _mediator.Send(new RemoverItemCommand(id), ct));
 }

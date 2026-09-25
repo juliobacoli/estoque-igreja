@@ -14,20 +14,13 @@ namespace EstoqueIgreja.Api.Controllers;
 [ApiController]
 [Authorize(Policy = Politicas.AcaoSocial)]
 [Route("api/acao-social")]
-public class AcaoSocialController : ControllerBase
+public class AcaoSocialController(ISender mediator) : ControllerBase
 {
-    private readonly ISender _mediator;
-
-    public AcaoSocialController(ISender mediator)
-    {
-        _mediator = mediator;
-    }
+    private readonly ISender _mediator = mediator;
 
     [HttpGet("itens")]
     public async Task<IActionResult> ListarItens(CancellationToken ct)
-    {
-        return Ok(await _mediator.Send(new ListarItensSociaisQuery(), ct));
-    }
+        => Ok(await _mediator.Send(new ListarItensSociaisQuery(), ct));
 
     [Authorize(Roles = "Admin")]
     [HttpPost("itens")]
@@ -41,25 +34,19 @@ public class AcaoSocialController : ControllerBase
     [Authorize(Roles = "Admin")]
     [HttpDelete("itens/{id:guid}")]
     public async Task<IActionResult> RemoverItem(Guid id, CancellationToken ct)
-    {
-        return Ok(await _mediator.Send(new RemoverItemSocialCommand(id), ct));
-    }
+        => Ok(await _mediator.Send(new RemoverItemSocialCommand(id), ct));
 
     [HttpPost("itens/{id:guid}/entradas")]
     public async Task<IActionResult> RegistrarEntrada(
         Guid id,
         [FromBody] RegistrarEntradaRequest request,
         CancellationToken ct)
-    {
-        return Ok(await _mediator.Send(new RegistrarEntradaCommand(id, request.Quantidade), ct));
-    }
+        => Ok(await _mediator.Send(new RegistrarEntradaCommand(id, request.Quantidade), ct));
 
     [HttpPost("itens/{id:guid}/ajustes")]
     public async Task<IActionResult> Ajustar(
         Guid id,
         [FromBody] AjustarEstoqueSocialRequest request,
         CancellationToken ct)
-    {
-        return Ok(await _mediator.Send(new AjustarEstoqueSocialCommand(id, request.NovaQuantidade, request.Motivo), ct));
-    }
+        => Ok(await _mediator.Send(new AjustarEstoqueSocialCommand(id, request.NovaQuantidade, request.Motivo), ct));
 }

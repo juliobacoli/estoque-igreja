@@ -31,15 +31,11 @@ public class ModeloCestaTests
 
     [Fact]
     public void DefinirItens_Vazio_Lanca()
-    {
-        Assert.Throws<ArgumentException>(() => ModeloCesta.Criar().DefinirItens([]));
-    }
+        => Assert.Throws<ArgumentException>(() => ModeloCesta.Criar().DefinirItens([]));
 
     [Fact]
     public void DefinirItens_QuantidadeZero_Lanca()
-    {
-        Assert.Throws<ArgumentOutOfRangeException>(() => ModeloCesta.Criar().DefinirItens([(Guid.NewGuid(), 0)]));
-    }
+        => Assert.Throws<ArgumentOutOfRangeException>(() => ModeloCesta.Criar().DefinirItens([(Guid.NewGuid(), 0)]));
 
     [Fact]
     public void DefinirItens_ItemRepetido_Lanca()
@@ -97,10 +93,7 @@ public class CapacidadeDaCestaTests
     }
 
     [Fact]
-    public void PodeMontar_SemItens_EhZero()
-    {
-        Assert.Equal(0, CapacidadeDaCesta.PodeMontar([]));
-    }
+    public void PodeMontar_SemItens_EhZero() => Assert.Equal(0, CapacidadeDaCesta.PodeMontar([]));
 
     [Fact]
     public void Faltas_ListaSoOsItensQueNaoChegam()
