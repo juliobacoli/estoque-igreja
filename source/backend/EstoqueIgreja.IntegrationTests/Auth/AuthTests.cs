@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using EstoqueIgreja.IntegrationTests.Infra;
 using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace EstoqueIgreja.IntegrationTests;
+namespace EstoqueIgreja.IntegrationTests.Auth;
 
 [Collection(ApiCollection.Nome)]
 public class AuthTests(ApiFactory factory) : TesteDeIntegracao(factory)

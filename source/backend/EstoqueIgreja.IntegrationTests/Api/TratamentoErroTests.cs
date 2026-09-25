@@ -4,7 +4,7 @@ using EstoqueIgreja.Application.Estoque.Queries.ExportarEstoquePdf;
 using EstoqueIgreja.IntegrationTests.Infra;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EstoqueIgreja.IntegrationTests;
+namespace EstoqueIgreja.IntegrationTests.Api;
 
 [Collection(ApiCollection.Nome)]
 public class TratamentoErroTests(ApiFactory factory) : TesteDeIntegracao(factory)

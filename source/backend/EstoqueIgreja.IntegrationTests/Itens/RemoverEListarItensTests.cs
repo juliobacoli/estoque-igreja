@@ -5,7 +5,7 @@ using EstoqueIgreja.Application.Itens.Queries.ListarItens;
 using EstoqueIgreja.IntegrationTests.Infra;
 using Microsoft.EntityFrameworkCore;
 
-namespace EstoqueIgreja.IntegrationTests;
+namespace EstoqueIgreja.IntegrationTests.Itens;
 
 [Collection(ApiCollection.Nome)]
 public class RemoverItemTests(ApiFactory factory) : TesteDeIntegracao(factory)

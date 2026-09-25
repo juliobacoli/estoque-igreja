@@ -4,7 +4,7 @@ using EstoqueIgreja.Application.Estoque.Queries.ObterUltimaAtualizacao;
 using EstoqueIgreja.IntegrationTests.Infra;
 using Microsoft.EntityFrameworkCore;
 
-namespace EstoqueIgreja.IntegrationTests;
+namespace EstoqueIgreja.IntegrationTests.Estoque;
 
 [Collection(ApiCollection.Nome)]
 public class UltimaAtualizacaoTests(ApiFactory factory) : TesteDeIntegracao(factory)
