@@ -242,3 +242,59 @@ docker exec -it estoque-pg psql -U postgres -d estoque -c "INSERT INTO \"Usuario
 - **Horário do PDF**: o container roda em UTC e o relatório converte para `America/Sao_Paulo`. Por isso a imagem precisa do pacote `tzdata`.
 - **Versão no menu**: é o `version` do `source/frontend/package.json`, passado ao front no build do `Dockerfile` com `--define VERSAO_APP`. Em `ng serve` e nos testes unitários aparece `dev`.
 - **Usuário novo precisa de módulo**: o `INSERT` manual (seção 7) tem de marcar `AcessoObreiros` e/ou `AcessoAcaoSocial`, senão o login responde "Usuário sem acesso".
+
+---
+
+## 12. Backup do banco de produção
+
+O backup **não fica no repositório**. Script, log e arquivos ficam no OneDrive, que guarda uma cópia fora da máquina:
+
+```
+C:\Users\Julio Bacoli\OneDrive\Documentos\Backups\
+├── backup-estoque-icpa.ps1        # o script
+├── backup-estoque-icpa.log        # registro de cada execução
+└── estoque-icpa\<AAAA-MM-DD>\estoque-<AAAA-MM-DD>_<HH-mm>.dump
+```
+
+### Antes de rodar
+
+- **CLI `railway` logado.** Se a sessão expirou, o script para com `Nada de base64 na saida...`. Resolva com `railway login`.
+- **Docker Desktop aberto** (opcional). Sem ele o backup é gerado do mesmo jeito, só não é conferido.
+
+### Rodar (no cmd)
+
+```
+pwsh -File "C:\Users\Julio Bacoli\OneDrive\Documentos\Backups\backup-estoque-icpa.ps1"
+```
+
+Deu certo quando aparecem as linhas verdes:
+
+```
+OK  2026-10-02\estoque-2026-10-02_23-34.dump  (21.3 KB)
+OK  conteudo conferido: 9 tabelas com dados
+OK  4 dias mantidos, 0 removidos
+```
+
+- Só o caminho entre aspas, sem `pwsh -File`, não executa nada. No PowerShell, o equivalente é `& "...\backup-estoque-icpa.ps1"`.
+- Não precisa de `-ExecutionPolicy Bypass`.
+- O script apaga sozinho um arquivo com menos de 1000 bytes, porque isso é uma mensagem de erro, não um backup. Nesse caso, veja o log, corrija a causa e rode de novo.
+- Retenção: mantém os últimos 7 dias e o primeiro dia de cada mês.
+- **Não há agendamento.** O backup só acontece quando alguém roda o comando.
+
+### Conferir se os dados estão certos
+
+A linha `conteudo conferido: N tabelas` só prova que o arquivo abre, porque conta também tabelas vazias. Para ver os dados, restaure o backup num Postgres temporário e compare com a tela. No cmd, com o Docker aberto, troque a data e o nome do arquivo pelos do seu backup:
+
+```
+docker run --rm -d --name restore-teste -e POSTGRES_PASSWORD=x -v "C:\Users\Julio Bacoli\OneDrive\Documentos\Backups\estoque-icpa\2026-10-02:/b" postgres:18-alpine
+```
+
+Espere uns 5 segundos e rode:
+
+```
+docker exec restore-teste pg_restore -U postgres -d postgres --no-owner /b/estoque-2026-10-02_23-34.dump
+docker exec restore-teste psql -U postgres -d postgres -c "SELECT \"Nome\", \"EstoqueAtual\", \"Unidade\" FROM \"Itens\" WHERE \"Ativo\" ORDER BY \"Nome\";"
+docker stop restore-teste
+```
+
+A lista deve bater com a tela "Estoque atual" dos Obreiros. O `docker stop` apaga o Postgres temporário; o arquivo de backup não é alterado.
