@@ -8,6 +8,6 @@
   "devDependencies": {
     "@playwright/test": "1.63.0",
     "@types/pg": "8.23.1",
-    "pg": "8.23.0"
+    "pg": "8.23.1"
   }
 }
