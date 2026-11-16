@@ -25,7 +25,7 @@ COPY source/backend/ ./
 COPY --from=frontend-build /app/frontend/dist/frontend/browser ./EstoqueIgreja.Api/wwwroot
 
 RUN dotnet publish EstoqueIgreja.Api/EstoqueIgreja.Api.csproj -c Release -o /app/publish
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS final
+FROM mcr.microsoft.com/dotnet/aspnet:11.0-alpine AS final
 WORKDIR /app
 
 RUN apk add --no-cache icu-libs tzdata fontconfig ttf-dejavu
