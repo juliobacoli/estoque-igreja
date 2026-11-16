@@ -10,7 +10,7 @@ COPY source/frontend/ ./
 RUN VERSAO=$(node -p "require('./package.json').version") && \
     npm run build -- --configuration production --define "VERSAO_APP='$VERSAO'"
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS backend-build
+FROM mcr.microsoft.com/dotnet/sdk:11.0 AS backend-build
 WORKDIR /app/backend
 
 COPY source/backend/EstoqueIgreja.sln ./
